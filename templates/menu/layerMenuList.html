@@ -1,0 +1,24 @@
+<div ng-if="!layersList.length">
+	<div>No se ha cargado ninguna capa</div>
+</div>
+<ul ng-if="layersList.length" class="list-group">
+	<li class="list-group-item" ng-repeat='layer in getLayerNames()'>
+		<button data-nq-toggle-popover="#popover" data-qs-title="{{layer}}" data-qs-content="{{layer}}"  class="btn pull-right btn-sm" type="button"><i class="fa fa-info"></i></button>
+	<div class="checkbox">
+		<label>
+		<input  ng-if="showCheckbox" type="checkbox" id="chck{{layer}}" name="{{layer}}">{{layer}}
+		</label>
+	</div>
+	<div>
+		<input id="opacity{{layer}}" type="range" min="0" max="1" step="0.01"/>
+	</div>
+	</li>
+	<div id="popover" class="popover" data-nq-popover="">
+      <h3 class="popover-title">{{title || 'Nombre capa'}}</h3>
+      <div class="popover-content">
+        <p>{{content || 'Sin contenido'}}</p>
+        <p class="text-success">This is static content of independent popover.</p>
+      </div>
+    </div>
+    {{layer}}
+</ul>

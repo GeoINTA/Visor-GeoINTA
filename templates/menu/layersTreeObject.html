@@ -1,0 +1,10 @@
+<li ng-if="!node.leaf">
+	<label class="tree-toggler nav-header">{{node.text}}</label>
+</li>
+<li ng-if="node.leaf">
+		<div class="checkbox">
+		<label>
+		<input type="checkbox" id="chckTree{{node.text}}" class="treeLayerChck" name="{{node.text}}">{{node.text}}
+		</label>
+	</div>
+</li>

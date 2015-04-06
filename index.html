@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en"  ng-app="visorINTA" ng-controller="MainController">
+<head>
+	<title>Visor INTA</title>
+
+
+
+
+  <!-- Styles -->
+  <link href="./styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
+  <link href="./styles/effect-light.min.css" type="text/css" rel="stylesheet" />
+  <link href="./styles/quantumui.min.css" type="text/css" rel="stylesheet" />
+  <link href="./styles/font-awesome.min.css" type="text/css" rel="stylesheet" />
+  <link href="./styles/ol.css" type="text/css" rel="stylesheet" />
+  <link href="./styles/visor_main.css" type="text/css" rel="stylesheet" />
+
+
+  <!-- Libs -->
+	<script src="./lib/jquery.js"></script>
+  <script src="./lib/bootstrap.min.js"></script>
+	<script src="./lib/angular.min.js"></script>
+	<script src="./lib/angular-route.min.js"></script>
+  <script src="./lib/angular-sanitize.min.js"></script>
+  <script src="./lib/angular-animate.min.js"></script>
+  <script src="./lib/quantumui.min.js"></script>
+	<script src="./lib/ol.js"></script>
+
+
+  <!-- Main Modules -->
+	<script src="./scripts/visorModule.js"></script>
+	<script src="./scripts/MainController.js"></script>
+
+
+  <!-- Directives -->
+	<script src="./scripts/directives/MenuDirective.js"></script>
+	<script src="./scripts/directives/MapDirective.js"></script>
+  <script src="./scripts/directives/LayerMenuListDirective.js"></script>
+  <script src="./scripts/directives/LayersTreeDirective.js"></script>
+  <script src="./scripts/directives/ProyectsListDirective.js"></script>
+
+  <!-- Factories / Services -->
+  <script src="./scripts/providers/ProyectsFactory.js"></script>
+  <script src="./scripts/providers/utils/MapUtilsService.js"></script>
+
+
+
+
+</head>
+<body>
+	<div> <!-- wrapper -->
+		<nav class="navbar navbar-default" id="visorHeader">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Visor GeoINTA</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <!--<button class="btn btn-primary navbar-btn" type="button" data-toggle="collapse" data-target="#pulldownMenu" aria-expanded="false" aria-controls="pulldownMenu">
+  Menu
+
+</button>-->
+       <button type="button" class="btn btn-primary navbar-btn" data-nq-collapse="" data-target-id="#pulldownMenu"> Menu </button>
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Buscar...">
+        </div>
+        <button type="submit" ng-click='buscar()' class="btn btn-default"><i class="fa fa-search fa-lg"></i></button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+	<div class="collapse" id="pulldownMenu">
+	  <div class="panel-group" id="menuPanelGroup" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <span >
+          <i class="fa fa-list-ul"></i>  Proyectos
+        </span>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+    	<!--<div class="panel-body">
+        Lista proyectos AJAX
+      </div>-->
+      <proyect-list proyects='proyects' active-proyect='activeProyect' update-active-proyect='updateActiveProyect()'></proyect-list>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingTwo">
+      <h4 class="panel-title collapsed" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        <span>
+          <i class="fa fa-circle-o"></i>  Proyecto activo
+        </span>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+      <div class="panel-body menuPanelConfig">
+        <layers-tree map='map' tree='activeProyectModel.modelo'></layers-tree>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingThree">
+      <h4 class="panel-title collapsed" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+        <span >
+          <i class="fa fa-wrench"></i>  Herramientas
+        </span>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+    	<div class="list-group">
+			  <a href="#" class="list-group-item">Importar capa WMS</a>
+			  <a href="#" class="list-group-item">Medir</a>
+			  <a href="#" class="list-group-item">Informacion</a>
+			  <a href="#" class="list-group-item">Lupa</a>
+			  <a href="#" class="list-group-item">Comparar capas</a>
+		</div>
+    </div>
+  </div>
+</div> <!-- cierra primer panelgroup -->
+    <div class="panel-group" id="layersPanelGroup" role="tablist">
+  <div class="panel panel-default light">
+    <div class="panel-heading" role="tab" id="headingFour">
+      <h4 class="panel-title collapsed" data-toggle="collapse" data-parent="#layersPanelGroup" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+        <span >
+          <i class="fa fa-database"></i>  Capas activas
+        </span>
+      </h4>
+    </div>
+    <div id="collapseFour" class="panel-collapse collapse menuPanelLayerList" role="tabpanel" aria-labelledby="headingFour">
+      <layer-menu-list map='map' layers-list='activeLayers' show-checkbox="false"></layer-menu-list>
+    </div>
+  </div>
+    <div class="panel panel-default light">
+    <div class="panel-heading" role="tab" id="headingBaseLayers">
+      <h4 class="panel-title collapsed" data-toggle="collapse" data-parent="#layersPanelGroup" href="#panelBaseLayers" aria-expanded="false" aria-controls="panelBaseLayers">
+        <span>
+          <i class="fa fa-search"></i>  Capas base
+        </span>
+      </h4>
+    </div>
+    <div id="panelBaseLayers" class="panel-collapse collapse menuPanelLayerList" role="tabpanel" aria-labelledby="headingBaseLayers">
+      <layer-menu-list map='map' layers-list='baseLayers'  show-checkbox="true"></layer-menu-list>
+    </div>
+    </div>
+      </div>
+	</div>
+		<div visor-map id="map" map='map'></div>
+	<div>
+</body>	

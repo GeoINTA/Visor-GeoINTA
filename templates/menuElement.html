@@ -1,0 +1,25 @@
+<!--<ul>
+	<li><a><i class="fa fa-list-ul fa-lg"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Proyectos</a>
+	<ul>
+	<li><a href="#">Proyecto uno</a></li>
+	<li><a href="#">Proyecto dos</a></li>
+	</ul>
+
+	</li>
+	<li><a  ng-click="proyectos()"><i class="fa fa-circle-o fa-lg"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Proyecto activo</a></li>
+	<li ng-click="herramientas()"><a><i class="fa fa-wrench fa-lg"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Herramientas</a></li>
+	<li ng-click="capas()"><a><i class="fa fa-th fa-lg"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Capas activas</a></li>
+</ul>-->
+<!--{{menuElement.title}}-->
+<!--<script type="text/ng-template" id="categoryTree">
+   {{menuElement.title}}
+    <ul ng-if="category.categories">
+        <li ng-repeat="category in category.categories" ng-include="'categoryTree'">           
+        </li>
+    </ul>
+</script>-->
+<i class="fa {{menuElement.icon}} fa-lg"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{menuElement.title}}
+<ul id="secondMenu" class="secondMenu">
+    <li class="Label" ng-repeat="menuElement in menuElement.childrens" ng-include="'templates/menuElement.html'">           
+    </li>
+</ul>

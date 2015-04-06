@@ -1,0 +1,9 @@
+<div ng-if="!layersTree">No se ha cargado ningún proyecto</div>
+<div ng-if="layersTree">
+	<div>
+			<ul class="nav tree">
+				<layer-tree-object ng-repeat="node in layersTree" map="map" node="node"></layer-tree-object>
+			</ul>
+		
+	</div>
+</div>
