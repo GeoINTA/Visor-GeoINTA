@@ -7,6 +7,7 @@
 
 
   <!-- Styles -->
+  <link href="./styles/jquery-ui.min.css" type="text/css" rel="stylesheet" />
   <link href="./styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
   <link href="./styles/effect-light.min.css" type="text/css" rel="stylesheet" />
   <link href="./styles/quantumui.min.css" type="text/css" rel="stylesheet" />
@@ -17,6 +18,7 @@
 
   <!-- Libs -->
 	<script src="./lib/jquery.js"></script>
+  <script src="./lib/jquery-ui.min.js"></script>
   <script src="./lib/bootstrap.min.js"></script>
 	<script src="./lib/angular.min.js"></script>
 	<script src="./lib/angular-route.min.js"></script>
@@ -28,6 +30,8 @@
 
   <!-- Main Modules -->
 	<script src="./scripts/visorModule.js"></script>
+  <script src="./scripts/tools/draw/draw.module.js"></script>
+  <script src="./scripts/tools/tools.module.js"></script>
 	<script src="./scripts/MainController.js"></script>
 
 
@@ -37,6 +41,7 @@
   <script src="./scripts/directives/LayerMenuListDirective.js"></script>
   <script src="./scripts/directives/LayersTreeDirective.js"></script>
   <script src="./scripts/directives/ProyectsListDirective.js"></script>
+  <script src="./scripts/tools/draw/directives/DrawDirective.js"></script>
 
   <!-- Factories / Services -->
   <script src="./scripts/providers/ProyectsFactory.js"></script>
@@ -122,6 +127,7 @@
     </div>
     <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
     	<div class="list-group">
+        <a href="#" class="list-group-item" ng-controller="DrawController" ng-click="toogleTool('draw')">Dibujar</a>
 			  <a href="#" class="list-group-item">Importar capa WMS</a>
 			  <a href="#" class="list-group-item">Medir</a>
 			  <a href="#" class="list-group-item">Informacion</a>
@@ -159,5 +165,11 @@
       </div>
 	</div>
 		<div visor-map id="map" map='map'></div>
+    <!-- Tools  -->
+    <div>
+    <tool-box id="drawTool" ng-show='isToolEnabled("draw")'>
+      <draw-tool map='map'></draw-tool>
+    </tool-box>
+  </div>
 	<div>
 </body>	

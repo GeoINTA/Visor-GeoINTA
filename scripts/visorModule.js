@@ -11,6 +11,7 @@ angular.module('visorINTA', [
   "visorINTA.directives.LayersTreeDirective",
   "visorINTA.directives.ProyectListDirective",
   "visorINTA.utils.MapUtilsService",
+  "visorINTA.tools.toolsModule"
 
 ]).config(['$routeProvider', function ($routeProvider) {
    $routeProvider.when('/:lat?/:lng?/:zoom?',          {templateUrl: "./templates/home.html"});

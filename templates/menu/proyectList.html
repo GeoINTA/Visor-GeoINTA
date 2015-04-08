@@ -1,11 +1,6 @@
-<!--<select>
-	<option ng-repeat='proyect in proyects'>
-		{{proyect.nombre}}
-	</option>		
-</select>-->
 Seleccione un proyecto
 <select 
 	class="form-control"
-	ng-model="activeProyect" 
+	ng-model="activeProyect"
 	ng-options="proyect.nombre for proyect in proyects">
-  </select>
+</select>

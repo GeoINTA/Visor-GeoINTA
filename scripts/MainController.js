@@ -1,18 +1,13 @@
 angular.module('visorINTA.MainController', [])
-  .controller('MainController', ['$rootScope','$scope','$loading','mapConfig','ProyectsFactory','MapUtils', function($rootScope,$scope,$loading,mapConfig,ProyectsFactory,MapUtils) {
+  .controller('MainController', ['$rootScope','$scope','$loading','mapConfig','ToolsManager','ProyectsFactory','MapUtils', function($rootScope,$scope,$loading,mapConfig,ToolsManager,ProyectsFactory,MapUtils) {
 
     // Layers
-    // El mapa guarda tres grupos de capas:
-    //    - Capas base
-    //    - Capas no base (capas insertadas en el mapa, no base)
-    //          - De estas capas "no base", algunas pueden estar visibles, y otras no.
-    //            Las que estan visibles, se guardan dentro de la variable activeLayers
-    //    - Capas importadas (capas agregadas por el usuario, no pertenecen a un proyecto en particular).
 
     $scope.baseLayers = []; // capas base del mapa
     $scope.mapLayers = []; // todas las capas (no base) del mapa, indepte de si estan activas (visibles) o no.
                            // cuando se carga un proyecto, todas las capas se cargan aqui.
     $scope.activeLayers = []; // capas (no base) activas actualmente.
+    $scope.importedLayers = []; // capas importadas por el usuario
 
     // Proyects
     $scope.proyects = []; // lista de todos los proyectos disponibles
@@ -25,6 +20,11 @@ angular.module('visorINTA.MainController', [])
     $scope.geoServers = {} // contiene la lista de servidores disponibles. Cada server contiene su URL, y una URL cache                               
 
 
+    // Tools
+
+    $scope.toolsManager = ToolsManager;
+
+
     $scope.loading = new $loading({
                 busyText: 'Cargando proyecto...',
                 theme: 'success',
@@ -32,18 +32,6 @@ angular.module('visorINTA.MainController', [])
                 //delayHide:1000,
                 showSpinner: true,
     });
-
-    $scope.proyectos = function() {
-      console.log("proyectos");
-    };
- 
-    $scope.capas = function() {
-         console.log("capas");     
-    };
- 
-    $scope.herramientas = function() {
-        console.log("herramientas");
-    };
 
 
     $scope.getBaseLayersGroup = function(){
@@ -87,6 +75,7 @@ angular.module('visorINTA.MainController', [])
       });
       $scope.baseLayers.push(layer1);
       $scope.baseLayers.push(layer2);
+
       return map;  
     }
 
@@ -95,6 +84,17 @@ angular.module('visorINTA.MainController', [])
 
     $scope.addLayerToMap = function(){
 
+    }
+
+    $scope.isToolEnabled = function(tool){
+      return $scope.toolsManager.isToolEnabled(tool);
+    }
+
+    $scope.toogleTool = function(tool){
+      // Cambio estado de la herramienta
+      $scope.toolsManager.toogleTool(tool);
+      // Aviso a los controladores hijos que se ha seleccionado una herramienta
+      $scope.$broadcast('toolClicked',tool);
     }
 
 
@@ -108,10 +108,13 @@ angular.module('visorINTA.MainController', [])
     }
 
     // Reseteo el estado del mapa
-    // Deja activas solo las capas base
+    // Deja visibles solo las capas base
     // Limpia variables
+    //    - Capas activas
     $scope.cleanMap = function(){
-      $scope.activeLayers = [];
+      $scope.activeLayers = []; // saco todas las capas activas
+      for (var k=0; k < $scope.mapLayers.length; k++) // limpio capas 'no base'
+        $scope.mapLayers[k].setVisible(false);
     }
 
 
@@ -121,6 +124,7 @@ angular.module('visorINTA.MainController', [])
       for (var i=0; i < $scope.activeProyectModel.capas.length;i++){
         layerConfig = $scope.activeProyectModel.capasConfig[$scope.activeProyectModel.capas[i]];
         tripleta = $scope.activeProyectModel.capas[i].split("::");
+        console.log($scope.activeProyectModel.capas[i]);
         nombreServidor = tripleta[0];
         server = $scope.lookupGeoServer(nombreServidor);
         nombreCapa = tripleta[1];
@@ -132,13 +136,14 @@ angular.module('visorINTA.MainController', [])
         }
         extent = [$scope.activeProyectModel.modelo[0].oeste,$scope.activeProyectModel.modelo[0].sur,$scope.activeProyectModel.modelo[0].este,$scope.activeProyectModel.modelo[0].norte];
         extentGoogle = ol.extent.applyTransform(extent, ol.proj.getTransform("EPSG:4326", "EPSG:900913"));
+        console.log($scope.activeProyectModel.capasConfig);
         //bbox_rep = $scope.map.getView()getMaxExtent();
         //if($scope.map.getLayersByName($scope.activeProyectModel.capas[i]).length == 0){
          // layer_temp = new OpenLayers.Layer.WMS($scope.activeProyectModel.capas[i],urlServidor,{layers: nombreCapa,transparent: true,styles:nombreEstilo}, {opacity:1,visibility: true});
           layer_temp = new ol.layer.Tile({
                 source: new ol.source.TileWMS(/** @type {olx.source.TileWMSOptions} */ ({
                   url: urlServidor,
-                  params: {'LAYERS': nombreCapa, 'TILED': true,'VERSION':'1.1.1','SRS':'900913'},
+                  params: {'LAYERS': nombreCapa, 'TILED': true,'VERSION':'1.1.1','SRS':'900913','STYLES':nombreEstilo},
                   serverType: 'geoserver'
                 })),
                 opacity:1,
@@ -238,6 +243,7 @@ angular.module('visorINTA.MainController', [])
     $scope.map = createMap();
     $scope.proyects = ProyectsFactory.getProyects();
     $scope.geoServers = ProyectsFactory.getGeoServers();
+    console.log($scope.toolsManager);
 
 
 

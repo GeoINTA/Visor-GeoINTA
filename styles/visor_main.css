@@ -81,3 +81,9 @@ margin-top: 0px;
 ul{
 list-style-type: none;
 }
+
+.toolBox{
+	position: fixed;
+	top:100px;
+	right: 0px;
+}

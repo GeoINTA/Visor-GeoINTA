@@ -11,6 +11,7 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
 		//template:"<li class='list-group-item' ng-repeat='layer in reverse(layersNames)'>{{layer}}</li>",
 		link: function(scope, iElement, iAttrs, ctrl) {
 			bindLayersControls();
+			
 
 			scope.$watchCollection('layersList', function(newValue, oldValue) {
                 if (newValue === oldValue){ // al inicio, los dos tienen el mismo valor
