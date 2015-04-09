@@ -31,6 +31,9 @@
   <!-- Main Modules -->
 	<script src="./scripts/visorModule.js"></script>
   <script src="./scripts/tools/draw/draw.module.js"></script>
+  <script src="./scripts/tools/measure/measure.module.js"></script>
+  <script src="./scripts/tools/spyLayer/spyLayer.module.js"></script>
+  <script src="./scripts/tools/swipe/swipe.module.js"></script>
   <script src="./scripts/tools/tools.module.js"></script>
 	<script src="./scripts/MainController.js"></script>
 
@@ -41,7 +44,11 @@
   <script src="./scripts/directives/LayerMenuListDirective.js"></script>
   <script src="./scripts/directives/LayersTreeDirective.js"></script>
   <script src="./scripts/directives/ProyectsListDirective.js"></script>
+  <script src="./scripts/directives/VisorBoxDirective.js"></script>
   <script src="./scripts/tools/draw/directives/DrawDirective.js"></script>
+  <script src="./scripts/tools/measure/directives/MeasureDirective.js"></script>
+  <script src="./scripts/tools/spyLayer/directives/SpyLayerDirective.js"></script>
+  <script src="./scripts/tools/swipe/directives/SwipeDirective.js"></script>
 
   <!-- Factories / Services -->
   <script src="./scripts/providers/ProyectsFactory.js"></script>
@@ -127,12 +134,12 @@
     </div>
     <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
     	<div class="list-group">
-        <a href="#" class="list-group-item" ng-controller="DrawController" ng-click="toogleTool('draw')">Dibujar</a>
+        <a href="#" class="list-group-item" ng-controller="DrawController" ng-click="toogleTool('drawTool')">Dibujar</a>
+        <a href="#" class="list-group-item" ng-controller="MeasureController" ng-click="toogleTool('measureTool')">Medir</a>
+        <a href="#" class="list-group-item" ng-controller="SpyLayerController" ng-click="toogleTool('spyLayerTool')">Lupa</a>
+        <a href="#" class="list-group-item" ng-controller="SwipeController" ng-click="toogleTool('swipeTool')">Cortina</a>
 			  <a href="#" class="list-group-item">Importar capa WMS</a>
-			  <a href="#" class="list-group-item">Medir</a>
 			  <a href="#" class="list-group-item">Informacion</a>
-			  <a href="#" class="list-group-item">Lupa</a>
-			  <a href="#" class="list-group-item">Comparar capas</a>
 		</div>
     </div>
   </div>
@@ -167,9 +174,18 @@
 		<div visor-map id="map" map='map'></div>
     <!-- Tools  -->
     <div>
-    <tool-box id="drawTool" ng-show='isToolEnabled("draw")'>
+    <visor-box id="drawTool" class="toolBox">
       <draw-tool map='map'></draw-tool>
-    </tool-box>
+    </visor-box>
+    <visor-box id="measureTool" class="toolBox">
+      <measure-tool map='map'></measure-tool>
+    </visor-box>
+    <visor-box id="spyLayerTool" class="toolBox">
+      <spy-layer-tool map='map' layer-list='activeLayers'></spy-layer-tool>
+    </visor-box>
+    <visor-box id="swipeTool" class="toolBox">
+      <swipe-tool map='map' layer-list='activeLayers'></swipe-tool>
+    </visor-box>
   </div>
 	<div>
 </body>	

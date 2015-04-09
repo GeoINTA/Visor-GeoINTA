@@ -1,0 +1,14 @@
+<div ng-if="!layerList.length" class="alert alert-warning" role="alert">
+	No hay ninguna capa activa para espiar
+</div>
+<div ng-if="layerList.length">
+	<div>
+	<p>Selecciona capa:</p>
+	<select 
+		class="form-control"
+		ng-model="layerSelected"
+		ng-change="layerSelectedChange(layerSelected)" 
+		ng-options="layer.get('name') as layer.get('name') for layer in layerList">
+	</select>
+	</div>
+</div>

@@ -10,6 +10,7 @@ angular.module('visorINTA', [
   "visorINTA.directives.LayerMenuListDirective",
   "visorINTA.directives.LayersTreeDirective",
   "visorINTA.directives.ProyectListDirective",
+  "visorINTA.directives.VisorBoxDirective",
   "visorINTA.utils.MapUtilsService",
   "visorINTA.tools.toolsModule"
 

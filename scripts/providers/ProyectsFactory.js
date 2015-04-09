@@ -133,10 +133,10 @@ angular.module('visorINTA.factories.ProyectsFactory',[])
              ],
              "expanded":true,
              "leaf":false,
-             "norte":-34,
-             "sur":-34,
-             "este":-58,
-             "oeste":-58,
+             "norte":-34.6039,
+             "sur":-34.6159,
+             "este":-58.663,
+             "oeste":-58.6839,
              "masinfo":"Ra\u00edz del proyecto",
              "toolbar":{  
                 "4":{  

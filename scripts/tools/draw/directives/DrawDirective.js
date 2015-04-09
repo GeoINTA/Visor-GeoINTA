@@ -2,20 +2,28 @@ angular.module('visorINTA.tools.draw.DrawDirective', [])
 .directive('drawTool', function(ToolsManager) {
 	return {
 		restrict: "E",
-		require:'^toolBox',
+		require:'^visorBox',
 		scope:{
 			title:'@',
 			map: '='
 		},
 		templateUrl:"templates/tools/drawTemplate.html",
-		link:function(scope, iElement, iAttrs,toolBoxCtrl) {
-			toolBoxCtrl.setTitle(scope.toolTitle);
+		link:function(scope, iElement, iAttrs,visorBoxCtrlr) {
+			visorBoxCtrlr.setTitle(scope.toolTitle);
+			visorBoxCtrlr.setBoxType('tool');
 
 
-			scope.$on('toolClicked', function (event, data) {
-				console.log(data);
-	    		if (data == scope.toolName){
-	    			ToolsManager.isToolEnabled(scope.toolName) ? openTool() : closeTool();
+			scope.$on('visorBoxClicked', function (event, data) {
+	    		if (data.type == 'tool' && data.id == scope.toolName){
+			        // Cambio estado de la herramienta
+      				ToolsManager.toogleTool(data.id);
+	    			if (ToolsManager.isToolEnabled(scope.toolName)){
+						visorBoxCtrlr.setIsOpen(true);
+						scope.openTool();
+	    			} else {
+    					visorBoxCtrlr.setIsOpen(false);
+	    				scope.closeTool();
+	    			}
 	    		}
 	  		});
 
@@ -47,13 +55,18 @@ angular.module('visorINTA.tools.draw.DrawDirective', [])
 	        map.addLayer(vector);
 
 	        // Acciones a realizar cuando se abre la herramienta
-	        function openTool(){
+	        scope.openTool = function(){
 	        	map.addInteraction(draw);	
 	        }
 
 	        // Acciones a realizar cuando se cierra la herramienta
-	        function closeTool(){
+	        scope.closeTool = function(){
 	        	map.removeInteraction(draw);
+
+	        }
+
+	        scope.clearMapFeatures = function(){
+	        	source.clear();
 	        }
 
             scope.$watch("drawType", function(newType, oldType){
@@ -76,7 +89,7 @@ angular.module('visorINTA.tools.draw.DrawDirective', [])
 
 		},
 		controller: function($scope){
-			$scope.toolName = "draw";
+			$scope.toolName = "drawTool";
 			$scope.toolTitle = "Dibujar";
 			$scope.drawType = "Point";
 

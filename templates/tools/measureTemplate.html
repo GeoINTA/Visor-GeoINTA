@@ -7,6 +7,9 @@
 		ng-options="drawType.value as drawType.title for drawType in drawObjectsTypes">
 	</select>
 	</div>
+	<div>
+	Medicion: {{lastMeasure}}
+	</div>
 	<div class="toolFooter">
 		<button class="btn btn-primary" ng-click="clearMapFeatures()">Limpiar mapa</button>
 	</div>

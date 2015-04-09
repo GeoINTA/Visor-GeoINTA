@@ -1,11 +1,17 @@
 angular.module('visorINTA.tools.toolsModule', [
-		'visorINTA.tools.drawModule'
+		'visorINTA.tools.drawModule',
+        'visorINTA.tools.measureModule',
+        'visorINTA.tools.spyLayerModule',
+        'visorINTA.tools.swipeModule',
 ])
 
 .service('ToolsManager', function () {
 
 	this.tools = {
-		"draw" : {"enabled":false}
+		"drawTool" : {"enabled":false},
+        "measureTool" : {"enabled":false},
+        "spyLayerTool" : {"enabled":false},
+        "swipeTool" : {"enabled":false}
 	}
 
     this.enableTool = function (tool,boolValue) {
@@ -20,27 +26,4 @@ angular.module('visorINTA.tools.toolsModule', [
     	this.tools[tool]["enabled"] = !this.tools[tool]["enabled"];
     }
 
-})
-
-.directive('toolBox', function() {
-	return {
-		restrict: "E",
-		transclude:true,
-		replace:true,
-		scope:{
-
-		},
-		template:"<div class='panel panel-default toolBox'><div class='panel-heading'><h3 class='panel-title'>{{title}}</h3></div><div ng-transclude class='panel-body'></div></div>",
-		link:function(scope, element, attrs) {
-			$(element).draggable({ cursor: "move",});
-		},
-		controller: function($scope){
-			$scope.title = "";
-
-
-			this.setTitle = function(title){
-				$scope.title = title;
-			}
-		}
-	}
 })

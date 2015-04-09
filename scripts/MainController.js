@@ -55,6 +55,7 @@ angular.module('visorINTA.MainController', [])
       var baseLayers = new ol.layer.Group({nombre:'baseLayers',layers:layers});
       var map = new ol.Map({
         controls: ol.control.defaults().extend([
+        new ol.control.FullScreen(),
         new ol.control.ScaleLine(),
         new ol.control.MousePosition({
             coordinateFormat: ol.coordinate.createStringXY(4),
@@ -90,11 +91,9 @@ angular.module('visorINTA.MainController', [])
       return $scope.toolsManager.isToolEnabled(tool);
     }
 
-    $scope.toogleTool = function(tool){
-      // Cambio estado de la herramienta
-      $scope.toolsManager.toogleTool(tool);
+    $scope.toogleTool = function(toolID){
       // Aviso a los controladores hijos que se ha seleccionado una herramienta
-      $scope.$broadcast('toolClicked',tool);
+      $scope.$broadcast('visorBoxClicked',{type:'tool',id:toolID});
     }
 
 
@@ -124,7 +123,6 @@ angular.module('visorINTA.MainController', [])
       for (var i=0; i < $scope.activeProyectModel.capas.length;i++){
         layerConfig = $scope.activeProyectModel.capasConfig[$scope.activeProyectModel.capas[i]];
         tripleta = $scope.activeProyectModel.capas[i].split("::");
-        console.log($scope.activeProyectModel.capas[i]);
         nombreServidor = tripleta[0];
         server = $scope.lookupGeoServer(nombreServidor);
         nombreCapa = tripleta[1];
@@ -136,7 +134,6 @@ angular.module('visorINTA.MainController', [])
         }
         extent = [$scope.activeProyectModel.modelo[0].oeste,$scope.activeProyectModel.modelo[0].sur,$scope.activeProyectModel.modelo[0].este,$scope.activeProyectModel.modelo[0].norte];
         extentGoogle = ol.extent.applyTransform(extent, ol.proj.getTransform("EPSG:4326", "EPSG:900913"));
-        console.log($scope.activeProyectModel.capasConfig);
         //bbox_rep = $scope.map.getView()getMaxExtent();
         //if($scope.map.getLayersByName($scope.activeProyectModel.capas[i]).length == 0){
          // layer_temp = new OpenLayers.Layer.WMS($scope.activeProyectModel.capas[i],urlServidor,{layers: nombreCapa,transparent: true,styles:nombreEstilo}, {opacity:1,visibility: true});
@@ -153,7 +150,7 @@ angular.module('visorINTA.MainController', [])
           $scope.map.addLayer(layer_temp); 
           $scope.mapLayers.push(layer_temp);
           //$scope.activeLayers.push(layer_temp);
-          //$scope.map.getView().fitExtent(extentGoogle, $scope.map.getSize());
+          $scope.map.getView().fitExtent(extentGoogle, $scope.map.getSize());
         //}
       }
     }
@@ -204,8 +201,9 @@ angular.module('visorINTA.MainController', [])
 
     }
 
-    //// ROOT FUNCTIONS ///
-
+    //// ROOT FUNCTIONS -  ///
+    // Funciones que pueden ser llamadas por cualquier modulo de la app, que injecten
+    // dentro $rootScope
 
     $rootScope.addActiveLayer = function(layer){
       if (layer){
@@ -217,6 +215,10 @@ angular.module('visorINTA.MainController', [])
       }
     }
 
+    $rootScope.getActiveLayers = function(){
+      return $scope.activeLayers;
+    }
+
 
     $rootScope.removeActiveLayer = function(layer){
         for (var i = 0; i < $scope.activeLayers.length; i++) {
@@ -226,6 +228,10 @@ angular.module('visorINTA.MainController', [])
             }
         }
         $scope.$apply();
+    }
+
+    $rootScope.getLayerByName = function(name){
+      return MapUtils.getLayerByName($scope.map,name);
     }
 
     //      ###       WATCHERS       ###      //

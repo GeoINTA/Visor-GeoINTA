@@ -1,0 +1,9 @@
+<div class='panel panel-default visorBox' ng-show="isOpen">
+	<div class="panel-heading">
+      <div class="btn-group pull-right">
+        <button ng-click="visorBoxClosed()" class="btn btn-default btn-xs"><i class="fa fa-times"></i></button>
+      </div>
+      <h4 class="panel-title">{{title}}</h4>
+    </div>
+	<div ng-transclude class='panel-body'></div>
+</div>
