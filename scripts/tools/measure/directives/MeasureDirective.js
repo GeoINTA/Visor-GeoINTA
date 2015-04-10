@@ -28,6 +28,9 @@ angular.module('visorINTA.tools.measure.MeasureDirective', [])
 	  		});
 
 			var map = scope.map;
+			var wgs84Sphere;
+			var measureTooltip;
+			var measureTooltipElement;
 			var draw;
 			var source;
 			var vector;
@@ -59,6 +62,8 @@ angular.module('visorINTA.tools.measure.MeasureDirective', [])
 			    });
 			    map.addInteraction(draw);
 
+ 		        scope.createMeasureTooltip();
+
 			    draw.on('drawstart',function(evt) {
 			        // set sketch
 			        sketch = evt.feature;
@@ -66,15 +71,27 @@ angular.module('visorINTA.tools.measure.MeasureDirective', [])
 			      }, this);
 
 			     draw.on('drawend',function(evt) {
-        			//measureTooltipElement.className = 'tooltip tooltip-static';
-        			//measureTooltip.setOffset([0, -7]);
+        			measureTooltipElement.className = 'tooltip tooltip-static';
+        			measureTooltip.setOffset([0, -7]);
         			// unset sketch
         			sketch = null;
-        			// unset tooltip so that a new one can be created
-        			//measureTooltipElement = null;
-        			//createMeasureTooltip();
-        			//scope.updateMeasureValues();
+        			measureTooltipElement = null;
+        			scope.createMeasureTooltip();
       			}, this);
+			}
+
+			scope.createMeasureTooltip = function() {
+				  if (measureTooltipElement) {
+				    measureTooltipElement.parentNode.removeChild(measureTooltipElement);
+				  }
+				  measureTooltipElement = document.createElement('div');
+				  measureTooltipElement.className = 'tooltip tooltip-measure';
+				  measureTooltip = new ol.Overlay({
+				    element: measureTooltipElement,
+				    offset: [0, -15],
+				    positioning: 'bottom-center'
+				  });
+				  map.addOverlay(measureTooltip);
 			}
 
 
@@ -98,10 +115,10 @@ angular.module('visorINTA.tools.measure.MeasureDirective', [])
 			      //helpMsg = continueLineMsg;
 			      tooltipCoord = geom.getLastCoordinate();
 			    }
-			    //measureTooltipElement.innerHTML = output;
+			    measureTooltipElement.innerHTML = output;
 			    scope.lastMeasure = output;
+			    measureTooltip.setPosition(tooltipCoord);
 			    scope.$apply();
-			    //measureTooltip.setPosition(tooltipCoord);
 			  }
 
 			  //helpTooltipElement.innerHTML = helpMsg;
@@ -109,29 +126,53 @@ angular.module('visorINTA.tools.measure.MeasureDirective', [])
 			}
 
 			scope.formatArea = function(polygon){
-				var area = polygon.getArea();
-				var output;
-				if (area > 10000) {
-					output = (Math.round(area / 1000000 * 100) / 100) +
-					    ' ' + 'km';
-				} else {
-					output = (Math.round(area * 100) / 100) +
-					    ' ' + 'm';
-				}
-				return output;
+				var area;
+				  if (scope.meaureGeodesic) {
+				    var sourceProj = map.getView().getProjection();
+				    var geom = /** @type {ol.geom.Polygon} */(polygon.clone().transform(
+				        sourceProj, 'EPSG:4326'));
+				    var coordinates = geom.getLinearRing(0).getCoordinates();
+				    area = Math.abs(wgs84Sphere.geodesicArea(coordinates));
+				  } else {
+				    area = polygon.getArea();
+				    
+				  }
+				  scope.haMeasure = (area / 10000);
+				  scope.haMeasure = scope.haMeasure.toFixed(2);
+				  var output;
+				  if (area > 10000) {
+				    output = (Math.round(area / 1000000 * 100) / 100) +
+				        ' ' + 'km2';
+				  } else {
+				    output = (Math.round(area * 100) / 100) +
+				        ' ' + 'm2';
+				  }
+				  return output;
 			}
 
 			scope.formatLength = function(line){
-				var length = Math.round(line.getLength() * 100) / 100;
-				var output;
-				if (length > 100) {
-				output = (Math.round(length / 1000 * 100) / 100) +
-				    ' ' + 'km';
-				} else {
-				output = (Math.round(length * 100) / 100) +
-				    ' ' + 'm';
-				}
-				return output;
+				var length;
+				  if (scope.meaureGeodesic) {
+				    var coordinates = line.getCoordinates();
+				    length = 0;
+				    var sourceProj = map.getView().getProjection();
+				    for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
+				      var c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
+				      var c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
+				      length += wgs84Sphere.haversineDistance(c1, c2);
+				    }
+				  } else {
+				    length = Math.round(line.getLength() * 100) / 100;
+				  }
+				  var output;
+				  if (length > 100) {
+				    output = (Math.round(length / 1000 * 100) / 100) +
+				        ' ' + 'km';
+				  } else {
+				    output = (Math.round(length * 100) / 100) +
+				        ' ' + 'm';
+				  }
+				  return output;
 			}
 
 
@@ -184,6 +225,7 @@ angular.module('visorINTA.tools.measure.MeasureDirective', [])
 				    })
 				  })
 				});
+		        wgs84Sphere = new ol.Sphere(6378137);
 		        map.addLayer(vector);
 		        map.on('pointermove', scope.handlePointerMove);
 	  		}
@@ -194,9 +236,11 @@ angular.module('visorINTA.tools.measure.MeasureDirective', [])
 		controller: function($scope){
 			$scope.toolName = "measureTool";
 			$scope.toolTitle = "Medir";
-			$scope.lastMeasure = 0;
+			$scope.lastMeasure = 0; // Almacena ultima medicion
+			$scope.haMeasure = 0; // Almacena medicion en hectareas (si se mide area)
 			//
 			$scope.drawType = "Polygon";
+			$scope.meaureGeodesic = true;
 
 			$scope.drawObjectsTypes = [
 				{value:"LineString",title:"Longitud"},

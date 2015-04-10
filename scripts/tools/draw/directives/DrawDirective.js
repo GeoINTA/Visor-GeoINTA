@@ -62,7 +62,6 @@ angular.module('visorINTA.tools.draw.DrawDirective', [])
 	        // Acciones a realizar cuando se cierra la herramienta
 	        scope.closeTool = function(){
 	        	map.removeInteraction(draw);
-
 	        }
 
 	        scope.clearMapFeatures = function(){
@@ -97,6 +96,7 @@ angular.module('visorINTA.tools.draw.DrawDirective', [])
 				{value:"Point",title:"Punto"},
 				{value:"LineString",title:"Linea"},
 				{value:"Polygon",title:"Poligono"},
+				{value:"Circle",title:"Circulo"},
 			];
 		}
 	}

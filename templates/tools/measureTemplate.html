@@ -1,16 +1,25 @@
 <div>
 	<div>
-	<p>Selecciona objecto a dibujar</p>
+	<p>Selecciona tipo de medicion</p>
 	<select 
 		class="form-control"
 		ng-model="drawType" 
 		ng-options="drawType.value as drawType.title for drawType in drawObjectsTypes">
 	</select>
 	</div>
-	<div>
-	Medicion: {{lastMeasure}}
+	<div class="checkbox">
+		<label>
+		<input ng-model="meaureGeodesic" type="checkbox" id="measureGeodesicCheck" name="measureGeodesicCheck">Usar medición geodésica
+		</label>
 	</div>
-	<div class="toolFooter">
+	<div class="alert alert-success">
+	Medicion: 
+	{{lastMeasure}}
+	<div ng-if='drawType == "Polygon"'>
+	   ({{haMeasure}} ha)
+	</div>
+	</div>
+	<div >
 		<button class="btn btn-primary" ng-click="clearMapFeatures()">Limpiar mapa</button>
 	</div>
 </div>
