@@ -34,6 +34,7 @@
   <script src="./scripts/tools/measure/measure.module.js"></script>
   <script src="./scripts/tools/spyLayer/spyLayer.module.js"></script>
   <script src="./scripts/tools/swipe/swipe.module.js"></script>
+  <script src="./scripts/tools/imageFilter/imageFilter.module.js"></script>
   <script src="./scripts/tools/tools.module.js"></script>
 	<script src="./scripts/MainController.js"></script>
 
@@ -49,6 +50,7 @@
   <script src="./scripts/tools/measure/directives/MeasureDirective.js"></script>
   <script src="./scripts/tools/spyLayer/directives/SpyLayerDirective.js"></script>
   <script src="./scripts/tools/swipe/directives/SwipeDirective.js"></script>
+  <script src="./scripts/tools/imageFilter/directives/ImageFilterDirective.js"></script>
 
   <!-- Factories / Services -->
   <script src="./scripts/providers/ProyectsFactory.js"></script>
@@ -138,6 +140,7 @@
         <a href="#" class="list-group-item" ng-controller="MeasureController" ng-click="toogleTool('measureTool')">Medir</a>
         <a href="#" class="list-group-item" ng-controller="SpyLayerController" ng-click="toogleTool('spyLayerTool')">Lupa</a>
         <a href="#" class="list-group-item" ng-controller="SwipeController" ng-click="toogleTool('swipeTool')">Cortina</a>
+        <a href="#" class="list-group-item" ng-controller="ImageFilterController" ng-click="toogleTool('imageFilterTool')">Filtros</a>
 			  <a href="#" class="list-group-item">Importar capa WMS</a>
 			  <a href="#" class="list-group-item">Informacion</a>
 		</div>
@@ -185,6 +188,9 @@
     </visor-box>
     <visor-box id="swipeTool" class="toolBox">
       <swipe-tool map='map' layer-list='activeLayers'></swipe-tool>
+    </visor-box>
+    <visor-box id="imageFilterTool" class="toolBox">
+      <image-filter-tool map='map' layer-list='activeLayers'></image-filter-tool>
     </visor-box>
   </div>
 	<div>

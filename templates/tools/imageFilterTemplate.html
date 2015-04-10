@@ -1,0 +1,13 @@
+<div>
+	<div>
+	<p>Selecciona filtro</p>
+	<select 
+		class="form-control"
+		ng-model="filterSelected" 
+		ng-options="filter.value as filter.title for filter in filterTypes">
+	</select>
+	</div>
+	<div class="toolFooter">
+		<button class="btn btn-primary" ng-click="applyFilter()">Aplicar filtro</button>
+	</div>
+</div>
