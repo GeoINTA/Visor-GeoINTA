@@ -1,4 +1,7 @@
-<div>
+<div ng-if="!layerList.length" class="alert alert-warning" role="alert">
+	No hay capas activas sobre las cuales aplicar filtros
+</div>
+<div ng-if="layerList.length">
 	<div>
 	<p>Selecciona filtro</p>
 	<select 
@@ -7,7 +10,15 @@
 		ng-options="filter.value as filter.title for filter in filterTypes">
 	</select>
 	</div>
+	<div>
+	<p>Capa a filtrar</p>
+	<select 
+		class="form-control"
+		ng-model="layerSelected"
+		ng-options="layer.get('name') as layer.get('name') for layer in layerList">
+	</select>
+	</div>
 	<div class="toolFooter">
-		<button class="btn btn-primary" ng-click="applyFilter()">Aplicar filtro</button>
+		<button class="btn btn-primary" ng-click="applyFilter(filterSelected,layerSelected)">Aplicar filtro</button>
 	</div>
 </div>
