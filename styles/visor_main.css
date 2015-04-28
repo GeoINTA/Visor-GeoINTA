@@ -91,6 +91,10 @@ list-style-type: none;
 	position: fixed;
 }
 
+.bigToolBox{
+	min-width: 200px;
+}
+
 .toolFooter{
 	padding-top: 10px;
 }

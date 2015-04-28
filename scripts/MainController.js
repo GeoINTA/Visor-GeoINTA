@@ -141,7 +141,7 @@ angular.module('visorINTA.MainController', [])
                 source: new ol.source.TileWMS(/** @type {olx.source.TileWMSOptions} */ ({
                   url: urlServidor,
                   params: {'LAYERS': nombreCapa, 'TILED': true,'VERSION':'1.1.1','SRS':'900913','STYLES':nombreEstilo},
-                  serverType: 'geoserver'
+                  serverType: 'geoserver',
                 })),
                 opacity:1,
                 visible: false,
