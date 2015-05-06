@@ -24,6 +24,9 @@ angular.module('visorINTA.MainController', [])
 
     $scope.toolsManager = ToolsManager;
 
+    // DEBUGGING
+    $scope.verboseMode = true;
+
 
     $scope.loading = new $loading({
                 busyText: 'Cargando proyecto...',
@@ -118,8 +121,6 @@ angular.module('visorINTA.MainController', [])
 
 
     $scope.loadActiveProyectLayers = function(){
-      $scope.cleanMap();
-      console.log($scope.mapLayers);
       for (var i=0; i < $scope.activeProyectModel.capas.length;i++){
         layerConfig = $scope.activeProyectModel.capasConfig[$scope.activeProyectModel.capas[i]];
         tripleta = $scope.activeProyectModel.capas[i].split("::");
@@ -170,6 +171,25 @@ angular.module('visorINTA.MainController', [])
     // Se fija en la variable {proyectsConfig} si ya se tiene la configuracion del proyecto pedido.
     // retorna null si no se la tiene
     $scope.getProyectModel = function(id){
+        /*$scope.loading.show();
+        var model = $scope.proyectsModel[id] || null;
+        if (model == null){ // Todavia no pedi este proyeto, lo pido al servicio que me da el gestor
+           ProyectsFactory.getProyect(id)
+              .success(function(data) {
+                console.log(data);
+                model =  data; 
+                $scope.proyectsModel[$scope.activeProyect.id]  = model; // guardo el nuevo modelo pedido, para no volver a pedirlo en el futuro
+              }).error(function(data, status) {
+                console.error('Error peticionando proyecto ' + id, status, data);
+                model = null;
+              })
+        }
+        console.log('model');
+        console.log(model);
+        $scope.loading.hide();*/
+    }
+
+     $scope.getProyectModel = function(id){
         $scope.loading.show();
         var model = $scope.proyectsModel[id] || null;
         if (model == null){
@@ -185,6 +205,16 @@ angular.module('visorINTA.MainController', [])
       return ProyectsFactory.getProyect(id);
     }
 
+    // Los JSON de los proyectos que recibo desde el gestor no son válidos,
+    // tienen valores que no necesito (si los necesita el visor viejo).
+    // Este metodo elimina estos valores que no necesito
+    $scope.cleanProyectData = function(data){
+      console.log(data);
+      var res = data.replace(/microsoft/i, "");
+      console.log(res);
+      return JSON.parse(data);
+    }
+
     // El proyecto activo se mantiene en la variable {activeProyect}.
     // Cuando este cambia hay que:
     //    - Actualizar el modelo correspondiente al proyecto activo.
@@ -196,9 +226,40 @@ angular.module('visorINTA.MainController', [])
     //          - Limpiar el mapa (sacar capas de los modelos anteriores, dejar solo las base)
     //          - Agregar 
     $scope.updateActiveProyect = function(){
+        /*var activeID = $scope.activeProyect.id;
+        ProyectsFactory.getProyect(activeID)
+              .success(function(data) {
+                $scope.activeProyectModel = $scope.cleanProyectData(data);
+                $scope.proyectsModel[activeID]  = data; // guardo el nuevo modelo pedido, para no volver a pedirlo en el futuro
+                console.log("ACTIVE");
+                console.log($scope.activeProyectModel);
+              }).error(function(data, status) {
+                console.error('Error peticionando proyecto ' + id, status, data);
+                $scope.activeProyectModel = {};
+              })*/
         $scope.activeProyectModel = $scope.getProyectModel($scope.activeProyect.id);
+        $scope.cleanMap();
         $scope.loadActiveProyectLayers();
 
+    }
+
+
+    $scope.requestProjectsList = function(){
+        ProyectsFactory.getProyects()
+        .success(function(data) {
+          $scope.proyects = data.proys;  
+        }).error(function(data, status) {
+          console.error('Error peticionando lista de proyectos', status, data);
+        })
+    }
+
+    $scope.requestGeoServers = function(){
+        ProyectsFactory.getGeoServers()
+        .success(function(data) {
+          $scope.geoServers = data;
+        }).error(function(data, status) {
+          console.error('Error peticionando lista de geoservidores', status, data);
+        })
     }
 
     //// ROOT FUNCTIONS -  ///
@@ -247,9 +308,8 @@ angular.module('visorINTA.MainController', [])
 
 
     $scope.map = createMap();
-    $scope.proyects = ProyectsFactory.getProyects();
-    $scope.geoServers = ProyectsFactory.getGeoServers();
-    console.log($scope.toolsManager);
+    $scope.requestProjectsList();
+    $scope.requestGeoServers();
 
 
 
