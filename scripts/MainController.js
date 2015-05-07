@@ -84,12 +84,6 @@ angular.module('visorINTA.MainController', [])
     }
 
 
-
-
-    $scope.addLayerToMap = function(){
-
-    }
-
     $scope.isToolEnabled = function(tool){
       return $scope.toolsManager.isToolEnabled(tool);
     }

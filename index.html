@@ -26,6 +26,7 @@
   <script src="./lib/angular-animate.min.js"></script>
   <script src="./lib/quantumui.min.js"></script>
 	<script src="./lib/ol.js"></script>
+  <script src="./lib/xml2json.js"></script>
 
 
   <!-- Main Modules -->
@@ -57,6 +58,7 @@
   <!-- Factories / Services -->
   <script src="./scripts/providers/ProyectsFactory.js"></script>
   <script src="./scripts/providers/utils/MapUtilsService.js"></script>
+  <script src="./scripts/providers/utils/GeoServerService.js"></script>
 
 
 
@@ -194,7 +196,7 @@
     <visor-box id="imageFilterTool" class="toolBox">
       <image-filter-tool map='map' layer-list='activeLayers'></image-filter-tool>
     </visor-box>
-    <visor-box id="importWmsTool" class="toolBox bigToolBox">
+    <visor-box id="importWmsTool" class="toolBox bigToolBox importWMSBox">
       <import-wms-tool map='map' layer-list='activeLayers'></import-wms-tool>
     </visor-box>
   </div>

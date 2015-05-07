@@ -12,6 +12,7 @@ angular.module('visorINTA', [
   "visorINTA.directives.ProyectListDirective",
   "visorINTA.directives.VisorBoxDirective",
   "visorINTA.utils.MapUtilsService",
+  "visorINTA.utils.GeoServerService",
   "visorINTA.tools.toolsModule"
 
 ]).config(['$routeProvider', function ($routeProvider) {
