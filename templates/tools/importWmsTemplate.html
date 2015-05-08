@@ -4,11 +4,11 @@
 	  <div class="form-group col-md-5">
 	    <div class="input-group">
 		  <span class="input-group-addon" id="urlserver">http://</span>
-		  <input type="text" class="form-control" placeholder="Ingrese URL Servidor..." aria-describedby="urlserver" ng-model="serverURL">
+		  <input type="text" class="form-control" placeholder="Ingrese URL Servidor..." aria-describedby="urlserver" ng-model="userServerURL">
 		</div>
 	  </div>
 	  <div class="col-md-2">
-	  <button type="submit" class="btn btn-default" ng-click="loadServerCapabilities()">Pedir capas</button>
+	  <button type="submit" id="loadCapabilitiesBtn" data-loading-text="Pidiendo capas..." class="btn btn-default" ng-click="loadServerCapabilities()">Pedir capas</button>
 	  </div>
 	</form>
 </div>

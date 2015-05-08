@@ -4,7 +4,7 @@ angular.module('visorINTA.MainController', [])
     // Layers
 
     $scope.baseLayers = []; // capas base del mapa
-    $scope.mapLayers = []; // todas las capas (no base) del mapa, indepte de si estan activas (visibles) o no.
+    $scope.infoLayers = []; // todas las capas (no base) del mapa, indepte de si estan activas (visibles) o no.
                            // cuando se carga un proyecto, todas las capas se cargan aqui.
     $scope.activeLayers = []; // capas (no base) activas actualmente.
     $scope.importedLayers = []; // capas importadas por el usuario
@@ -109,8 +109,8 @@ angular.module('visorINTA.MainController', [])
     //    - Capas activas
     $scope.cleanMap = function(){
       $scope.activeLayers = []; // saco todas las capas activas
-      for (var k=0; k < $scope.mapLayers.length; k++) // limpio capas 'no base'
-        $scope.mapLayers[k].setVisible(false);
+      for (var k=0; k < $scope.infoLayers.length; k++) // limpio capas 'no base'
+        $scope.infoLayers[k].setVisible(false);
     }
 
 
@@ -143,7 +143,7 @@ angular.module('visorINTA.MainController', [])
                 name: $scope.activeProyectModel.capasConfig[$scope.activeProyectModel.capas[i]].nombre,
               })
           $scope.map.addLayer(layer_temp); 
-          $scope.mapLayers.push(layer_temp);
+          $scope.infoLayers.push(layer_temp);
           //$scope.activeLayers.push(layer_temp);
           $scope.map.getView().fitExtent(extentGoogle, $scope.map.getSize());
         //}
@@ -259,6 +259,11 @@ angular.module('visorINTA.MainController', [])
     //// ROOT FUNCTIONS -  ///
     // Funciones que pueden ser llamadas por cualquier modulo de la app, que injecten
     // dentro $rootScope
+
+
+    $rootScope.addLayer = function(layerObject){
+
+    }
 
     $rootScope.addActiveLayer = function(layer){
       if (layer){

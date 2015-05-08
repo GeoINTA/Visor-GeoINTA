@@ -65,10 +65,12 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 			$scope.styleSelected = [];
 
 			$scope.loadServerCapabilities = function(){
-				if ($scope.serverURL){
+				if ($scope.userServerURL){
+					$scope.fullServerURL = 'http://' + $scope.userServerURL;
+					var $btn = $('#loadCapabilitiesBtn').button('loading');
 					$scope.serverCapabilities = {};
 					$scope.serverCapabilities.layers = {};
-					GeoServerUtils.getServerCapabilities($scope.serverURL)
+					GeoServerUtils.getServerCapabilities($scope.fullServerURL)
 					.success(function(data) {
 			      		for (i in data.WMS_Capabilities.Capability.Layer.Layer){
 			      			layerData = data.WMS_Capabilities.Capability.Layer.Layer[i];
@@ -82,13 +84,15 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 								$scope.serverCapabilities.layers[layerData.Name].styles.push(styleData.Name);
 							}
 			      		}
-			      		$scope.serverRequested = $scope.serverURL;
+			      		$scope.serverRequested = $scope.fullServerURL;
 			      		//$scope.layerSelected = $scope.serverCapabilities.layers[0];
 			      		//$scope.styleSelected = $scope.layerSelected.styles[0];
 
 				    }).error(function(data, status) {
 				      console.error('Error peticionando capacidades del servidor', status, data);
-				    })
+				    }).finally(function() {
+					  $btn.button('reset');
+					});
 				}
 			}
 
