@@ -86,7 +86,7 @@ angular.module('visorINTA.tools.spyLayer.SpyLayerDirective', [])
 
 	        scope.getObjectLayerSelected = function(){
 	        	if (scope.layerSelected){
-	        		return $rootScope.getLayerByName(scope.layerSelected);
+	        		return $rootScope.getLayerBy("title",scope.layerSelected);
 	        	}
 	        	return null;
 	        }
@@ -94,7 +94,7 @@ angular.module('visorINTA.tools.spyLayer.SpyLayerDirective', [])
 	        // Acciones a realizar cuando se abre la herramienta
 	        scope.openTool = function(){
 	        	if (scope.layerList.length){
-	        		scope.layerSelected = scope.layerList[0].get('name');
+	        		scope.layerSelected = scope.layerList[0].get('title');
 	        		scope.addSpyLayerToMap();
 	        	}	
 	        }

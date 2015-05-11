@@ -43,8 +43,8 @@ angular.module('visorINTA.tools.imageFilter.ImageFilterDirective', [])
 
 	        scope.applyFilter = function(filter,layer){
 	        	kernel = scope.getFilterKernel(filter);
-	        	scope.layerSelected = $rootScope.getLayerByName(layer);
-	        	console.log(scope.layerSelected.get('name'));
+	        	scope.layerSelected = $rootScope.getLayerBy("title",layer);
+	        	console.log(scope.layerSelected.get('title'));
 	        	if (kernel){
 		        	selectedKernel = scope.normalizeKernel(kernel);
 	  				map.render();
@@ -127,7 +127,7 @@ angular.module('visorINTA.tools.imageFilter.ImageFilterDirective', [])
 
 	        scope.getObjectLayerSelected = function(){
 	        	if (scope.layerSelected){
-	        		return $rootScope.getLayerByName(scope.layerSelected);
+	        		return $rootScope.getLayerByTitle(scope.layerSelected);
 	        	}
 	        	return null;
 	        }

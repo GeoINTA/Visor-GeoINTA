@@ -67,7 +67,7 @@ angular.module('visorINTA.tools.swipe.SwipeDirective', [])
 
 	        scope.getObjectLayerSelected = function(){
 	        	if (scope.layerSelected){
-	        		return $rootScope.getLayerByName(scope.layerSelected);
+	        		return $rootScope.getLayerBy("title",scope.layerSelected);
 	        	}
 	        	return null;
 	        }
@@ -79,7 +79,7 @@ angular.module('visorINTA.tools.swipe.SwipeDirective', [])
 				  map.render();
 	        	});
 	        	if (scope.layerList.length){
-	        		scope.layerSelected = scope.layerList[0].get('name');
+	        		scope.layerSelected = scope.layerList[0].get('title');
 	        		scope.addSwipeToMap();
 	        	}	
 	        }

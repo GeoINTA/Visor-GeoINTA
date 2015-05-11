@@ -25,10 +25,10 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
             	$timeout(function(){
             	for (var i = 0 ; i < scope.layersList.length; i++){
 					var layerObject = scope.layersList[i];
-					var opacity = new ol.dom.Input(document.getElementById('opacity' + layerObject.get('name')));
+					var opacity = new ol.dom.Input(document.getElementById('opacity' + layerObject.get('title')));
 					opacity.bindTo('value', layerObject, 'opacity').transform(parseFloat, String);
 					if (scope.showCheckbox){
-						var inputCheck = new ol.dom.Input(document.getElementById("chck" + layerObject.get('name')));
+						var inputCheck = new ol.dom.Input(document.getElementById("chck" + layerObject.get('title')));
 						inputCheck.bindTo('checked', layerObject, 'visible');	
 					}
 				}
@@ -45,7 +45,7 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
         	$scope.getLayerNames = function(){
         		var names = [];
         		for (var i = $scope.layersList.length - 1; i >= 0  ; i--){
-        			names.push($scope.layersList[i].get('name'));
+        			names.push($scope.layersList[i].get('title'));
         		}
         		return names;
         	}

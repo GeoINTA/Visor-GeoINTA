@@ -47,11 +47,13 @@ angular.module('visorINTA.MainController', [])
       var layer1 = new ol.layer.Tile({
               preload: 4,
               source: new ol.source.OSM(),
-              name:"OSM GO",
+              title:"OSM GO",
+              name:MapUtils.constructLayerIdentifier("base_layer_OSM","no_style")
           });
       var layer2 = new ol.layer.Tile({
             source: new ol.source.MapQuest({layer: 'sat'}),
-            name: "Satelite",
+            title: "Satelite",
+            name:MapUtils.constructLayerIdentifier("base_layer_satellite","no_style")
       });
       layers.push(layer1);
       layers.push(layer2);
@@ -116,6 +118,7 @@ angular.module('visorINTA.MainController', [])
 
     $scope.loadActiveProyectLayers = function(){
       for (var i=0; i < $scope.activeProyectModel.capas.length;i++){
+        var layerObject, layerIdentifier;
         layerConfig = $scope.activeProyectModel.capasConfig[$scope.activeProyectModel.capas[i]];
         tripleta = $scope.activeProyectModel.capas[i].split("::");
         nombreServidor = tripleta[0];
@@ -129,11 +132,19 @@ angular.module('visorINTA.MainController', [])
         }
         extent = [$scope.activeProyectModel.modelo[0].oeste,$scope.activeProyectModel.modelo[0].sur,$scope.activeProyectModel.modelo[0].este,$scope.activeProyectModel.modelo[0].norte];
         extentGoogle = ol.extent.applyTransform(extent, ol.proj.getTransform("EPSG:4326", "EPSG:900913"));
-        //bbox_rep = $scope.map.getView()getMaxExtent();
-        //if($scope.map.getLayersByName($scope.activeProyectModel.capas[i]).length == 0){
-         // layer_temp = new OpenLayers.Layer.WMS($scope.activeProyectModel.capas[i],urlServidor,{layers: nombreCapa,transparent: true,styles:nombreEstilo}, {opacity:1,visibility: true});
-          layer_temp = new ol.layer.Tile({
-                source: new ol.source.TileWMS(/** @type {olx.source.TileWMSOptions} */ ({
+        layerIdentifier =  MapUtils.constructLayerIdentifier(nombreCapa,nombreEstilo);
+        layerObject = $rootScope.getLayerBy('id',layerIdentifier);
+        if(!layerObject){
+          layerObject = MapUtils.createWMSLayerObject({
+                serverURL: urlServidor,
+                layerName: nombreCapa,
+                layerTitle: $scope.activeProyectModel.capasConfig[$scope.activeProyectModel.capas[i]].nombre,
+                style: nombreEstilo,
+                visible:false,
+                opacity:1
+            });
+          /*layerObject = new ol.layer.Tile({
+                source: new ol.source.TileWMS(/** @type {olx.source.TileWMSOptions} */ /*({
                   url: urlServidor,
                   params: {'LAYERS': nombreCapa, 'TILED': true,'VERSION':'1.1.1','SRS':'900913','STYLES':nombreEstilo},
                   serverType: 'geoserver',
@@ -141,9 +152,12 @@ angular.module('visorINTA.MainController', [])
                 opacity:1,
                 visible: false,
                 name: $scope.activeProyectModel.capasConfig[$scope.activeProyectModel.capas[i]].nombre,
-              })
-          $scope.map.addLayer(layer_temp); 
-          $scope.infoLayers.push(layer_temp);
+                id:   layerIdentifier // Armo tupla nombre_capa::nombre_estilo
+              })*/
+          }
+          //console.log(layerObject.get('id'));
+          $scope.map.addLayer(layerObject); 
+          $scope.infoLayers.push(layerObject);
           //$scope.activeLayers.push(layer_temp);
           $scope.map.getView().fitExtent(extentGoogle, $scope.map.getSize());
         //}
@@ -204,8 +218,6 @@ angular.module('visorINTA.MainController', [])
     // Este metodo elimina estos valores que no necesito
     $scope.cleanProyectData = function(data){
       console.log(data);
-      var res = data.replace(/microsoft/i, "");
-      console.log(res);
       return JSON.parse(data);
     }
 
@@ -292,6 +304,10 @@ angular.module('visorINTA.MainController', [])
 
     $rootScope.getLayerByName = function(name){
       return MapUtils.getLayerByName($scope.map,name);
+    }
+
+    $rootScope.getLayerBy = function(field,value){
+      return MapUtils.getLayerBy($scope.map,field,value);  
     }
 
     //      ###       WATCHERS       ###      //

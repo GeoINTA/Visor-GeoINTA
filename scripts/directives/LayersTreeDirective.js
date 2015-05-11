@@ -14,7 +14,7 @@ angular.module('visorINTA.directives.LayersTreeDirective', [])
 			});
 
 			$(element).on('change', '.treeLayerChck', function() {
-				layerObject = MapUtils.getLayerByName(scope.map,this.name);
+				layerObject = MapUtils.getLayerByTitle(scope.map,this.name);
 				if (this.checked){
 					$rootScope.addActiveLayer(layerObject);
 				} else {
@@ -43,7 +43,7 @@ angular.module('visorINTA.directives.LayersTreeDirective', [])
 			function initNode(){
 				if (node.leaf){
 					node.layerName = node.layerNames[0];
-					node.layerObject = MapUtils.getLayerByName(scope.map,node.text);
+					node.layerObject = MapUtils.getLayerByTitle(scope.map,node.text);
 					if (node.checked){
 						$rootScope.addActiveLayer(node.layerObject);
 					}
@@ -53,7 +53,7 @@ angular.module('visorINTA.directives.LayersTreeDirective', [])
         		
         	function bindNodeControls(){	
         		// bind checkbox
-				var inputCheck = new ol.dom.Input(document.getElementById("chckTree" + node.layerObject.get('name')));
+				var inputCheck = new ol.dom.Input(document.getElementById("chckTree" + node.layerObject.get('title')));
 				inputCheck.bindTo('checked', node.layerObject, 'visible');
 				// cambio estado checkbox
 
