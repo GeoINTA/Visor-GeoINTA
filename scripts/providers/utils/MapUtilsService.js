@@ -1,6 +1,18 @@
 angular.module('visorINTA.utils.MapUtilsService', [])
 .service('MapUtils', function(){
 
+
+    this.layerExists = function(map,layerObject){
+        var exist = false;
+        console.log('pre-exist');
+        map.getLayers().forEach(function(layer) {
+            if (layer.get('id') == layerObject.get('id')){
+                exist = true;
+            }
+        });
+        return exist;
+    }
+
 	this.getLayerByTitle = function(map,value) {
 		layer = this.getLayerBy(map,'title',value);
 		return layer;

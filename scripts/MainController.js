@@ -143,22 +143,9 @@ angular.module('visorINTA.MainController', [])
                 visible:false,
                 opacity:1
             });
-          /*layerObject = new ol.layer.Tile({
-                source: new ol.source.TileWMS(/** @type {olx.source.TileWMSOptions} */ /*({
-                  url: urlServidor,
-                  params: {'LAYERS': nombreCapa, 'TILED': true,'VERSION':'1.1.1','SRS':'900913','STYLES':nombreEstilo},
-                  serverType: 'geoserver',
-                })),
-                opacity:1,
-                visible: false,
-                name: $scope.activeProyectModel.capasConfig[$scope.activeProyectModel.capas[i]].nombre,
-                id:   layerIdentifier // Armo tupla nombre_capa::nombre_estilo
-              })*/
           }
-          //console.log(layerObject.get('id'));
           $scope.map.addLayer(layerObject); 
           $scope.infoLayers.push(layerObject);
-          //$scope.activeLayers.push(layer_temp);
           $scope.map.getView().fitExtent(extentGoogle, $scope.map.getSize());
         //}
       }
@@ -268,23 +255,82 @@ angular.module('visorINTA.MainController', [])
         })
     }
 
+    // Metodo que inserta en el modelo del proyecto actual, la capa recibida,
+    // dentro de la rama especificada en 'type'
+    $scope.insertImportedLayerToModel = function(layerObject,type){
+      console.log($scope.activeProyectModel);
+      var model = ($scope.activeProyectModel.modelo) ? $scope.activeProyectModel.modelo[0] : null; // puede ser nulo
+      console.log(model);
+      if (!model){
+      } else {
+        console.log(model);
+        //model["Capas importadas"][type].push(newNode);
+      }
+    }
+    
+
+    // Se fija si la capa ya existe en el vector.
+    // Compara campo 'id' de la capa.
+    $scope.layerInArray = function(vector,layerObject){
+      for (var i = 0 ; i < vector.length; i++){
+        lyrTemp = vector[i];
+        if (lyrTemp.get('id') == layerObject.get('id')){
+          return true;
+        }
+      }
+    return false;
+    }
+
     //// ROOT FUNCTIONS -  ///
     // Funciones que pueden ser llamadas por cualquier modulo de la app, que injecten
     // dentro $rootScope
 
+    // Retorna true si la capa existe en el mapa.
+    // Compara campo 'id' de cada capa
+    $rootScope.layerExists = function(layerObject){
+        return MapUtils.layerExists(layerObject);
+    }
+
 
     $rootScope.addLayer = function(layerObject){
-
+      try {
+          var exist = $rootScope.getLayerBy('title',layerObject);
+          if (!exist){
+            $scope.map.addLayer(layerObject);
+            return true;
+          }
+          return false;
+      } catch(err){
+          return false;
+      }
     }
 
     $rootScope.addActiveLayer = function(layer){
       if (layer){
-          $scope.activeLayers.push(layer);
+          if (!$scope.layerInArray($scope.activeLayers,layer)){
+            $scope.activeLayers.push(layer);
+          }
           if (!layer.getVisible()){
             layer.setVisible(true);
           }
-          $scope.$apply();
+          try{
+            $scope.$apply();
+          } catch(err){
+
+          }
       }
+    }
+
+
+    // Metodo que inserta a la capa en el mapa,
+    // y la establece como activa.
+    // Luego, las guarda en la lista importedLayers
+    $rootScope.addImportedLayer = function(layerObject,type){
+       if ($rootScope.addLayer(layerObject,true)){
+          $rootScope.addActiveLayer(layerObject);
+          $scope.importedLayers.push(layerObject);
+       }
+
     }
 
     $rootScope.getActiveLayers = function(){
@@ -295,20 +341,17 @@ angular.module('visorINTA.MainController', [])
     $rootScope.removeActiveLayer = function(layer){
         for (var i = 0; i < $scope.activeLayers.length; i++) {
             tmpLayer = $scope.activeLayers[i];
-            if (tmpLayer.get('name') == layer.get('name')){
+            if (tmpLayer.get('id') == layer.get('id')){
               $scope.activeLayers.splice(i,1);
             }
         }
         $scope.$apply();
     }
 
-    $rootScope.getLayerByName = function(name){
-      return MapUtils.getLayerByName($scope.map,name);
-    }
-
     $rootScope.getLayerBy = function(field,value){
       return MapUtils.getLayerBy($scope.map,field,value);  
     }
+
 
     //      ###       WATCHERS       ###      //
 
