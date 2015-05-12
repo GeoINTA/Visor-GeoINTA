@@ -113,6 +113,8 @@ angular.module('visorINTA.MainController', [])
       $scope.activeLayers = []; // saco todas las capas activas
       for (var k=0; k < $scope.infoLayers.length; k++) // limpio capas 'no base'
         $scope.infoLayers[k].setVisible(false);
+      for (var j=0; j < $scope.importedLayers.length; j++) // limpio capas 'no base'
+        $scope.map.removeLayer($scope.importedLayers[j]);
     }
 
 
