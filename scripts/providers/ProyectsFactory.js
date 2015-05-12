@@ -283,8 +283,19 @@ angular.module('visorINTA.factories.ProyectsFactory',[])
 
     proyectsFactory.getProyect = function(id){
         //return this.requestData({modo:'mod',id:id},true);
-        var model = proyectsConfig[id] || null;
-        return model;
+        return $http.get(networkServices.gestor, {
+                params : {modo:'mod',id:id},
+                transformResponse:function(data,header,status){
+                    var regExp = /mapfish\.\w+.\w+\((.*?)\)/g;
+                    data = data.replace(regExp,'""');
+                    var second = /\'<img src=\"\' \+ \"\" \+ \'\">\'/g;
+                    data = data.replace(second,'""');
+                    var jsonData = JSON.parse(data);
+                    return jsonData;
+                }
+        })
+        //var model = proyectsConfig[id] || null;
+        //return model;
     }
 
     proyectsFactory.getGeoServers = function(){
@@ -292,14 +303,16 @@ angular.module('visorINTA.factories.ProyectsFactory',[])
     }
 
 
-    proyectsFactory.requestData = function(params,transformResponse){
-      if (transformResponse){
-        return $http.get(networkServices.gestor, {
+    proyectsFactory.requestData = function(params,transformResponseFunction){
+      if (transformResponseFunction){
+        return $http.jsonp(networkServices.gestor + '?callback=JSON_CALLBACK', {
                 params : params,
-                transformResponse:undefined
+                transformResponse:function(data,header,status){
+                    return data;
+                }
         })
       } else {
-        return $http.get(networkServices.gestor, {
+        return $http.jsonp(networkServices.gestor + '?callback=JSON_CALLBACK', {
                   params : params
         })
       }

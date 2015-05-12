@@ -87,8 +87,10 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 							}
 			      		}
 			      		$scope.serverRequested = $scope.fullServerURL;
-			      		//$scope.layerSelected = $scope.serverCapabilities.layers[0];
-			      		//$scope.styleSelected = $scope.layerSelected.styles[0];
+			      		$scope.layerSelected = $scope.serverCapabilities.layers[Object.keys($scope.serverCapabilities.layers)[0]];
+			      		$scope.styleSelected = $scope.layerSelected.styles[0];
+			      		$scope.layerSelectdIndex = 0;
+			      		$scope.styleSelectedIndex = 0;
 
 				    }).error(function(data, status) {
 				      console.error('Error peticionando capacidades del servidor', status, data);
@@ -98,13 +100,17 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 				}
 			}
 
-			$scope.setLayerSelected = function(layer){
+			$scope.setLayerSelected = function(layer,index){
 				$scope.layerSelected = layer;
 				$scope.styleSelected = $scope.layerSelected.styles[0];
+				$scope.layerSelectdIndex = index;
+				$scope.styleSelectedIndex = 0;
 			}
 
-			$scope.setStyleSelected = function(style){
+			$scope.setStyleSelected = function(style,index){
 				$scope.styleSelected = style;
+				$scope.styleSelectedIndex = index;
+				console.log(index);
 			}
 
 		}

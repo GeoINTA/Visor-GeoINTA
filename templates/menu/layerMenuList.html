@@ -2,7 +2,7 @@
 	<div>No se ha cargado ninguna capa</div>
 </div>
 <ul ng-if="layersList.length" class="list-group">
-	<li class="list-group-item" ng-repeat='layer in getLayerNames()'>
+	<li class="list-group-item" ng-repeat='layer in getLayerNames() track by $index' >
 		<button data-nq-toggle-popover="#popover" data-qs-title="{{layer}}" data-qs-content="{{layer}}"  class="btn pull-right btn-sm" type="button"><i class="fa fa-info"></i></button>
 	<div class="checkbox">
 		<label>

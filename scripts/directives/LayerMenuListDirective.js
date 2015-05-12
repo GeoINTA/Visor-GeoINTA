@@ -26,6 +26,7 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
             	for (var i = 0 ; i < scope.layersList.length; i++){
 					var layerObject = scope.layersList[i];
 					var opacity = new ol.dom.Input(document.getElementById('opacity' + layerObject.get('title')));
+					
 					opacity.bindTo('value', layerObject, 'opacity').transform(parseFloat, String);
 					if (scope.showCheckbox){
 						var inputCheck = new ol.dom.Input(document.getElementById("chck" + layerObject.get('title')));

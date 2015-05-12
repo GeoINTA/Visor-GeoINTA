@@ -19,10 +19,9 @@
 		<div class="panel panel-default capabilitiesPanel">
 		  <!-- Default panel contents -->
 		  <div class="panel-heading">Lista de capas</div>
-
 		  <!-- List group -->
 		  <div id="importLayersList"class="list-group">
-			<a class="list-group-item" ng-repeat="layer in serverCapabilities.layers" ng-click="setLayerSelected(layer)">{{layer.title}}</a>
+			<a class="list-group-item" ng-class="{ 'active': $index == layerSelectdIndex }" ng-repeat="layer in serverCapabilities.layers" ng-click="setLayerSelected(layer,$index)">{{layer.title}}</a>
 		  </div>
 		</div>
 	</div>
@@ -33,7 +32,7 @@
 
 		  <!-- List group -->
 		  <div id="importStyleList" class="list-group">
-			<a class="list-group-item" ng-repeat="style in layerSelected.styles" ng-click="setStyleSelected(style)">{{style}}</a>
+			<a class="list-group-item" ng-class="{ 'active': $index == styleSelectedIndex }" ng-repeat="style in layerSelected.styles" ng-click="setStyleSelected(style,$index)">{{style}}</a>
 		  </div>
 		</div>
 	</div>
