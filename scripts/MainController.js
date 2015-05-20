@@ -130,8 +130,10 @@ angular.module('visorINTA.MainController', [])
         if(server.urlCache && layerConfig.useCache == "true"){
            console.log("USE CACHE!");
             urlServidor = server.urlCache;
+            cacheOptions = {resolutions:mapConfig.baseResolutions};
         } else {
             urlServidor = server.url;
+            cacheOptions = null;
         }
         extent = [$scope.activeProyectModel.modelo[0].oeste,$scope.activeProyectModel.modelo[0].sur,$scope.activeProyectModel.modelo[0].este,$scope.activeProyectModel.modelo[0].norte];
         extentGoogle = ol.extent.applyTransform(extent, ol.proj.getTransform("EPSG:4326", "EPSG:900913"));
@@ -139,13 +141,15 @@ angular.module('visorINTA.MainController', [])
         layerObject = $rootScope.getLayerBy('id',layerIdentifier);
         if(!layerObject){
           layerObject = MapUtils.createWMSLayerObject({
-                serverURL: urlServidor,
-                layerName: nombreCapa,
-                layerTitle: $scope.activeProyectModel.capasConfig[$scope.activeProyectModel.capas[i]].nombre,
-                style: nombreEstilo,
-                visible:false,
-                opacity:1
-            });
+                                    serverURL: urlServidor,
+                                    layerName: nombreCapa,
+                                    layerTitle: $scope.activeProyectModel.capasConfig[$scope.activeProyectModel.capas[i]].nombre,
+                                    style: nombreEstilo,
+                                    visible:false,
+                                    opacity:1
+                                },
+                                cacheOptions
+                );
           }
           $scope.map.addLayer(layerObject); 
           $scope.infoLayers.push(layerObject);

@@ -4,7 +4,6 @@ angular.module('visorINTA.utils.MapUtilsService', [])
 
     this.layerExists = function(map,layerObject){
         var exist = false;
-        console.log('pre-exist');
         map.getLayers().forEach(function(layer) {
             if (layer.get('id') == layerObject.get('id')){
                 exist = true;
@@ -38,13 +37,25 @@ angular.module('visorINTA.utils.MapUtilsService', [])
     // layerTitle es el titulo publico con el que se muestra a la capa
     // layerName es el nombre de la capa tal cual aparece en el servidor
     // id es una composicion dada por el nombre y el estilo de la capa
-    this.createWMSLayerObject = function(data){
+    this.createWMSLayerObject = function(data,cacheOptions){
+        // Cache
+        var gwcGrid = null;
+        if (cacheOptions){
+            console.log('create cache');
+            gwcGrid = new ol.tilegrid.TileGrid({
+                    resolutions: cacheOptions.resolutions,
+                    origin: cacheOptions.origin || [-60.0185,-34.8765],
+                    tileSize: 256
+            })
+            console.log(gwcGrid);
+        }
+        // build layer
     	layer = new ol.layer.Tile({
                 source: new ol.source.TileWMS(/** @type {olx.source.TileWMSOptions} */ ({
                   url: data.serverURL,
                   params: {'LAYERS': data.layerName, 'TILED': true,'VERSION':'1.1.1','SRS':'900913','STYLES':data.style},
-                  serverType: 'geoserver',
                 })),
+                tileGrid: gwcGrid,
                 opacity:data.opacity,
                 visible: data.visible,
                 title: data.layerTitle,
