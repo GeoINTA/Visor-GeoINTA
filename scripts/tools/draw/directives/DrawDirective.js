@@ -77,7 +77,6 @@ angular.module('visorINTA.tools.draw.DrawDirective', [])
 
 	        // Usuario cambia tipo de objecto a dibujar
 	        scope.typeDrawChanged = function(){
-	        	console.log(scope.drawType);
 	        	map.removeInteraction(draw);
 	        	draw = new ol.interaction.Draw({
 		      		source: source,

@@ -7,7 +7,6 @@ angular.module('visorINTA.directives.menudirectives', [])
   		},
   		templateUrl:'templates/menuElement.html',
   		controller: function($scope){
-  			console.log($scope.menuElement);
   		},
       replace:false,
   	}

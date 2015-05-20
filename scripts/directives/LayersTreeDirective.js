@@ -15,7 +15,6 @@ angular.module('visorINTA.directives.LayersTreeDirective', [])
 
 			$(element).on('change', '.treeLayerChck', function() {
 				layerObject = MapUtils.getLayerByTitle(scope.map,this.name);
-				console.log(layerObject);
 				if (this.checked){
 					$rootScope.addActiveLayer(layerObject);
 				} else {

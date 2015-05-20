@@ -110,7 +110,6 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 			$scope.setStyleSelected = function(style,index){
 				$scope.styleSelected = style;
 				$scope.styleSelectedIndex = index;
-				console.log(index);
 			}
 
 		}

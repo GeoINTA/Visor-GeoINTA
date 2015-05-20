@@ -128,7 +128,6 @@ angular.module('visorINTA.MainController', [])
         nombreCapa = tripleta[1];
         nombreEstilo = (tripleta[2] == "SIN_ESTILO") ? "" : tripleta[2];
         if(server.urlCache && layerConfig.useCache == "true"){
-           console.log("USE CACHE!");
             urlServidor = server.urlCache;
             cacheOptions = {resolutions:mapConfig.baseResolutions};
         } else {
@@ -207,7 +206,6 @@ angular.module('visorINTA.MainController', [])
       //return ProyectsFactory.getProyect(id);
       ProyectsFactory.getProyect(id)
         .success(function(data) {
-          console.log(data);  
         }).error(function(data, status) {
           console.error('Error peticionando proyecto ' + id, status, data);
         })
@@ -217,7 +215,6 @@ angular.module('visorINTA.MainController', [])
     // tienen valores que no necesito (si los necesita el visor viejo).
     // Este metodo elimina estos valores que no necesito
     $scope.cleanProyectData = function(data){
-      console.log(data);
       return JSON.parse(data);
     }
 
@@ -235,7 +232,6 @@ angular.module('visorINTA.MainController', [])
         var activeID = $scope.activeProyect.id;
         ProyectsFactory.getProyect(activeID)
               .success(function(data) {
-                console.log(data);
                 $scope.activeProyectModel = data;
                 $scope.proyectsModel[activeID]  = data; // guardo el nuevo modelo pedido, para no volver a pedirlo en el futuro
                 $scope.cleanMap();
@@ -266,20 +262,6 @@ angular.module('visorINTA.MainController', [])
           console.error('Error peticionando lista de geoservidores', status, data);
         })
     }
-
-    // Metodo que inserta en el modelo del proyecto actual, la capa recibida,
-    // dentro de la rama especificada en 'type'
-    $scope.insertImportedLayerToModel = function(layerObject,type){
-      console.log($scope.activeProyectModel);
-      var model = ($scope.activeProyectModel.modelo) ? $scope.activeProyectModel.modelo[0] : null; // puede ser nulo
-      console.log(model);
-      if (!model){
-      } else {
-        console.log(model);
-        //model["Capas importadas"][type].push(newNode);
-      }
-    }
-    
 
     // Se fija si la capa ya existe en el vector.
     // Compara campo 'id' de la capa.

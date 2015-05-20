@@ -44,7 +44,6 @@ angular.module('visorINTA.tools.imageFilter.ImageFilterDirective', [])
 	        scope.applyFilter = function(filter,layer){
 	        	kernel = scope.getFilterKernel(filter);
 	        	scope.layerSelected = $rootScope.getLayerBy("title",layer);
-	        	console.log(scope.layerSelected.get('title'));
 	        	if (kernel){
 		        	selectedKernel = scope.normalizeKernel(kernel);
 	  				map.render();
@@ -55,7 +54,6 @@ angular.module('visorINTA.tools.imageFilter.ImageFilterDirective', [])
 	        }
 
 	        scope.convolve = function(context, kernel){
-	        	console.log("convolve");
 				var canvas = context.canvas;
 				var width = canvas.width;
 				var height = canvas.height;

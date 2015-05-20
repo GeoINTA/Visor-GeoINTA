@@ -41,13 +41,11 @@ angular.module('visorINTA.utils.MapUtilsService', [])
         // Cache
         var gwcGrid = null;
         if (cacheOptions){
-            console.log('create cache');
             gwcGrid = new ol.tilegrid.TileGrid({
                     resolutions: cacheOptions.resolutions,
                     origin: cacheOptions.origin || [-60.0185,-34.8765],
                     tileSize: 256
             })
-            console.log(gwcGrid);
         }
         // build layer
     	layer = new ol.layer.Tile({
