@@ -230,6 +230,7 @@ angular.module('visorINTA.MainController', [])
     //          - Agregar 
     $scope.updateActiveProyect = function(){
         var activeID = $scope.activeProyect.id;
+        $scope.loading.show();
         ProyectsFactory.getProyect(activeID)
               .success(function(data) {
                 $scope.activeProyectModel = data;
@@ -239,7 +240,9 @@ angular.module('visorINTA.MainController', [])
               }).error(function(data, status) {
                 console.error('Error peticionando proyecto ' + id, status, data);
                 $scope.activeProyectModel = {};
-              })
+              }).finally(function() {
+                  $scope.loading.hide();
+              });
         //$scope.activeProyectModel = $scope.getProyectModel($scope.activeProyect.id);
 
     }
