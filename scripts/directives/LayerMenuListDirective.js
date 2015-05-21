@@ -1,5 +1,5 @@
 angular.module('visorINTA.directives.LayerMenuListDirective', [])
-.directive('layerMenuList', function($timeout) {
+.directive('layerMenuList', function($timeout,MapUtils) {
 	return {
 		restrict: 'EA',
 		scope : {
@@ -17,22 +17,38 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
                 if (newValue === oldValue){ // al inicio, los dos tienen el mismo valor
       				return;
 				};
-            	bindLayersControls();	
+            	bindLayersControls();
             });
 
 
             function bindLayersControls(){
             	$timeout(function(){
-            	for (var i = 0 ; i < scope.layersList.length; i++){
-					var layerObject = scope.layersList[i];
-					var opacity = new ol.dom.Input(document.getElementById('opacity' + layerObject.get('title')));
-					
-					opacity.bindTo('value', layerObject, 'opacity').transform(parseFloat, String);
-					if (scope.showCheckbox){
-						var inputCheck = new ol.dom.Input(document.getElementById("chck" + layerObject.get('title')));
-						inputCheck.bindTo('checked', layerObject, 'visible');	
-					}
-				}
+		            	for (var i = 0 ; i < scope.layersList.length; i++){
+							var layerObject = scope.layersList[i];
+							var element = document.getElementById('opacity' + layerObject.get('title'));
+							$(element).on("change", function() {
+								layer = MapUtils.getLayerByTitle(scope.map,$(this).attr('name'));
+		      					layer.setOpacity($(this).val()); // max = 1, min = 0
+		    				});
+							if (scope.showCheckbox){
+								var inputCheck = document.getElementById("chck" + layerObject.get('title'));
+								inputCheck.addEventListener('change', function() {
+								  var checked = this.checked;
+								  layer = MapUtils.getLayerByTitle(scope.map,$(this).attr('name'));
+								  if (checked !== layer.getVisible()) {
+								    layer.setVisible(checked);
+								  }
+								});
+
+								layerObject.on('change:visible', function() {
+								  var visible = this.getVisible();
+								  inputCheck = document.getElementById("chck" + this.get('title'));
+								  if (inputCheck && (visible !== inputCheck.checked)) {
+								    inputCheck.checked = visible;
+								  }
+								});
+							}
+						}
             	});
             };
       		

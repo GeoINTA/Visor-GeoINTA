@@ -53,8 +53,26 @@ angular.module('visorINTA.directives.LayersTreeDirective', [])
         		
         	function bindNodeControls(){	
         		// bind checkbox
-				var inputCheck = new ol.dom.Input(document.getElementById("chckTree" + node.layerObject.get('title')));
-				inputCheck.bindTo('checked', node.layerObject, 'visible');
+				var inputCheck = document.getElementById("chckTree" + node.layerObject.get('title'));
+				inputCheck.checked = node.checked;
+				inputCheck.addEventListener('change', function() {
+				  var checked = this.checked;
+				  layer = MapUtils.getLayerByTitle(scope.map,$(this).attr('name'));
+				  if (checked !== layer.getVisible()) {
+				    layer.setVisible(checked);
+				  }
+				});
+
+				node.layerObject.on('change:visible', function() {
+				  var visible = this.getVisible();
+				  console.log(node.layerObject.get('title'));
+				  inputCheck = document.getElementById("chckTree" + this.get('title'));
+				  //console.log($(this).attr('name'));
+				  if (visible !== inputCheck.checked) {
+				    inputCheck.checked = visible;
+				  }
+				});
+				//inputCheck.bindTo('checked', node.layerObject, 'visible');
 				// cambio estado checkbox
 
 
