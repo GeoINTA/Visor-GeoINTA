@@ -1,0 +1,22 @@
+<div ng-if="!infoReceived.length" class="alert alert-warning" role="alert">
+	Haga click en un punto del mapa para recibir información
+</div>
+<div ng-if="infoReceived.length">
+	<ul class="nav nav-tabs">
+	    <li ng-repeat="infoTab in infoReceived"  ng-class="{ 'active': $first }"><a data-toggle="tab" href="#{{infoTab.tabID}}">{{infoTab.title}}</a></li>
+	</ul>
+	<div class="tab-content">
+		<div ng-repeat="infoTab in infoReceived" id="{{infoTab.tabID}}" class="tab-pane fade" ng-class="{ 'in active': $first }">
+			<table class="table table-striped">
+				<tr>
+					<th>Campo</th>
+					<th>Valor</th>
+				</tr>
+				<tr ng-repeat="(infoKey,infoValue) in infoTab.info">
+					<td>{{infoKey}}</td>
+					<td>{{infoValue}}</td>
+				</tr>
+			</table>
+		</div>	    
+	</div>
+</div>

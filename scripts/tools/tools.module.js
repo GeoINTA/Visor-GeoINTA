@@ -4,7 +4,8 @@ angular.module('visorINTA.tools.toolsModule', [
         'visorINTA.tools.spyLayerModule',
         'visorINTA.tools.swipeModule',
         'visorINTA.tools.imageFilterModule',
-        'visorINTA.tools.importWmsModule'
+        'visorINTA.tools.importWmsModule',
+        'visorINTA.tools.featureInfoModule'
 ])
 
 .service('ToolsManager', function () {
@@ -16,6 +17,7 @@ angular.module('visorINTA.tools.toolsModule', [
         "swipeTool" : {"enabled":false},
         "imageFilterTool" : {"enabled":false},
         "importWmsTool" : {"enabled":false},
+        "featureInfoTool" : {"enabled":false}
 	}
 
     this.enableTool = function (tool,boolValue) {

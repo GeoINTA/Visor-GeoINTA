@@ -37,6 +37,7 @@
   <script src="./scripts/tools/swipe/swipe.module.js"></script>
   <script src="./scripts/tools/imageFilter/imageFilter.module.js"></script>
   <script src="./scripts/tools/importWms/importWms.module.js"></script>
+  <script src="./scripts/tools/featureInfo/featureInfo.module.js"></script>
   <script src="./scripts/tools/tools.module.js"></script>
 	<script src="./scripts/MainController.js"></script>
 
@@ -54,6 +55,7 @@
   <script src="./scripts/tools/swipe/directives/SwipeDirective.js"></script>
   <script src="./scripts/tools/imageFilter/directives/ImageFilterDirective.js"></script>
   <script src="./scripts/tools/importWms/directives/ImportWmsDirective.js"></script>
+  <script src="./scripts/tools/featureInfo/directives/FeatureInfoDirective.js"></script>
 
   <!-- Factories / Services -->
   <script src="./scripts/providers/ProyectsFactory.js"></script>
@@ -146,7 +148,7 @@
         <a href="#" class="list-group-item" ng-controller="SwipeController" ng-click="toogleTool('swipeTool')">Cortina</a>
         <a href="#" class="list-group-item" ng-controller="ImageFilterController" ng-click="toogleTool('imageFilterTool')">Filtros</a>
         <a href="#" class="list-group-item" ng-controller="ImportWmsController" ng-click="toogleTool('importWmsTool')">Importar capa WMS</a>
-			  <a href="#" class="list-group-item">Informacion</a>
+			  <a href="#" class="list-group-item" ng-controller="FeatureInfoController" ng-click="toogleTool('featureInfoTool')">Informacion</a>
 		</div>
     </div>
   </div>
@@ -198,6 +200,9 @@
     </visor-box>
     <visor-box id="importWmsTool" class="toolBox bigToolBox importWMSBox">
       <import-wms-tool map='map' layer-list='activeLayers'></import-wms-tool>
+    </visor-box>
+    <visor-box id="featureInfoTool" class="toolBox bigToolBox">
+      <feature-info-tool map='map' layer-list='activeLayers' project-model='activeProyectModel'></feature-info-tool>
     </visor-box>
   </div>
 </body>	
