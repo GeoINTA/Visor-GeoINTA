@@ -26,12 +26,14 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
 		            	for (var i = 0 ; i < scope.layersList.length; i++){
 							var layerObject = scope.layersList[i];
 							var element = document.getElementById('opacity' + layerObject.get('title'));
+							$(element).val(layerObject.getOpacity());
 							$(element).on("change", function() {
 								layer = MapUtils.getLayerByTitle(scope.map,$(this).attr('name'));
 		      					layer.setOpacity($(this).val()); // max = 1, min = 0
 		    				});
 							if (scope.showCheckbox){
 								var inputCheck = document.getElementById("chck" + layerObject.get('title'));
+								inputCheck.checked = layerObject.getVisible();
 								inputCheck.addEventListener('change', function() {
 								  var checked = this.checked;
 								  layer = MapUtils.getLayerByTitle(scope.map,$(this).attr('name'));
