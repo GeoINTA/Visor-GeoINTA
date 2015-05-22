@@ -1,5 +1,5 @@
 angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
-.directive('featureInfoTool', function(ToolsManager) {
+.directive('featureInfoTool', function($rootScope,ToolsManager,GeoServerUtils) {
 	return {
 		restrict: "E",
 		require:'^visorBox',
@@ -28,7 +28,33 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 	    		}
 	  		});
 
-			
+	  		scope.map.on('singleclick', function(evt) {
+	  			var layersToRequest = [];
+	  			var featureInfoConfig = scope.getFeatureInfoConfig();
+	  			if (featureInfoConfig != "default"){
+	  				for (layerConfig in featureInfoConfig){
+	  					layerObject = $rootScope.getLayerObjectFromConfig(layerConfig);
+	  					layersToRequest.push(layerObject);
+		  			}
+		  			GeoServerUtils.getFeatureInfo(layersToRequest,evt.coordinate,scope.map.getView())
+		  			.then(function success(response) {
+		  				console.log(response);
+					    scope.bindData(response);
+				    })
+				   	.catch(function error(msg) {
+				       console.error("No se ha podido pedir informacion -- " + msg);
+				   	});
+	  			} else {
+	  				console.log("No se ha configurado informacion para este proyecto");
+	  			}
+	  		})
+
+			scope.getFeatureInfoConfig = function(){
+				var model = $rootScope.getProyectModel();
+	  			var pluginConfig = model.modelo[0].toolbar["9"] || null;
+	  			var featureInfoConfig = (pluginConfig) ? pluginConfig.config[0].valor : "default";
+	  			return featureInfoConfig;
+			}
 
 	        // Acciones a realizar cuando se abre la herramienta
 	        scope.openTool = function(){
@@ -70,6 +96,24 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 			$scope.toolTitle = "Informacion";
 
 			$scope.infoReceived = []; // almacena la informacion recibida
+
+
+
+			// Recibe respuesta getFeatureInfo
+			$scope.bindData = function(data){
+				var featureInfoConfig = $scope.getFeatureInfoConfig();
+				for (i in data){ // data contiene respuesta de varias peticiones getFeatureInfo
+					var infoFeatureResponse = data[i];
+					console.log(infoFeatureResponse.data.layerTitle);
+					for (layerConfig in featureInfoConfig){
+						layerTitle = $rootScope.getLayerObjectFromConfig(layerConfig);
+						if (layerTitle == infoFeatureResponse.data.layerTitle){
+							var layerFields = featureInfoConfig[layerConfig];
+							console.log(layerTitle);
+						}
+					}
+				}
+			}
 
 		}
 	}

@@ -354,6 +354,21 @@ angular.module('visorINTA.MainController', [])
     }
 
 
+    $rootScope.getProyectModel = function(){
+        return $scope.activeProyectModel;
+    }
+
+
+    $rootScope.getLayerObjectFromConfig = function(configName){
+       for (layer in $scope.activeProyectModel.capasConfig){
+          if (layer == configName){
+            console.log($scope.activeProyectModel.capasConfig[layer].nombre);
+            return $rootScope.getLayerBy('title',$scope.activeProyectModel.capasConfig[layer].nombre);
+          }
+       }
+       return null;
+    }
+
     //      ###       WATCHERS       ###      //
 
     // watch cambio de proyecto activo
