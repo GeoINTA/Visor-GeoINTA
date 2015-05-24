@@ -60,13 +60,14 @@ angular.module('visorINTA.MainController', [])
       var baseLayers = new ol.layer.Group({nombre:'baseLayers',layers:layers});
       var map = new ol.Map({
         controls: ol.control.defaults().extend([
-        new ol.control.FullScreen(),
-        new ol.control.ScaleLine(),
-        new ol.control.MousePosition({
-            coordinateFormat: ol.coordinate.createStringXY(4),
-            projection: 'EPSG:4326',
-            undefinedHTML: '&nbsp;'
-          })
+          new ol.control.FullScreen(),
+          new ol.control.ScaleLine(),
+          new ol.control.MousePosition({
+              coordinateFormat: ol.coordinate.createStringXY(4),
+              projection: 'EPSG:4326',
+              undefinedHTML: '&nbsp;',
+              className:'visor-mouse-position'
+            })
       ]),
         layers: [
           layer1,

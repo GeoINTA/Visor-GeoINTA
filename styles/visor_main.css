@@ -1,10 +1,3 @@
-
-
-#map {
-      height: 100%;
-      width: 100%;
-}
-
 html,body {
   margin: 0;
   padding: 0;
@@ -12,6 +5,9 @@ html,body {
   height: 100%;
 }
 
+.wrapper{
+	height: inherit;
+}
 
 .navbar {
 	margin-bottom: 0px;
@@ -22,6 +18,35 @@ html,body {
 box-shadow: 6px 6px 12px rgba(0,0,0,0.175);
 background-color: rgba(255,255,255,0.6);
 }
+
+
+/*    MAPA   */  
+
+
+
+#map {
+      height: 100%;
+      width: 100%;
+}
+
+.visor-mouse-position{
+	position: absolute;
+	color:#FFF;
+	background: rgba(0, 60, 136, 0.3) none repeat scroll 0 0;
+	border-radius: 4px;
+	padding: 0px 5px 0px 5px;
+	margin: 1px 1px 1px 5px;
+	bottom:8px;
+	left: 140px;
+	font-size: 14px;
+}
+
+.ol-zoom{
+	right: .5em;
+	top: 3em;
+	left: initial;
+}
+
 
 .panel-group .panel+.panel {
 margin-top: 0px;
