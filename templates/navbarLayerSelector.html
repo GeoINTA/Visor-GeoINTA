@@ -1,5 +1,5 @@
 <select id="nabvarLayerPicker" class="form-control visorSelectpicker" ng-model="baseLayerSelected" ng-change="updateBaseLayer()">
-	<option ng-selected="$first" ng-repeat="layer in layersList" value='{{layer.get("title")}}'>
+	<option  ng-repeat="layer in layersList" ng-selected='$first' value='{{layer.get("title")}}'>
 	{{layer.get('title')}}
 	</option>
 	<option value="no_base_layer">Sin capa base</option>

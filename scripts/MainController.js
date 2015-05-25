@@ -27,6 +27,8 @@ angular.module('visorINTA.MainController', [])
     // DEBUGGING
     $scope.verboseMode = true;
 
+    $scope.bingKey = 'An980uGYXOk9yd-vHLUeV2J_ebho9xTXZObprH56yX3FQrhw_FxHYBPQVVvB4TG8';
+
 
     $scope.loading = new $loading({
                 busyText: 'Cargando proyecto...',
@@ -44,20 +46,36 @@ angular.module('visorINTA.MainController', [])
 
     var createMap = function(){
       var layers = [];
-      var layer1 = new ol.layer.Tile({
+      var osm = new ol.layer.Tile({
               preload: 4,
               source: new ol.source.OSM(),
               title:"Open Street Map",
-              name:MapUtils.constructLayerIdentifier("base_layer_OSM","no_style")
+              name:MapUtils.constructLayerIdentifier("base_layer_OSM","no_style"),
+              visible:false
           });
-      var layer2 = new ol.layer.Tile({
-            source: new ol.source.MapQuest({layer: 'sat'}),
-            title: "Satelite",
-            visible:false,
-            name:MapUtils.constructLayerIdentifier("base_layer_satellite","no_style")
-      });
-      layers.push(layer1);
-      layers.push(layer2);
+      var aerial = new ol.layer.Tile({
+                source: new ol.source.BingMaps({
+                  key: $scope.bingKey,
+                  imagerySet: 'Aerial'
+                }),
+                title:"Aereo",
+                name:MapUtils.constructLayerIdentifier("bing_aerial","no_style"),
+                visible:true,
+                opacity:1,
+      })
+      var labelsAerial = new ol.layer.Tile({
+                source: new ol.source.BingMaps({
+                  key: $scope.bingKey,
+                  imagerySet: 'AerialWithLabels'
+                }),
+                title:"Aereo con etiquetas",
+                name:MapUtils.constructLayerIdentifier("bing_aerial_labels","no_style"),
+                visible:false,
+                opacity:1,
+            })
+      layers.push(aerial);
+      layers.push(labelsAerial);
+      layers.push(osm);
       var baseLayers = new ol.layer.Group({nombre:'baseLayers',layers:layers});
       var map = new ol.Map({
         controls: ol.control.defaults().extend([
@@ -71,8 +89,9 @@ angular.module('visorINTA.MainController', [])
             })
       ]),
         layers: [
-          layer1,
-          layer2
+          aerial,
+          labelsAerial,
+          osm,
         ],
         projection:mapConfig.projection,
         displayProjection:mapConfig.displayProjection,
@@ -81,9 +100,9 @@ angular.module('visorINTA.MainController', [])
           zoom: mapConfig.zoom
         }),
       });
-      $scope.baseLayers.push(layer1);
-      $scope.baseLayers.push(layer2);
-
+      $scope.baseLayers.push(aerial);
+      $scope.baseLayers.push(labelsAerial);
+      $scope.baseLayers.push(osm);
       return map;  
     }
 
