@@ -47,12 +47,13 @@ angular.module('visorINTA.MainController', [])
       var layer1 = new ol.layer.Tile({
               preload: 4,
               source: new ol.source.OSM(),
-              title:"OSM GO",
+              title:"Open Street Map",
               name:MapUtils.constructLayerIdentifier("base_layer_OSM","no_style")
           });
       var layer2 = new ol.layer.Tile({
             source: new ol.source.MapQuest({layer: 'sat'}),
             title: "Satelite",
+            visible:false,
             name:MapUtils.constructLayerIdentifier("base_layer_satellite","no_style")
       });
       layers.push(layer1);

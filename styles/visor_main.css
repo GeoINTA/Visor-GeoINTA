@@ -9,6 +9,12 @@ html,body {
 	height: inherit;
 }
 
+
+
+
+/* HEADER   */
+
+
 .navbar {
 	margin-bottom: 0px;
 }
@@ -17,6 +23,10 @@ html,body {
 #visorHeader{
 box-shadow: 6px 6px 12px rgba(0,0,0,0.175);
 background-color: rgba(255,255,255,0.6);
+}
+
+.dropdown-toggle:after, .dropdown-toggle.btn:after{
+	content: none;
 }
 
 
@@ -91,7 +101,7 @@ margin-top: 0px;
 
 .panel-group{
 	box-shadow: 6px 6px 50px rgba(0,0,0,0.175);
-	margin-bottom: 10px;
+	margin-bottom: 2px;
 }
 
 .menuPanelConfig{

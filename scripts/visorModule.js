@@ -6,6 +6,7 @@ angular.module('visorINTA', [
   'ngQuantum',
   "visorINTA.factories.ProyectsFactory",
   "visorINTA.directives.menudirectives",
+  "visorINTA.directives.NavbarLayerSelectorDirective",
   "visorINTA.directives.mapDirective",
   "visorINTA.directives.LayerMenuListDirective",
   "visorINTA.directives.LayersTreeDirective",

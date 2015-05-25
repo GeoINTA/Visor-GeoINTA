@@ -10,5 +10,5 @@ angular.module('visorINTA.directives.menudirectives', [])
   		},
       replace:false,
   	}
-  });
+});
  
