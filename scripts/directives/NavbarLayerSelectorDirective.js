@@ -23,10 +23,6 @@ angular.module('visorINTA.directives.NavbarLayerSelectorDirective', [])
 		controller: function($scope){
 
 			$scope.baseLayerSelected = $scope.layersList[0].get('title');
-
-			for (var i = 0 ; i < $scope.layersList.length ; i++){
-				console.log($scope.layersList[i].get('title'));
-			}
 		},
 	};
 });

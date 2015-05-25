@@ -11,6 +11,15 @@ angular.module('visorINTA.directives.ProyectListDirective', ['visorINTA.factorie
 		templateUrl:"templates/menu/proyectList.html",
 		link: function(scope, iElement, iAttrs, ctrl) {
 
+
+		    // watch cambio de proyecto activo
+		    scope.$watch("activeProyect", function(newProyect, oldProyect){
+		        if (newProyect === oldProyect){ // al inicio, los dos tienen el mismo valor
+		          return;
+		        }
+		        scope.updateActiveProyect();
+		    });
+
 		},
 		controller: function($scope){
 		},

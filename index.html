@@ -105,8 +105,8 @@
 	<div class="collapse" id="pulldownMenu">
 	  <div class="panel-group" id="menuPanelGroup" role="tablist" aria-multiselectable="true">
   <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingOne">
-      <h4 class="panel-title" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+    <div class="panel-heading menuHeader hvr-glow" role="tab" id="headingOne" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+      <h4 class="panel-title" >
         <span >
           <i class="fa fa-list-ul"></i>  Proyectos
         </span>
@@ -120,8 +120,8 @@
     </div>
   </div>
   <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingTwo">
-      <h4 class="panel-title collapsed" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+    <div class="panel-heading menuHeader hvr-glow" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+      <h4 class="panel-title collapsed" >
         <span>
           <i class="fa fa-circle-o"></i>  Proyecto activo
         </span>
@@ -134,15 +134,15 @@
     </div>
   </div>
   <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingThree">
-      <h4 class="panel-title collapsed" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+    <div class="panel-heading menuHeader hvr-glow" role="tab" id="headingThree" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+      <h4 class="panel-title collapsed" >
         <span >
           <i class="fa fa-wrench"></i>  Herramientas
         </span>
       </h4>
     </div>
     <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-    	<div class="list-group">
+    	<div class="list-group menuPanelConfig">
         <a href="#" class="list-group-item" ng-controller="DrawController" ng-click="toogleTool('drawTool')">Dibujar</a>
         <a href="#" class="list-group-item" ng-controller="MeasureController" ng-click="toogleTool('measureTool')">Medir</a>
         <a href="#" class="list-group-item" ng-controller="SpyLayerController" ng-click="toogleTool('spyLayerTool')">Lupa</a>
@@ -156,8 +156,8 @@
 </div> <!-- cierra primer panelgroup -->
     <div class="panel-group" id="layersPanelGroup" role="tablist">
   <div class="panel panel-default light">
-    <div class="panel-heading" role="tab" id="headingFour">
-      <h4 class="panel-title collapsed" data-toggle="collapse" data-parent="#layersPanelGroup" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+    <div class="panel-heading menuHeader hvr-glow" role="tab" id="headingFour" data-toggle="collapse" data-parent="#layersPanelGroup" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+      <h4 class="panel-title collapsed" >
         <span >
           <i class="fa fa-database"></i>  Capas activas
         </span>
@@ -167,11 +167,6 @@
       <layer-menu-list map='map' layers-list='activeLayers' show-checkbox="true"></layer-menu-list>
     </div>
   </div>
-    <div class="panel panel-default light">
-    <div id="panelBaseLayers" class="panel-collapse collapse menuPanelLayerList" role="tabpanel" aria-labelledby="headingBaseLayers">
-      <layer-menu-list map='map' layers-list='baseLayers'  show-checkbox="true"></layer-menu-list>
-    </div>
-    </div>
       </div>
 	</div>
 		<div visor-map id="map" map='map'></div>

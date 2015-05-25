@@ -30,7 +30,7 @@ angular.module('visorINTA.MainController', [])
 
     $scope.loading = new $loading({
                 busyText: 'Cargando proyecto...',
-                theme: 'success',
+                theme: 'primary',
                 timeout: false,
                 //delayHide:1000,
                 showSpinner: true,
@@ -358,13 +358,6 @@ angular.module('visorINTA.MainController', [])
 
     //      ###       WATCHERS       ###      //
 
-    // watch cambio de proyecto activo
-    $scope.$watch("activeProyect", function(newProyect, oldProyect){
-        if (newProyect === oldProyect){ // al inicio, los dos tienen el mismo valor
-          return;
-        }
-        $scope.updateActiveProyect();
-    });
 
 
 
