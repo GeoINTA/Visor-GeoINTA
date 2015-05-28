@@ -22,6 +22,7 @@ angular.module('visorINTA.utils.GeoServerService', [])
                 transformResponse: function (data, headers) {
                 	data = JSON.parse(data);
                     data.layerTitle = layer.get('title');
+                    data.layerId = layer.get('id');
                     return data;
                 }
 			});

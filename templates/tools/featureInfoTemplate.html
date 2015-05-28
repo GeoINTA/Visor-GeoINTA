@@ -3,10 +3,10 @@
 </div>
 <div ng-if="infoReceived.length">
 	<ul class="nav nav-tabs">
-	    <li ng-repeat="infoTab in infoReceived"  ng-class="{ 'active': $first }"><a data-toggle="tab" href="#{{infoTab.tabID}}">{{infoTab.title}}</a></li>
+	    <li ng-repeat="infoTab in infoReceived"  ng-class="{ 'active': $first }"><a data-toggle="tab" href="#infoFeature_{{$index}}">{{infoTab.title}}</a></li>
 	</ul>
 	<div class="tab-content">
-		<div ng-repeat="infoTab in infoReceived" id="{{infoTab.tabID}}" class="tab-pane fade" ng-class="{ 'in active': $first }">
+		<div ng-repeat="infoTab in infoReceived" id="infoFeature_{{$index}}" class="tab-pane fade" ng-class="{ 'in active': $first }">
 			<table class="table table-striped">
 				<tr>
 					<th>Campo</th>

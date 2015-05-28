@@ -20,9 +20,7 @@ angular.module('visorINTA.utils.MapUtilsService', [])
 
     this.getLayerBy = function(map,field,value){
     	lyr = null;
-        console.log(value);
 		map.getLayers().forEach(function(layer) {
-            console.log(layer.get(field) );
 		    if (layer.get(field) == value) {
 		    	lyr = layer; // no se xq no funciona si retorno directo desde aca
 		    }
