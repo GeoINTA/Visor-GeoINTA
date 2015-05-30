@@ -95,6 +95,13 @@ list-style-type: none;
 
 .visorBox{
 	position: fixed;
+	display: inline-block;
+}
+
+.visorBoxBody{
+	max-width: 800px;
+	max-height: 400px;
+	overflow-y: scroll;
 }
 
 .bigToolBox{
