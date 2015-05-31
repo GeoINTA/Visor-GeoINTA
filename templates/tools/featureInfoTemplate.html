@@ -14,7 +14,7 @@
 				</tr>
 				<tr ng-repeat="(infoKey,infoValue) in infoTab.info">
 					<td>{{infoKey}}</td>
-					<td>{{infoValue}}</td>
+					<td ng-bind-html='infoValue'></td>
 				</tr>
 			</table>
 		</div>	    

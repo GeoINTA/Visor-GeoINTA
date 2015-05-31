@@ -96,9 +96,7 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 			$scope.toolTitle = "Informacion";
 
 			$scope.updateState = function(config){
-				console.log(config);
 				$scope.state = config || $scope.stateList['TOOL_READY'];
-				console.log($scope.state);
 			}
 
 			// Recibe respuesta getFeatureInfo
