@@ -79,8 +79,10 @@ angular.module('visorINTA.tools.spyLayer.SpyLayerDirective', [])
 	        // 'precompose' y 'postcompose'
 	        scope.unbindLayerListening = function(){
 	        	layer = scope.getObjectLayerSelected();
-	        	layer.un('precompose',scope.onPreCompose);
-	        	layer.un('postcompose',scope.onPostCompose);
+	        	if (layer){
+	        		layer.un('precompose',scope.onPreCompose);
+	        		layer.un('postcompose',scope.onPostCompose);
+	        	}
 	        }
 	        
 
