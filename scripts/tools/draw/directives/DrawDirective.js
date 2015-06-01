@@ -1,5 +1,5 @@
 angular.module('visorINTA.tools.draw.DrawDirective', [])
-.directive('drawTool', function(ToolsManager) {
+.directive('drawTool', function() {
 	return {
 		restrict: "E",
 		require:'^visorBox',
@@ -13,17 +13,11 @@ angular.module('visorINTA.tools.draw.DrawDirective', [])
 			visorBoxCtrlr.setBoxType('tool');
 
 
-			scope.$on('visorBoxClicked', function (event, data) {
-	    		if (data.type == 'tool' && data.id == scope.toolName){
-			        // Cambio estado de la herramienta
-      				ToolsManager.toogleTool(data.id);
-	    			if (ToolsManager.isToolEnabled(scope.toolName)){
-						visorBoxCtrlr.setIsOpen(true);
-						scope.openTool();
-	    			} else {
-    					visorBoxCtrlr.setIsOpen(false);
-	    				scope.closeTool();
-	    			}
+			scope.$on('visorBoxEvent', function (event, data) {
+	    		if (data.action == 'open'){
+	    			scope.openBox();
+	    		} else {
+	    			scope.closeBox();
 	    		}
 	  		});
 
@@ -55,12 +49,12 @@ angular.module('visorINTA.tools.draw.DrawDirective', [])
 	        map.addLayer(vector);
 
 	        // Acciones a realizar cuando se abre la herramienta
-	        scope.openTool = function(){
+	        scope.openBox = function(){
 	        	map.addInteraction(draw);	
 	        }
 
 	        // Acciones a realizar cuando se cierra la herramienta
-	        scope.closeTool = function(){
+	        scope.closeBox = function(){
 	        	map.removeInteraction(draw);
 	        }
 

@@ -1,5 +1,5 @@
 angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
-.directive('featureInfoTool', function($rootScope,ToolsManager,GeoServerUtils) {
+.directive('featureInfoTool', function($rootScope,GeoServerUtils) {
 	return {
 		restrict: "E",
 		require:'^visorBox',
@@ -13,22 +13,13 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 			visorBoxCtrlr.setTitle(scope.toolTitle);
 			visorBoxCtrlr.setBoxType('tool');
 
-
-			scope.$on('visorBoxClicked', function (event, data) {
-	    		if (data.type == 'tool' && data.id == scope.toolName){
-			        // Cambio estado de la herramienta
-      				ToolsManager.toogleTool(data.id);
-	    			if (ToolsManager.isToolEnabled(scope.toolName)){
-						visorBoxCtrlr.setIsOpen(true);
-						scope.openTool();
-	    			} else {
-    					visorBoxCtrlr.setIsOpen(false);
-	    				scope.closeTool();
-	    			}
+			scope.$on('visorBoxEvent', function (event, data) {
+	    		if (data.action == 'open'){
+	    			scope.openBox();
+	    		} else {
+	    			scope.closeBox();
 	    		}
 	  		});
-
-	  		console.log(scope.layerList);
 
 			scope.listenEvents = function(){
 				scope.mapListener = scope.map.on('singleclick', function(evt) {
@@ -73,7 +64,7 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 			}
 
 	        // Acciones a realizar cuando se abre la herramienta
-	        scope.openTool = function(){
+	        scope.openBox = function(){
 	        	if (scope.state != scope.stateList['DATA_RECEIVED']){
         			scope.updateState();
 	        	}
@@ -81,7 +72,7 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 	        }
 
 	        // Acciones a realizar cuando se cierra la herramienta
-	        scope.closeTool = function(){
+	        scope.closeBox = function(){
 	        	scope.map.unByKey(scope.mapListener);
 	        }
 

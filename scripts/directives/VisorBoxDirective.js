@@ -1,5 +1,5 @@
-angular.module('visorINTA.directives.VisorBoxDirective', [])
-.directive('visorBox', function() {
+angular.module('visorINTA.directives.VisorBoxDirective', ['visorINTA.utils.VisorBoxManagerService'])
+.directive('visorBox', function(boxActions,VisorBoxManager) {
 	return {
 		restrict: "E",
 		transclude:true,
@@ -9,15 +9,39 @@ angular.module('visorINTA.directives.VisorBoxDirective', [])
 		},
 		templateUrl:"templates/VisorBoxTemplate.html",
 		link:function(scope, element, attrs) {
+			var boxID = $(element).attr('id');
 			$(element).draggable({ cursor: "move"});
 
 
 			scope.visorBoxClosed = function(){
-				boxID = $(element).attr('id');
 				// Aviso a lo hijos que la caja se cierra
-				scope.$broadcast('visorBoxClicked',{type:scope.boxType,id:boxID});
-				
+				scope.updateBoxState(boxActions['CLOSE']);
 			}
+
+			scope.updateBoxState = function(action){
+				var isEnabled = VisorBoxManager.doAction(action,boxID);
+				scope.setIsOpen(isEnabled);
+				newState = (isEnabled) ? boxActions['OPEN'] : boxActions['CLOSE'];
+				scope.emitEvent(newState);
+			}
+
+			// Emite eventos 'visorBoxEvent'
+			// 'visorBoxEvent', solo es iniciado por esta directiva,
+			// Notar que el evento 'visorBoxClicked' es iniciado desde afuera de aqui, y es escuchado
+			// solamente
+			scope.emitEvent = function(actionTriggered){
+				scope.$broadcast('visorBoxEvent',{id:boxID,type:scope.boxType,action:actionTriggered});
+			}
+
+
+			scope.$on('visorBoxClicked', function (event, data) {
+				if (data.id == boxID){
+					scope.updateBoxState(data.action);
+				}
+	  		});
+
+			VisorBoxManager.addBox(boxID);
+
 		},
 		controller: function($scope){
 			$scope.title = "";
@@ -38,7 +62,12 @@ angular.module('visorINTA.directives.VisorBoxDirective', [])
 				$scope.boxType = type;
 			}
 
+			// TO FIX
 			this.setIsOpen = function(bool){
+				$scope.isOpen = bool;
+			}
+
+			$scope.setIsOpen = function(bool){
 				$scope.isOpen = bool;
 			}
 

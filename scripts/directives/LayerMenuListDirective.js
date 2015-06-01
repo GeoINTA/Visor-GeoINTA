@@ -1,5 +1,5 @@
 angular.module('visorINTA.directives.LayerMenuListDirective', [])
-.directive('layerMenuList', function($timeout,MapUtils) {
+.directive('layerMenuList', function($timeout,boxActions,MapUtils) {
 	return {
 		restrict: 'EA',
 		scope : {
@@ -55,7 +55,7 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
             };
       		
 		},
-		controller: function($scope){
+		controller: function($scope,$rootScope){
 			$scope.reverse = function(array) {
 	            var copy = [].concat(array);
 	            return copy.reverse();
@@ -68,7 +68,14 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
         		}
         		return names;
         	}
- 
+ 			
+ 			// Muestra box con detalles de la capa
+ 			// Le avisa al controlador principal que haga visible la caja de informacion de capa
+ 			// Actualiza la capa de la cual tiene que mostrarse informacion
+ 			$scope.showLayerInfo = function(layer){
+ 				$rootScope.initBoxAction('layerInfoBox','info',boxActions["OPEN"]);
+ 				$rootScope.updateLayerInfoActive(layer);
+ 			}
 
   		},
 

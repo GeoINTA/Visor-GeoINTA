@@ -121,3 +121,7 @@ list-style-type: none;
 .toolFooter{
 	padding-top: 10px;
 }
+
+.layerMenuCheckbox{
+	clear: both;
+}

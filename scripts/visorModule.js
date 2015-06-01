@@ -6,6 +6,7 @@ angular.module('visorINTA', [
   'ngQuantum',
   "visorINTA.factories.ProyectsFactory",
   "visorINTA.directives.menudirectives",
+  "visorINTA.directives.LayerInfoBoxDirective",
   "visorINTA.directives.mapDirective",
   "visorINTA.directives.LayerMenuListDirective",
   "visorINTA.directives.LayersTreeDirective",
@@ -28,4 +29,9 @@ angular.module('visorINTA', [
     })
     .constant("networkServices",{
         "gestor": "http://geointa.inta.gov.ar/gestor/servicioVisor"
+    })
+    .constant("boxActions",{
+        "OPEN" : "open",
+        "CLOSE" : "close",
+        "TOOGLE" : "toogle"
     });

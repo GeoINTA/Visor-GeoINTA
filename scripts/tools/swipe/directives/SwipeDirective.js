@@ -1,5 +1,5 @@
 angular.module('visorINTA.tools.swipe.SwipeDirective', [])
-.directive('swipeTool', function($rootScope,ToolsManager) {
+.directive('swipeTool', function($rootScope) {
 	return {
 		restrict: "E",
 		require:'^visorBox',
@@ -16,18 +16,11 @@ angular.module('visorINTA.tools.swipe.SwipeDirective', [])
 			var map;
             scope.swipe = $('#swipeRange');
             
-
-			scope.$on('visorBoxClicked', function (event, data) {
-	    		if (data.type == 'tool' && data.id == scope.toolName){
-			        // Cambio estado de la herramienta
-      				ToolsManager.toogleTool(data.id);
-	    			if (ToolsManager.isToolEnabled(scope.toolName)){
-						visorBoxCtrlr.setIsOpen(true);
-						scope.openTool();
-	    			} else {
-    					visorBoxCtrlr.setIsOpen(false);
-	    				scope.closeTool();
-	    			}
+            scope.$on('visorBoxEvent', function (event, data) {
+	    		if (data.action == 'open'){
+	    			scope.openBox();
+	    		} else {
+	    			scope.closeBox();
 	    		}
 	  		});
 
@@ -74,7 +67,7 @@ angular.module('visorINTA.tools.swipe.SwipeDirective', [])
 
 
 	        // Acciones a realizar cuando se abre la herramienta
-	        scope.openTool = function(){
+	        scope.openBox = function(){
 	        	$("#swipeRange").on("input change", function() { 
 				  map.render();
 	        	});
@@ -85,7 +78,7 @@ angular.module('visorINTA.tools.swipe.SwipeDirective', [])
 	        }
 
 	        // Acciones a realizar cuando se cierra la herramienta
-	        scope.closeTool = function(){
+	        scope.closeBox = function(){
 	        	scope.unbindLayerListening();
 	        }
 

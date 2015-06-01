@@ -1,5 +1,5 @@
 angular.module('visorINTA.tools.importWms.importWmsDirective', [])
-.directive('importWmsTool', function($rootScope,ToolsManager,MapUtils,GeoServerUtils) {
+.directive('importWmsTool', function($rootScope,MapUtils,GeoServerUtils) {
 	return {
 		restrict: "E",
 		require:'^visorBox',
@@ -13,28 +13,21 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 			visorBoxCtrlr.setTitle(scope.toolTitle);
 			visorBoxCtrlr.setBoxType('tool');
 
-
-			scope.$on('visorBoxClicked', function (event, data) {
-	    		if (data.type == 'tool' && data.id == scope.toolName){
-			        // Cambio estado de la herramienta
-      				ToolsManager.toogleTool(data.id);
-	    			if (ToolsManager.isToolEnabled(scope.toolName)){
-						visorBoxCtrlr.setIsOpen(true);
-						scope.openTool();
-	    			} else {
-    					visorBoxCtrlr.setIsOpen(false);
-	    				scope.closeTool();
-	    			}
+			scope.$on('visorBoxEvent', function (event, data) {
+	    		if (data.action == 'open'){
+	    			scope.openBox();
+	    		} else {
+	    			scope.closeBox();
 	    		}
 	  		});
 
 
 	        // Acciones a realizar cuando se abre la herramienta
-	        scope.openTool = function(){
+	        scope.openBox = function(){
 	        }
 
 	        // Acciones a realizar cuando se cierra la herramienta
-	        scope.closeTool = function(){
+	        scope.closeBox = function(){
 
 	        }
 

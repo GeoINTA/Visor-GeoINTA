@@ -3,8 +3,8 @@
 </div>
 <ul ng-if="layersList.length" class="list-group">
 	<li class="list-group-item" ng-repeat='layer in getLayerNames() track by $index' >
-		<button data-nq-toggle-popover="#popover" data-qs-title="{{layer}}" data-qs-content="{{layer}}"  class="btn pull-right btn-sm" type="button"><i class="fa fa-info"></i></button>
-	<div class="checkbox">
+		<button class="layerMenuBtn btn pull-right btn-sm" ng-click="showLayerInfo(layer)" type="button"><i class="fa fa-info"></i></button>
+	<div class="checkbox layerMenuCheckbox">
 		<label>
 		<input  ng-if="showCheckbox" type="checkbox" checked="true" id="chck{{layer}}" name="{{layer}}">{{layer}}
 		</label>
@@ -13,12 +13,5 @@
 		<input id="opacity{{layer}}" type="range" min="0" max="1" step="0.01" name="{{layer}}"/>
 	</div>
 	</li>
-	<div id="popover" class="popover" data-nq-popover="">
-      <h3 class="popover-title">{{title || 'Nombre capa'}}</h3>
-      <div class="popover-content">
-        <p>{{content || 'Sin contenido'}}</p>
-        <p class="text-success">This is static content of independent popover.</p>
-      </div>
-    </div>
     {{layer}}
 </ul>

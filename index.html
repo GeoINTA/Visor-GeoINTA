@@ -46,6 +46,7 @@
 	<script src="./scripts/directives/MenuDirective.js"></script>
 	<script src="./scripts/directives/MapDirective.js"></script>
   <script src="./scripts/directives/LayerMenuListDirective.js"></script>
+  <script src="./scripts/directives/LayerInfoBoxDirective.js"></script>
   <script src="./scripts/directives/LayersTreeDirective.js"></script>
   <script src="./scripts/directives/ProyectsListDirective.js"></script>
   <script src="./scripts/directives/VisorBoxDirective.js"></script>
@@ -59,8 +60,9 @@
 
   <!-- Factories / Services -->
   <script src="./scripts/providers/ProyectsFactory.js"></script>
-  <script src="./scripts/providers/utils/MapUtilsService.js"></script>
-  <script src="./scripts/providers/utils/GeoServerService.js"></script>
+  <script src="./scripts/providers/services/MapUtilsService.js"></script>
+  <script src="./scripts/providers/services/GeoServerService.js"></script>
+  <script src="./scripts/providers/services/VisorBoxManagerService.js"></script>
 
 
 
@@ -142,13 +144,13 @@
     </div>
     <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
     	<div class="list-group">
-        <a href="#" class="list-group-item" ng-controller="DrawController" ng-click="toogleTool('drawTool')">Dibujar</a>
-        <a href="#" class="list-group-item" ng-controller="MeasureController" ng-click="toogleTool('measureTool')">Medir</a>
-        <a href="#" class="list-group-item" ng-controller="SpyLayerController" ng-click="toogleTool('spyLayerTool')">Lupa</a>
-        <a href="#" class="list-group-item" ng-controller="SwipeController" ng-click="toogleTool('swipeTool')">Cortina</a>
-        <a href="#" class="list-group-item" ng-controller="ImageFilterController" ng-click="toogleTool('imageFilterTool')">Filtros</a>
-        <a href="#" class="list-group-item" ng-controller="ImportWmsController" ng-click="toogleTool('importWmsTool')">Importar capa WMS</a>
-			  <a href="#" class="list-group-item" ng-controller="FeatureInfoController" ng-click="toogleTool('featureInfoTool')">Informacion</a>
+        <a href="#" class="list-group-item" ng-click="initBoxAction('drawTool','tool','toogle')">Dibujar</a>
+        <a href="#" class="list-group-item" ng-click="initBoxAction('measureTool','tool','toogle')">Medir</a>
+        <a href="#" class="list-group-item"ng-click="initBoxAction('spyLayerTool','tool','toogle')">Lupa</a>
+        <a href="#" class="list-group-item" ng-click="initBoxAction('swipeTool','tool','toogle')">Cortina</a>
+        <a href="#" class="list-group-item" ng-click="initBoxAction('imageFilterTool','tool','toogle')">Filtros</a>
+        <a href="#" class="list-group-item" ng-click="initBoxAction('importWmsTool','tool','toogle')">Importar capa WMS</a>
+			  <a href="#" class="list-group-item" ng-click="initBoxAction('featureInfoTool','tool','toogle')">Informacion</a>
 		</div>
     </div>
   </div>
@@ -205,4 +207,8 @@
       <feature-info-tool map='map' layer-list='activeLayers' project-model='activeProyectModel'></feature-info-tool>
     </visor-box>
   </div>
+  <!-- Layer Info Box -->
+  <visor-box id="layerInfoBox" class="toolBox">
+    <layer-info-box active-layer='layerInfoActive'></layer-info-box> 
+  </visor-box>
 </body>	

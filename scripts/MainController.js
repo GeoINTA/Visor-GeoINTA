@@ -1,5 +1,5 @@
 angular.module('visorINTA.MainController', [])
-  .controller('MainController', ['$rootScope','$scope','$loading','mapConfig','ToolsManager','ProyectsFactory','MapUtils', function($rootScope,$scope,$loading,mapConfig,ToolsManager,ProyectsFactory,MapUtils) {
+  .controller('MainController', ['$rootScope','$scope','$loading','mapConfig','ProyectsFactory','MapUtils', function($rootScope,$scope,$loading,mapConfig,ProyectsFactory,MapUtils) {
 
     // Layers
 
@@ -20,9 +20,9 @@ angular.module('visorINTA.MainController', [])
     $scope.geoServers = {} // contiene la lista de servidores disponibles. Cada server contiene su URL, y una URL cache                               
 
 
-    // Tools
+    // Info Layer
+    $scope.layerInfoActive = "Satelite";
 
-    $scope.toolsManager = ToolsManager;
 
     // DEBUGGING
     $scope.verboseMode = true;
@@ -83,16 +83,6 @@ angular.module('visorINTA.MainController', [])
       $scope.baseLayers.push(layer2);
 
       return map;  
-    }
-
-
-    $scope.isToolEnabled = function(tool){
-      return $scope.toolsManager.isToolEnabled(tool);
-    }
-
-    $scope.toogleTool = function(toolID){
-      // Aviso a los controladores hijos que se ha seleccionado una herramienta
-      $scope.$broadcast('visorBoxClicked',{type:'tool',id:toolID});
     }
 
 
@@ -366,6 +356,16 @@ angular.module('visorINTA.MainController', [])
           }
        }
        return null;
+    }
+
+    $rootScope.initBoxAction = function(boxID,type,action){
+      $scope.$broadcast('visorBoxClicked',{id:boxID,type:'info',action:action});
+    }
+
+
+    $rootScope.updateLayerInfoActive = function(layer){
+      console.log(layer);
+      $scope.layerInfoActive = layer;
     }
 
     //      ###       WATCHERS       ###      //
