@@ -61,4 +61,13 @@ angular.module('visorINTA.utils.MapUtilsService', [])
         });
         return layer;
     }
+
+
+    // Recibe coordenadas en EPSG:4326 y chequea si son correctas
+    this.validateCoordinates = function(lat,lng){
+        if ( (lat < -90 || lat > 90) || (lng < -180 || lng > 180) ){
+            return false;
+        }
+        return true;
+    }
 });

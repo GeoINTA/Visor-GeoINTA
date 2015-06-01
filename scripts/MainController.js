@@ -1,6 +1,6 @@
 angular.module('visorINTA.MainController', [])
-  .controller('MainController', ['$rootScope','$scope','$loading','mapConfig','ProyectsFactory','MapUtils', function($rootScope,$scope,$loading,mapConfig,ProyectsFactory,MapUtils) {
-
+  .controller('MainController', ['$rootScope','$location','$scope','$loading','mapConfig','ProyectsFactory','MapUtils', function($rootScope,$location,$scope,$loading,mapConfig,ProyectsFactory,MapUtils) {
+    
     // Layers
 
     $scope.baseLayers = []; // capas base del mapa
@@ -42,6 +42,58 @@ angular.module('visorINTA.MainController', [])
 
     }
 
+    // QUERY URL -
+    // Funciones que manipulan valores recibidios en el query de la url
+
+
+    // Obtiene valores del query recibido en la pagina
+    // Se fija la existencia de valores específicos, necesarios (opcionales) para la app
+    // lat y lng deben ser valores en proyeccion EPSG:4326
+    $scope.getQueryValues = function(){
+      $scope.queryValues = {};
+      $scope.queryValues['proyectID'] = parseInt($location.search().p) || null;
+      // Coords
+      $scope.queryValues['lat'] = parseFloat($location.search().lat) || null;
+      $scope.queryValues['lng'] = parseFloat($location.search().lng) || null;
+      $scope.queryValues['zoom'] = null;
+    }
+
+    $scope.validateMapQueryValues = function(){
+      if (!MapUtils.validateCoordinates($scope.queryValues['lat'],$scope.queryValues['lng'])){
+        $scope.queryValues['lat'] = null;
+        $scope.queryValues['lng'] = null;
+      }
+      $scope.queryValues['zoom'] = parseInt($location.search().z) || null;
+      if ($scope.queryValues['zoom'] < 0 || $scope.queryValues['zoom'] > 16){
+        $scope.queryValues['zoom'] = null;
+      }
+    }
+
+
+    $scope.checkInitProyectLoad = function(){
+      if ($scope.queryValues['proyectID']){
+        $scope.activeProyect.id = $scope.queryValues['proyectID'];
+        $scope.updateActiveProyect();
+      }
+    }
+
+    // Se fija si se recibieron en el query parametros de lat y lng.
+    // En ese caso, retorna una tupla de la forma [] 
+    $scope.getInitMapCenter = function(projectionTransform){
+      center = null;
+      if ($scope.queryValues['lat'] && $scope.queryValues['lng']){
+          center = [$scope.queryValues['lat'],$scope.queryValues['lng']];
+          if (projectionTransform){
+            center = ol.proj.transform(center, 'EPSG:4326', projectionTransform);
+      }
+      return center;  
+      }
+   }
+
+    $scope.getInitMapZoom = function(){
+      return $scope.queryValues['zoom'];
+    }
+
     var createMap = function(){
       var layers = [];
       var layer1 = new ol.layer.Tile({
@@ -75,10 +127,11 @@ angular.module('visorINTA.MainController', [])
         projection:mapConfig.projection,
         displayProjection:mapConfig.displayProjection,
         view: new ol.View({
-          center: mapConfig.center,
-          zoom: mapConfig.zoom
+          center: $scope.getInitMapCenter(mapConfig.projection) || mapConfig.center,
+          zoom: $scope.getInitMapZoom() || mapConfig.zoom
         }),
       });
+      console.log( $scope.getInitMapZoom() || mapConfig.zoom);
       $scope.baseLayers.push(layer1);
       $scope.baseLayers.push(layer2);
 
@@ -364,7 +417,6 @@ angular.module('visorINTA.MainController', [])
 
 
     $rootScope.updateLayerInfoActive = function(layer){
-      console.log(layer);
       $scope.layerInfoActive = layer;
     }
 
@@ -379,10 +431,14 @@ angular.module('visorINTA.MainController', [])
     });
 
 
-
+    $scope.getQueryValues();
+    $scope.validateMapQueryValues();
     $scope.map = createMap();
     $scope.requestProjectsList();
     $scope.requestGeoServers();
+
+    // PROYECT LOAD
+    $scope.checkInitProyectLoad();
 
 
 
