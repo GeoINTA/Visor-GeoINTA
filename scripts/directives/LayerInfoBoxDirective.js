@@ -6,7 +6,7 @@ angular.module('visorINTA.directives.LayerInfoBoxDirective', [])
 		scope:{
 			activeLayer : '='
 		},
-		templateUrl:"templates/box/LayerInfoBoxTemplate.html",
+		templateUrl:"templates/box/layerInfoBoxTemplate.html",
 		link:function(scope, iElement, iAttrs,visorBoxCtrlr) {
 			visorBoxCtrlr.setTitle(scope.boxTitle);
 			visorBoxCtrlr.setBoxType('info');
