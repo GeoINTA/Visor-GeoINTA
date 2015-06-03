@@ -7,6 +7,7 @@ angular.module('visorINTA', [
   "visorINTA.factories.ProyectsFactory",
   "visorINTA.directives.menudirectives",
   "visorINTA.directives.LayerInfoBoxDirective",
+  "visorINTA.directives.NavbarLayerSelectorDirective",
   "visorINTA.directives.mapDirective",
   "visorINTA.directives.LayerMenuListDirective",
   "visorINTA.directives.LayersTreeDirective",

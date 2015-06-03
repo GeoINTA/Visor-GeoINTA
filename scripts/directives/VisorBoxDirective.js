@@ -10,7 +10,7 @@ angular.module('visorINTA.directives.VisorBoxDirective', ['visorINTA.utils.Visor
 		templateUrl:"templates/VisorBoxTemplate.html",
 		link:function(scope, element, attrs) {
 			var boxID = $(element).attr('id');
-			$(element).draggable({ cursor: "move"});
+			$(element).draggable({ cursor: "move",handle:".panel-heading"});
 
 
 			scope.visorBoxClosed = function(){

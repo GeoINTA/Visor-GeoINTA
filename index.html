@@ -8,6 +8,7 @@
   <!-- Styles -->
   <link href="./styles/jquery-ui.min.css" type="text/css" rel="stylesheet" />
   <link href="./styles/bootstrap.min.css" type="text/css" rel="stylesheet" />
+  <link href="./styles/bootstrap-select.min.css" type="text/css" rel="stylesheet" />
   <link href="./styles/effect-light.min.css" type="text/css" rel="stylesheet" />
   <link href="./styles/quantumui.min.css" type="text/css" rel="stylesheet" />
   <link href="./styles/font-awesome.min.css" type="text/css" rel="stylesheet" />
@@ -19,6 +20,7 @@
 	<script src="./lib/jquery.js"></script>
   <script src="./lib/jquery-ui.min.js"></script>
   <script src="./lib/bootstrap.min.js"></script>
+  <script src="./lib/bootstrap-select.min.js"></script>
 	<script src="./lib/angular.min.js"></script>
 	<script src="./lib/angular-route.min.js"></script>
   <script src="./lib/angular-sanitize.min.js"></script>
@@ -43,6 +45,7 @@
 
   <!-- Directives -->
 	<script src="./scripts/directives/MenuDirective.js"></script>
+  <script src="./scripts/directives/NavbarLayerSelectorDirective.js"></script>
 	<script src="./scripts/directives/MapDirective.js"></script>
   <script src="./scripts/directives/LayerMenuListDirective.js"></script>
   <script src="./scripts/directives/LayerInfoBoxDirective.js"></script>
@@ -69,11 +72,12 @@
 </head>
 <body>
 	<div class="wrapper"> <!-- wrapper -->
+    <visor-navbar></visor-navbar>
 		<nav class="navbar navbar-default" id="visorHeader">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="mainNavbarCollapse">
         <span class="sr-only">Toggle</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -83,12 +87,8 @@
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div class="collapse navbar-collapse" id="mainNavbarCollapse">
       <ul class="nav navbar-nav">
-        <!--<button class="btn btn-primary navbar-btn" type="button" data-toggle="collapse" data-target="#pulldownMenu" aria-expanded="false" aria-controls="pulldownMenu">
-  Menu
-
-</button>-->
        <button type="button" class="btn btn-primary navbar-btn" data-nq-collapse="" data-target-id="#pulldownMenu"> Menu </button>
       </ul>
       <form class="navbar-form navbar-left" role="search">
@@ -97,16 +97,17 @@
         </div>
         <button type="submit" ng-click='buscar()' class="btn btn-default"><i class="fa fa-search fa-lg"></i></button>
       </form>
-      <ul class="nav navbar-nav navbar-right">
-      </ul>
+      <form class="navbar-form navbar-right">
+        <navbar-layer-selector layers-list='baseLayers'></navbar-layer-selector>
+      </form>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
 	<div class="collapse" id="pulldownMenu">
 	  <div class="panel-group" id="menuPanelGroup" role="tablist" aria-multiselectable="true">
   <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingOne">
-      <h4 class="panel-title" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+    <div class="panel-heading menuHeader hvr-glow" role="tab" id="headingOne" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+      <h4 class="panel-title" >
         <span >
           <i class="fa fa-list-ul"></i>  Proyectos
         </span>
@@ -120,8 +121,8 @@
     </div>
   </div>
   <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingTwo">
-      <h4 class="panel-title collapsed" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+    <div class="panel-heading menuHeader hvr-glow" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+      <h4 class="panel-title collapsed" >
         <span>
           <i class="fa fa-circle-o"></i>  Proyecto activo
         </span>
@@ -134,8 +135,8 @@
     </div>
   </div>
   <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingThree">
-      <h4 class="panel-title collapsed" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+    <div class="panel-heading menuHeader hvr-glow" role="tab" id="headingThree" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+      <h4 class="panel-title collapsed" >
         <span >
           <i class="fa fa-wrench"></i>  Herramientas
         </span>
@@ -150,14 +151,14 @@
         <a class="list-group-item" ng-click="initBoxAction('imageFilterTool','tool','toogle')">Filtros</a>
         <a class="list-group-item" ng-click="initBoxAction('importWmsTool','tool','toogle')">Importar capa WMS</a>
 			  <a class="list-group-item" ng-click="initBoxAction('featureInfoTool','tool','toogle')">Informacion</a>
-		</div>
+		  </div>
     </div>
   </div>
 </div> <!-- cierra primer panelgroup -->
     <div class="panel-group" id="layersPanelGroup" role="tablist">
   <div class="panel panel-default light">
-    <div class="panel-heading" role="tab" id="headingFour">
-      <h4 class="panel-title collapsed" data-toggle="collapse" data-parent="#layersPanelGroup" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+    <div class="panel-heading menuHeader hvr-glow" role="tab" id="headingFour" data-toggle="collapse" data-parent="#layersPanelGroup" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+      <h4 class="panel-title collapsed" >
         <span >
           <i class="fa fa-database"></i>  Capas activas
         </span>
@@ -167,18 +168,6 @@
       <layer-menu-list map='map' layers-list='activeLayers' show-checkbox="true"></layer-menu-list>
     </div>
   </div>
-    <div class="panel panel-default light">
-    <div class="panel-heading" role="tab" id="headingBaseLayers">
-      <h4 class="panel-title collapsed" data-toggle="collapse" data-parent="#layersPanelGroup" href="#panelBaseLayers" aria-expanded="false" aria-controls="panelBaseLayers">
-        <span>
-          <i class="fa fa-search"></i>  Capas base
-        </span>
-      </h4>
-    </div>
-    <div id="panelBaseLayers" class="panel-collapse collapse menuPanelLayerList" role="tabpanel" aria-labelledby="headingBaseLayers">
-      <layer-menu-list map='map' layers-list='baseLayers'  show-checkbox="true"></layer-menu-list>
-    </div>
-    </div>
       </div>
 	</div>
 		<div visor-map id="map" map='map'></div>
