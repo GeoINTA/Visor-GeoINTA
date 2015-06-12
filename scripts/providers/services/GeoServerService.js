@@ -35,15 +35,10 @@ angular.module('visorINTA.utils.GeoServerService', [])
 	// Los geoservers proveen un servicio y responden con archivos XML (siempre).
 	// Aqui, manejo la respuesta para parsear el xml y convertirlo en un objeto json/javascript
 	this.requestData = function(serverURL,params){
-		url = networkServices.proxyUrl + '?url=' + serverURL + '?request=getCapabilities%26service=WMS';
-		console.log(url);
-		console.log(params);
-		//url = serverURL;
-		//params.url= serverURL;
+		url = serverURL;
 		return $http.get(url, {
                 params : params,
                 transformResponse: function (data, headers) {
-                	console.log(data);
                     data = x2js.xml_str2json(data);
                     return data;
                 }
