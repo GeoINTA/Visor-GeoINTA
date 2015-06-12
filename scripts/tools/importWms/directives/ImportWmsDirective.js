@@ -24,6 +24,9 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 
 	        // Acciones a realizar cuando se abre la herramienta
 	        scope.openBox = function(){
+	        	if (!scope.serverList.length > 0){
+	        		scope.serverList = $rootScope.getGeoServers();
+	        	}
 	        }
 
 	        // Acciones a realizar cuando se cierra la herramienta
@@ -41,11 +44,16 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 	        			opacity:1
 	        	});
 	        	$rootScope.addImportedLayer(newLayer,"WMS");
-	        	//scope.map.addLayer(newLayer);
-	        	//$rootScope.addActiveLayer(newLayer);
-	        	//console.log(scope.serverRequested);
-	        	//console.log(scope.layerSelected);
-	        	//console.log(scope.styleSelected);
+	        }
+
+
+	        scope.serverListSelected = function(serverUrl){
+	        	needle = 'http://'; // string a quitar de la url
+	        	pos = serverUrl.indexOf(needle);
+	        	console.log(pos);
+	        	if (pos >= 0)
+	        		serverUrl = serverUrl.substr(needle.length);
+	        	scope.userServerURL = serverUrl;
 	        }
 
 
@@ -54,6 +62,7 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 			$scope.toolName = "importWmsTool";
 			$scope.toolTitle = "Importar capa WMS";
 
+			$scope.serverList = [];
 			$scope.serverCapabilities = {};
 			$scope.serverRequested = "";
 			$scope.layerSelected = {};

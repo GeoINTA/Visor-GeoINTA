@@ -5,6 +5,12 @@
 	    <div class="input-group">
 		  <span class="input-group-addon" id="urlserver">http://</span>
 		  <input type="text" class="form-control" placeholder="Ingrese URL Servidor..." aria-describedby="urlserver" ng-model="userServerURL">
+		  <div class="input-group-btn">
+	        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+	        <ul class="dropdown-menu" role="menu">
+	          <li ng-repeat="server in serverList"><a ng-click="serverListSelected(server.url)">{{server.nombre}} </a></li>
+	        </ul>
+	      </div><!-- /btn-group -->
 		</div>
 	  </div>
 	  <div class="col-md-2">

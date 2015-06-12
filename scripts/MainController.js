@@ -401,6 +401,10 @@ angular.module('visorINTA.MainController', [])
       return $scope.activeLayers;
     }
 
+    $rootScope.getGeoServers = function(){
+      return $scope.geoServers;
+    }
+
 
     $rootScope.removeActiveLayer = function(layer){
         for (var i = 0; i < $scope.activeLayers.length; i++) {
