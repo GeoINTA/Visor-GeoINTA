@@ -102,7 +102,7 @@ angular.module('visorINTA.MainController', [])
               preload: 4,
               source: new ol.source.OSM(),
               title:"Open Street Map",
-              name:MapUtils.constructLayerIdentifier("base_layer_OSM","no_style"),
+              id:MapUtils.constructLayerIdentifier("BASE","base_layer_OSM","no_style"),
               visible:false
           });
       var aerial = new ol.layer.Tile({
@@ -111,7 +111,7 @@ angular.module('visorINTA.MainController', [])
                   imagerySet: 'Aerial'
                 }),
                 title:"Aereo",
-                name:MapUtils.constructLayerIdentifier("bing_aerial","no_style"),
+                id:MapUtils.constructLayerIdentifier("BASE","bing_aerial","no_style"),
                 visible:true,
                 opacity:1,
       })
@@ -121,7 +121,7 @@ angular.module('visorINTA.MainController', [])
                   imagerySet: 'AerialWithLabels'
                 }),
                 title:"Aereo con etiquetas",
-                name:MapUtils.constructLayerIdentifier("bing_aerial_labels","no_style"),
+                id:MapUtils.constructLayerIdentifier("BASE","bing_aerial_labels","no_style"),
                 visible:false,
                 opacity:1,
             })
@@ -164,8 +164,9 @@ angular.module('visorINTA.MainController', [])
     }
 
     $scope.buscar = function(){
-      alert($scope.activeProyect.nombre);
-      console.log($scope);
+      for (var k = 0 ; k < $scope.activeLayers.length ; k++){
+        console.log($scope.activeLayers[k].get('id'));
+      }
     }
 
     // Reseteo el estado del mapa
@@ -199,11 +200,12 @@ angular.module('visorINTA.MainController', [])
         }
         extent = [$scope.activeProyectModel.modelo[0].oeste,$scope.activeProyectModel.modelo[0].sur,$scope.activeProyectModel.modelo[0].este,$scope.activeProyectModel.modelo[0].norte];
         extentGoogle = ol.extent.applyTransform(extent, ol.proj.getTransform("EPSG:4326", "EPSG:900913"));
-        layerIdentifier =  MapUtils.constructLayerIdentifier(nombreCapa,nombreEstilo);
+        layerIdentifier =  MapUtils.constructLayerIdentifier(nombreServidor,nombreCapa,nombreEstilo);
         layerObject = $rootScope.getLayerBy('id',layerIdentifier);
         if(!layerObject){
           layerObject = MapUtils.createWMSLayerObject({
                                     serverURL: urlServidor,
+                                    layerOrigin: nombreServidor,
                                     layerName: nombreCapa,
                                     layerTitle: $scope.activeProyectModel.capasConfig[$scope.activeProyectModel.capas[i]].nombre,
                                     style: nombreEstilo,
@@ -354,7 +356,7 @@ angular.module('visorINTA.MainController', [])
 
     $rootScope.addLayer = function(layerObject){
       try {
-          var exist = $rootScope.getLayerBy('title',layerObject);
+          var exist = $rootScope.getLayerBy('id',layerObject);
           if (!exist){
             $scope.map.addLayer(layerObject);
             return true;
@@ -372,15 +374,6 @@ angular.module('visorINTA.MainController', [])
           }
           if (!layer.getVisible()){
             layer.setVisible(true);
-          }
-          try{
-            setTimeout(function () {
-                $scope.$apply(function () {
-                    $scope.message = "Timeout called!";
-                });
-            }, 2000);
-          } catch(err){
-
           }
       }
     }

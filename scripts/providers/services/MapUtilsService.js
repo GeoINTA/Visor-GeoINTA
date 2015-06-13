@@ -28,8 +28,9 @@ angular.module('visorINTA.utils.MapUtilsService', [])
 	  	return lyr;
     }
 
-    this.constructLayerIdentifier = function(name,style){
-        return name + "::" + style;
+
+    this.constructLayerIdentifier = function(origin,name,style){
+        return origin + "__" +name + "__" + style;
     }
 
     // Crea un objecto layer WMS, a partir de data
@@ -57,7 +58,7 @@ angular.module('visorINTA.utils.MapUtilsService', [])
                 opacity:data.opacity,
                 visible: data.visible,
                 title: data.layerTitle,
-                id:this.constructLayerIdentifier(data.layerName,data.style)
+                id:this.constructLayerIdentifier(data.layerOrigin,data.layerName,data.style)
         });
         return layer;
     }

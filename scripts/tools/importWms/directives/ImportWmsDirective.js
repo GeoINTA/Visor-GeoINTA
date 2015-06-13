@@ -37,6 +37,7 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 	        scope.importWMSLayer = function(){
 	        	var newLayer = MapUtils.createWMSLayerObject({
 	        			serverURL: scope.serverRequested,
+	        			layerOrigin: "IMPORTED",
 	        			layerName: scope.layerSelected.name,
 	        			layerTitle:scope.layerSelected.title,
 	        			style: scope.styleSelected,
@@ -50,7 +51,6 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 	        scope.serverListSelected = function(serverUrl){
 	        	needle = 'http://'; // string a quitar de la url
 	        	pos = serverUrl.indexOf(needle);
-	        	console.log(pos);
 	        	if (pos >= 0)
 	        		serverUrl = serverUrl.substr(needle.length);
 	        	scope.userServerURL = serverUrl;
@@ -76,23 +76,25 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 					$scope.serverCapabilities.layers = {};
 					GeoServerUtils.getServerCapabilities($scope.fullServerURL)
 					.success(function(data) {
-			      		for (i in data.WMS_Capabilities.Capability.Layer.Layer){
-			      			layerData = data.WMS_Capabilities.Capability.Layer.Layer[i];
-			      			$scope.serverCapabilities.layers[layerData.Name] = {
-			      					title:layerData.Title,
-			      					name:layerData.Name,
-			      					styles:[]
-							};
-							for (j in layerData.Style_asArray){
-								styleData = layerData.Style_asArray[j];
-								$scope.serverCapabilities.layers[layerData.Name].styles.push(styleData.Name);
-							}
+						if (data.WMS_Capabilities){ // Si servidor retorna error, no existe
+				      		for (i in data.WMS_Capabilities.Capability.Layer.Layer){
+				      			layerData = data.WMS_Capabilities.Capability.Layer.Layer[i];
+				      			$scope.serverCapabilities.layers[layerData.Name] = {
+				      					title:layerData.Title,
+				      					name:layerData.Name,
+				      					styles:[]
+								};
+								for (j in layerData.Style_asArray){
+									styleData = layerData.Style_asArray[j];
+									$scope.serverCapabilities.layers[layerData.Name].styles.push(styleData.Name);
+								}
+				      		}
+				      		$scope.serverRequested = $scope.fullServerURL;
+				      		$scope.layerSelected = $scope.serverCapabilities.layers[Object.keys($scope.serverCapabilities.layers)[0]];
+				      		$scope.styleSelected = $scope.layerSelected.styles[0];
+				      		$scope.layerSelectdIndex = 0;
+				      		$scope.styleSelectedIndex = 0;
 			      		}
-			      		$scope.serverRequested = $scope.fullServerURL;
-			      		$scope.layerSelected = $scope.serverCapabilities.layers[Object.keys($scope.serverCapabilities.layers)[0]];
-			      		$scope.styleSelected = $scope.layerSelected.styles[0];
-			      		$scope.layerSelectdIndex = 0;
-			      		$scope.styleSelectedIndex = 0;
 
 				    }).error(function(data, status) {
 				      console.error('Error peticionando capacidades del servidor', status, data);

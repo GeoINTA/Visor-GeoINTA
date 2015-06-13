@@ -2,16 +2,15 @@
 	<div>No se ha cargado ninguna capa</div>
 </div>
 <ul ng-if="layersList.length" class="list-group">
-	<li class="list-group-item" ng-repeat='layer in getLayerNames() track by $index' >
+	<li class="list-group-item" ng-repeat='layer in getLayerIDs() track by $index' >
 		<button class="layerMenuBtn btn pull-right btn-sm" ng-click="showLayerInfo(layer)" type="button"><i class="fa fa-info"></i></button>
 	<div class="checkbox layerMenuCheckbox">
 		<label>
-		<input  ng-if="showCheckbox" type="checkbox" checked="true" id="chck{{layer}}" name="{{layer}}">{{layer}}
+		<input  ng-if="showCheckbox" type="checkbox" checked="true" id="chck{{layer}}" name="{{layer}}">{{getLayerTitle(layer)}}
 		</label>
 	</div>
 	<div>
 		<input id="opacity{{layer}}" type="range" min="0" max="1" step="0.01" name="{{layer}}"/>
 	</div>
 	</li>
-    {{layer}}
 </ul>
