@@ -80,6 +80,7 @@ margin-top: 0px;
 
 .visorBoxHeader {
 	cursor: move;
+	border:1px solid transparent;
 }
 
 .list-group{
@@ -130,16 +131,20 @@ list-style-type: none;
 .visorBox{
 	position: fixed;
 	display: inline-block;
+	height: 0px;
+	min-width: 180px;
 }
 
 .visorBoxBody{
 	max-width: 800px;
 	max-height: 400px;
 	overflow-y: scroll;
+	background-color: #FFF;
 }
 
+
 .bigToolBox{
-	min-width: 200px;
+	min-width: 250px;
 }
 
 .importWMSBox{

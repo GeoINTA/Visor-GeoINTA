@@ -18,6 +18,22 @@ angular.module('visorINTA.directives.VisorBoxDirective', ['visorINTA.utils.Visor
 				scope.updateBoxState(boxActions['CLOSE']);
 			}
 
+
+			scope.visorBoxCollapse = function(){
+				box = $('#'+boxID);
+				body = $('#'+boxID).find('.panel-body');
+				if (box.hasClass('panel-collapsed')) {
+					body.slideDown();
+	                box.removeClass('panel-collapsed');
+	                box.find('.tooglebtn').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+				} else {
+					box.width(box.width()); // revisar porque se achica width sin esto
+					body.slideUp("fast");
+					box.addClass('panel-collapsed');
+	                box.find('.tooglebtn').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+	            }
+			}
+
 			scope.updateBoxState = function(action){
 				var isEnabled = VisorBoxManager.doAction(action,boxID);
 				scope.setIsOpen(isEnabled);
