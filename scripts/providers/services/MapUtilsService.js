@@ -1,6 +1,7 @@
 angular.module('visorINTA.utils.MapUtilsService', [])
 .service('MapUtils', function(){
 
+    this.LAYER_ID_SEPARATOR = "__";
 
     this.layerExists = function(map,layerObject){
         var exist = false;
@@ -30,7 +31,19 @@ angular.module('visorINTA.utils.MapUtilsService', [])
 
 
     this.constructLayerIdentifier = function(origin,name,style){
-        return origin + "__" +name + "__" + style;
+        return origin + this.LAYER_ID_SEPARATOR + name + this.LAYER_ID_SEPARATOR + style;
+    }
+
+    // layerOrID puede ser un objeto layer de openlayers,
+    // o un string que se refiere a un id de una capa
+    this.getLayerParams = function(layerOrId){
+        identifier =  (! typeof layerOrId == "string") ? layerOrId.get('id'): layerOrId;
+        params = identifier.split(this.LAYER_ID_SEPARATOR);
+        return {
+            "server":params[0],
+            "layerName":params[1],
+            "layerStyle":params[2]
+        }
     }
 
     // Crea un objecto layer WMS, a partir de data

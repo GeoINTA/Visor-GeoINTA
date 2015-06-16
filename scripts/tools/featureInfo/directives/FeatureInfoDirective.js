@@ -1,12 +1,13 @@
 angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
-.directive('featureInfoTool', function($rootScope,GeoServerUtils) {
+.directive('featureInfoTool', function($rootScope,MapUtils,GeoServerUtils) {
 	return {
 		restrict: "E",
 		require:'^visorBox',
 		scope:{
 			title:'@',
 			map: '=',
-			layerList : '=',
+			projectLayerList : '=layerList',
+			importedLayers : '=',
 		},
 		templateUrl:"templates/tools/featureInfoTemplate.html",
 		link:function(scope, iElement, iAttrs,visorBoxCtrlr) {
@@ -25,20 +26,13 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 				scope.mapListener = scope.map.on('singleclick', function(evt) {
 					scope.updateState(scope.stateList['REQUESTING_DATA']);
 					scope.infoReceived = [];
-		  			var layersToRequest = [];
-		  			var featureInfoConfig = scope.getFeatureInfoConfig();
-		  			if (featureInfoConfig != "default"){
-		  				for (layerConfig in featureInfoConfig){
-		  					layerObject = $rootScope.getLayerObjectFromConfig(layerConfig);
-		  					if (scope.layerIsActive(layerObject)){
-		  						layersToRequest.push(layerObject);
-		  					}
-			  			}
-			  		}
-			  		if (layersToRequest.length > 0 ){
+					scope.layersToRequest = [];
+		  			scope.prepareActiveLayers(); // agrego capas activas a la peticion
+		  			scope.prepareImportedLayers();// agrego capas importadas a la peticion
+			  		if (scope.layersToRequest.length > 0 ){
 			  			// WARNING -> Hace una peticion independiente por cada capa presente en la config
 			  			//			  del proyecto
-			  			GeoServerUtils.getFeatureInfo(layersToRequest,evt.coordinate,scope.map.getView())
+			  			GeoServerUtils.getFeatureInfo(scope.layersToRequest,evt.coordinate,scope.map.getView())
 			  			.then(function success(response) {
 						    scope.bindData(response);
 					    })
@@ -50,6 +44,24 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 		  				scope.$apply(); // angular no se entera de que cambio el estado sin esta linea
 				   }
 	  			})
+			}
+
+			scope.prepareActiveLayers = function(){
+				var featureInfoConfig = scope.getFeatureInfoConfig();
+	  			if (featureInfoConfig != "default"){
+	  				for (layerConfig in featureInfoConfig){
+	  					layerObject = $rootScope.getLayerObjectFromConfig(layerConfig);
+	  					if (scope.layerIsActive(layerObject)){
+	  						scope.layersToRequest.push(layerObject);
+	  					}
+		  			}
+		  		}
+			}
+
+			scope.prepareImportedLayers = function(){
+				for (k in scope.importedLayers){
+					scope.layersToRequest.push(scope.importedLayers[k]);
+				}
 			}
 	  		
 
@@ -86,6 +98,8 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 			$scope.toolName = "featureInfoTool";
 			$scope.toolTitle = "Informacion";
 
+			$scope.layersToRequest = [];
+
 			$scope.updateState = function(config){
 				$scope.state = config || $scope.stateList['TOOL_READY'];
 			}
@@ -97,14 +111,22 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 				var featureInfoConfig = $scope.getFeatureInfoConfig();
 				for (i in data){ // data contiene respuesta de varias peticiones getFeatureInfo
 					var infoFeatureResponse = data[i];
-					for (layerConfig in featureInfoConfig){
-						layerObjectConfig = $rootScope.getLayerObjectFromConfig(layerConfig);
-						layerTitle = layerObjectConfig.get('title');
-						if (layerTitle == infoFeatureResponse.data.layerTitle
-							&& infoFeatureResponse.data.features.length){
-							existData = true;
-							var layerConfig = featureInfoConfig[layerConfig];
-							$scope.bindLayerData(layerTitle,layerConfig,infoFeatureResponse.data.features[0].properties);
+					if (infoFeatureResponse.data.features.length){
+						layerOrigin = MapUtils.getLayerParams(infoFeatureResponse.data.layerId)["server"];
+						if (layerOrigin != "IMPORTED"){
+							for (layerConfig in featureInfoConfig){
+								layerObjectConfig = $rootScope.getLayerObjectFromConfig(layerConfig);
+								layerTitle = layerObjectConfig.get('title');
+								if (layerTitle == infoFeatureResponse.data.layerTitle){
+									existData = true;
+									var layerConfig = featureInfoConfig[layerConfig];
+									$scope.bindLayerData(layerTitle,layerConfig,infoFeatureResponse.data.features[0].properties);
+								}
+							}
+						} else {
+							// bind capas importadas, notar segundo parametro es vacio
+							if (infoFeatureResponse.data.features.length)
+							$scope.bindLayerData(infoFeatureResponse.data.layerTitle,null,infoFeatureResponse.data.features[0].properties);
 						}
 					}
 				}
@@ -114,6 +136,7 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 
 
 			$scope.bindLayerData = function(layerTitle,layerConfig,dataReceived){
+				console.log("bind layer!!");
 				// objecto que almacena la info recibida desde el servidor
 				var data = {
 					'title':layerTitle,
@@ -122,17 +145,25 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 
 					}
 				}
-				for (propertyTitle in layerConfig){ // 
-					propertyName = layerConfig[propertyTitle]; // nombre original de la propiedad
-					propertyValue = dataReceived[propertyName];
-					data['info'][propertyTitle] = propertyValue;
+				if (layerConfig){ // existe una configuracion especifica para la capa, filtro por las propiedades que aparecen alli
+					for (propertyTitle in layerConfig){ // 
+						propertyName = layerConfig[propertyTitle]; // nombre original de la propiedad
+						propertyValue = dataReceived[propertyName];
+						data['info'][propertyTitle] = propertyValue;
+					}
+				} else { // sin configuracion, muestro todas las propiedades recibidas
+					for (propertyTitle in dataReceived){
+						console.log(propertyTitle);
+						data['info'][propertyTitle] = dataReceived[propertyTitle];
+					}
 				}
 				$scope.infoReceived.push(data);
 			}
 
+
 			$scope.layerIsActive = function(layerObject){
-				for (i in $scope.layerList){
-					lyr = $scope.layerList[i];
+				for (i in $scope.projectLayerList){
+					lyr = $scope.projectLayerList[i];
 					if (lyr.get('id') == layerObject.get('id')){
 						return true;
 					}
