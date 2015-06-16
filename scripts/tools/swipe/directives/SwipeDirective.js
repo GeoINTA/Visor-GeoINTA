@@ -15,7 +15,7 @@ angular.module('visorINTA.tools.swipe.SwipeDirective', [])
 
 			var map;
             scope.swipe = $('#swipeRange');
-            
+
             scope.$on('visorBoxEvent', function (event, data) {
 	    		if (data.action == 'open'){
 	    			scope.openBox();
@@ -27,8 +27,10 @@ angular.module('visorINTA.tools.swipe.SwipeDirective', [])
 
 	        scope.addSwipeToMap = function(){
 	        	layer = scope.getObjectLayerSelected();
-				layer.on('precompose', scope.onPreCompose);
-				layer.on('postcompose', scope.onPostCompose);
+	        	if (layer){
+					layer.on('precompose', scope.onPreCompose);
+					layer.on('postcompose', scope.onPostCompose);
+				}
 	        }
 
 	  		scope.layerSelectedChange = function(newLayer){
@@ -39,8 +41,10 @@ angular.module('visorINTA.tools.swipe.SwipeDirective', [])
 
 	        scope.unbindLayerListening = function(){
 	        	layer = scope.getObjectLayerSelected();
-	        	layer.un('precompose',scope.onPreCompose);
-	        	layer.un('postcompose',scope.onPostCompose);
+	        	if (layer){
+	        		layer.un('precompose',scope.onPreCompose);
+	        		layer.un('postcompose',scope.onPostCompose);
+	        	}
 	        }
 
 	        scope.onPreCompose = function(event){
@@ -68,7 +72,8 @@ angular.module('visorINTA.tools.swipe.SwipeDirective', [])
 
 	        // Acciones a realizar cuando se abre la herramienta
 	        scope.openBox = function(){
-	        	$("#swipeRange").on("input change", function() { 
+	        	$("#swipeRange").on("input change", function() {
+	        	  console.log('change');
 				  map.render();
 	        	});
 	        	if (scope.layerList.length){
