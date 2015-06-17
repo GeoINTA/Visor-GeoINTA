@@ -71,7 +71,7 @@ angular.module('visorINTA.utils.MapUtilsService', [])
                 opacity:data.opacity,
                 visible: data.visible,
                 title: data.layerTitle,
-                id:this.constructLayerIdentifier(data.layerOrigin,data.layerName,data.style)
+                id:this.constructLayerIdentifier(data.layerOrigin,data.layerName,data.style),
         });
         return layer;
     }

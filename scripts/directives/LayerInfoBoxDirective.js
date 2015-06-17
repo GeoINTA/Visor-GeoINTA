@@ -1,10 +1,11 @@
 angular.module('visorINTA.directives.LayerInfoBoxDirective', [])
-.directive('layerInfoBox', function() {
+.directive('layerInfoBox', function($rootScope,MapUtils) {
 	return {
 		restrict: "E",
 		require:'^visorBox',
 		scope:{
-			activeLayer : '='
+			map : '=',
+			activeLayerList : '=activeLayer'
 		},
 		templateUrl:"templates/box/layerInfoBoxTemplate.html",
 		link:function(scope, iElement, iAttrs,visorBoxCtrlr) {
@@ -20,9 +21,49 @@ angular.module('visorINTA.directives.LayerInfoBoxDirective', [])
 	    		}
 	  		});
 
+	  		scope.$watch("activeLayerList", function(newType, oldType){
+		        if (newType === oldType){ // al inicio, los dos tienen el mismo valor
+		          return;
+		        }
+		        scope.activeLayer = scope.activeLayerList[0];
+		        scope.updateLayerInfo();
+		    },true);
+
+
+		    scope.updateLayerInfo = function(){
+		    	scope.updateLayerObject();
+		    	scope.activeLayertitle = scope.getLayerTitle();
+		    	scope.activeLayerLegend = scope.getLayerLegend();
+		    }
+
+		    scope.updateLayerObject = function(){
+		    	scope.layerObject = MapUtils.getLayerBy(scope.map,'id',scope.activeLayer);
+		    }
+
+	  		scope.getLayerTitle = function(){
+	  			layer = scope.layerObject;
+	  			if (layer){
+	  				return layer.get('title');
+	  			}
+	  			return "";
+	  		}
+
+	  		scope.getLayerLegend = function(){
+	  			layer = scope.layerObject;
+	  			if (layer){
+	  				layerURL = layer.getSource().getUrls()[0];
+	  				source = scope.baseLegendParams;
+	  				source['LAYER'] = MapUtils.getLayerParams(layer.get('id'))['layerName'];
+	  				legendURL = layerURL + '?' + scope.encodeQueryData(source);
+	  				return legendURL;
+	  			} else {
+	  				scope.layerLegendURL = null;
+	  			}
+	  		}
+
 
 	  		scope.openBox = function(){
-	  			console.log(scope.activeLayer);
+	  			
 	  		}
 
 	  		scope.closeBox = function(){
@@ -32,6 +73,26 @@ angular.module('visorINTA.directives.LayerInfoBoxDirective', [])
 		},
 		controller: function($scope){
 			$scope.boxTitle = "Informacion de capa";
+
+			$scope.layerObject = null;
+			$scope.activeLayertitle = "";
+	    	$scope.activeLayerLegend = null;
+
+			$scope.baseLegendParams = {
+			    SERVICE: 'WMS',
+			    REQUEST: 'GetLegendGraphic',
+			    FORMAT: 'image/png',
+			    WIDTH : '20',
+			    HEIGHT: '20',
+			    VERSION: '1.0.0',
+			}
+
+			$scope.encodeQueryData = function(data){
+			   var ret = [];
+			   for (var d in data)
+			      ret.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+			   return ret.join("&");
+			}
 		}
 	}
 })

@@ -21,7 +21,7 @@ angular.module('visorINTA.MainController', [])
 
 
     // Info Layer
-    $scope.layerInfoActive = "Satelite";
+    $scope.layerInfoActive = [];
 
 
     // DEBUGGING
@@ -435,7 +435,12 @@ angular.module('visorINTA.MainController', [])
 
 
     $rootScope.updateLayerInfoActive = function(layer){
-      $scope.layerInfoActive = layer;
+      console.log("update");
+      $scope.layerInfoActive[0] = layer;
+    }
+
+    $rootScope.getLayerInfoActive = function(){
+      return $scope.layerInfoActive;
     }
 
     //      ###       WATCHERS       ###      //

@@ -92,8 +92,9 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
  			// Le avisa al controlador principal que haga visible la caja de informacion de capa
  			// Actualiza la capa de la cual tiene que mostrarse informacion
  			$scope.showLayerInfo = function(layer){
- 				$rootScope.initBoxAction('layerInfoBox','info',boxActions["OPEN"]);
+ 				console.log(layer);
  				$rootScope.updateLayerInfoActive(layer);
+ 				$rootScope.initBoxAction('layerInfoBox','info',boxActions["OPEN"]);
  			}
 
   		},
