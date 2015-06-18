@@ -175,9 +175,10 @@ angular.module('visorINTA.MainController', [])
     //    - Capas activas
     $scope.cleanMap = function(){
       $scope.activeLayers = []; // saco todas las capas activas
-      for (var k=0; k < $scope.infoLayers.length; k++) // limpio capas 'no base'
+      for (var k=0; k < $scope.infoLayers.length; k++){ // limpio capas 'no base'
         $scope.infoLayers[k].setVisible(false);
-      for (var j=0; j < $scope.importedLayers.length; j++) // limpio capas 'no base'
+      }
+      for (var j=0; j < $scope.importedLayers.length; j++) // limpio capas importadas
         $scope.map.removeLayer($scope.importedLayers[j]);
       $scope.importedLayers = [];
     }
@@ -215,9 +216,9 @@ angular.module('visorINTA.MainController', [])
                                 },
                                 cacheOptions
                 );
+            $scope.map.addLayer(layerObject); 
+            $scope.infoLayers.push(layerObject);
           }
-          $scope.map.addLayer(layerObject); 
-          $scope.infoLayers.push(layerObject);
           $scope.map.getView().fitExtent(extentGoogle, $scope.map.getSize());
         //}
       }
@@ -235,55 +236,6 @@ angular.module('visorINTA.MainController', [])
     }
 
 
-    // Se fija en la variable {proyectsConfig} si ya se tiene la configuracion del proyecto pedido.
-    // retorna null si no se la tiene
-    $scope.getProyectModel = function(id){
-        /*$scope.loading.show();
-        var model = $scope.proyectsModel[id] || null;
-        if (model == null){ // Todavia no pedi este proyeto, lo pido al servicio que me da el gestor
-           ProyectsFactory.getProyect(id)
-              .success(function(data) {
-                console.log(data);
-                model =  data; 
-                $scope.proyectsModel[$scope.activeProyect.id]  = model; // guardo el nuevo modelo pedido, para no volver a pedirlo en el futuro
-              }).error(function(data, status) {
-                console.error('Error peticionando proyecto ' + id, status, data);
-                model = null;
-              })
-        }
-        console.log('model');
-        console.log(model);
-        $scope.loading.hide();*/
-    }
-
-     $scope.getProyectModel = function(id){
-        $scope.loading.show();
-        var model = $scope.proyectsModel[id] || null;
-        if (model == null){
-           model = $scope.requestProyectModel(id);
-           $scope.proyectsModel[$scope.activeProyect.id]  = model; // guardo el nuevo modelo pedido, para no volver a pedirlo en el futuro
-        }
-        $scope.loading.hide();
-        return model;
-    }
-
-
-    $scope.requestProyectModel = function(id){
-      //return ProyectsFactory.getProyect(id);
-      ProyectsFactory.getProyect(id)
-        .success(function(data) {
-        }).error(function(data, status) {
-          console.error('Error peticionando proyecto ' + id, status, data);
-        })
-    }
-
-    // Los JSON de los proyectos que recibo desde el gestor no son válidos,
-    // tienen valores que no necesito (si los necesita el visor viejo).
-    // Este metodo elimina estos valores que no necesito
-    $scope.cleanProyectData = function(data){
-      return JSON.parse(data);
-    }
-
     // El proyecto activo se mantiene en la variable {activeProyect}.
     // Cuando este cambia hay que:
     //    - Actualizar el modelo correspondiente al proyecto activo.
@@ -294,23 +246,29 @@ angular.module('visorINTA.MainController', [])
     //    - Una vez obtenido el modelo:
     //          - Limpiar el mapa (sacar capas de los modelos anteriores, dejar solo las base)
     //          - Agregar 
-    $scope.updateActiveProyect = function(){
+    $scope.requestActiveProyect = function(){
         var activeID = $scope.activeProyect.id;
-        $scope.loading.show();
-        ProyectsFactory.getProyect(activeID)
+        if ($scope.proyectsModel[activeID]){
+            $scope.updateActiveProyect($scope.proyectsModel[activeID]);
+        } else {
+          $scope.loading.show();
+          ProyectsFactory.getProyect(activeID)
               .success(function(data) {
-                $scope.activeProyectModel = data;
                 $scope.proyectsModel[activeID]  = data; // guardo el nuevo modelo pedido, para no volver a pedirlo en el futuro
-                $scope.cleanMap();
-                $scope.loadActiveProyectLayers();
+                $scope.updateActiveProyect(data);
               }).error(function(data, status) {
                 console.error('Error peticionando proyecto ' + id, status, data);
                 $scope.activeProyectModel = {};
               }).finally(function() {
                   $scope.loading.hide();
               });
-        //$scope.activeProyectModel = $scope.getProyectModel($scope.activeProyect.id);
+        }
+    }
 
+    $scope.updateActiveProyect = function(data){
+      $scope.activeProyectModel = data;
+      $scope.cleanMap();
+      $scope.loadActiveProyectLayers();
     }
 
 
@@ -435,7 +393,6 @@ angular.module('visorINTA.MainController', [])
 
 
     $rootScope.updateLayerInfoActive = function(layer){
-      console.log("update");
       $scope.layerInfoActive[0] = layer;
     }
 

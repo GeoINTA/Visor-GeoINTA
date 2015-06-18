@@ -66,12 +66,12 @@ angular.module('visorINTA.directives.LayersTreeDirective', [])
 				node.layerObject.on('change:visible', function() {
 				  var visible = this.getVisible();
 				  inputCheck = document.getElementById("chckTree" + this.get('title'));
-				  //console.log($(this).attr('name'));
-				  if (visible !== inputCheck.checked) {
-				    inputCheck.checked = visible;
-				  }
+				  if (inputCheck){
+					  if (visible !== inputCheck.checked) {
+					    inputCheck.checked = visible;
+					  }
+					}
 				});
-				//inputCheck.bindTo('checked', node.layerObject, 'visible');
 				// cambio estado checkbox
 
 
