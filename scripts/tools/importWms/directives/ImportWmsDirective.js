@@ -37,6 +37,7 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 	        scope.importWMSLayer = function(){
 	        	var newLayer = MapUtils.createWMSLayerObject({
 	        			serverURL: scope.serverRequested,
+	        			legendURL: scope.serverRequested,
 	        			layerOrigin: "IMPORTED",
 	        			layerName: scope.layerSelected.name,
 	        			layerTitle:scope.layerSelected.title,

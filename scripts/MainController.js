@@ -1,5 +1,5 @@
 angular.module('visorINTA.MainController', [])
-  .controller('MainController', ['$rootScope','$location','$scope','$loading','mapConfig','ProyectsFactory','MapUtils', function($rootScope,$location,$scope,$loading,mapConfig,ProyectsFactory,MapUtils) {
+  .controller('MainController', ['$rootScope','$location','$scope','$loading','$timeout','mapConfig','ProyectsFactory','MapUtils', function($rootScope,$location,$scope,$loading,$timeout,mapConfig,ProyectsFactory,MapUtils) {
     
     // Layers
 
@@ -205,8 +205,10 @@ angular.module('visorINTA.MainController', [])
         layerIdentifier =  MapUtils.constructLayerIdentifier(nombreServidor,nombreCapa,nombreEstilo);
         layerObject = $rootScope.getLayerBy('id',layerIdentifier);
         if(!layerObject){
+                      console.log('leyenda' + urlServidor);
           layerObject = MapUtils.createWMSLayerObject({
                                     serverURL: urlServidor,
+                                    legendURL: server.url, // como leyenda asigno url servidor (no cache)
                                     layerOrigin: nombreServidor,
                                     layerName: nombreCapa,
                                     layerTitle: $scope.activeProyectModel.capasConfig[$scope.activeProyectModel.capas[i]].nombre,
@@ -327,6 +329,7 @@ angular.module('visorINTA.MainController', [])
     }
 
     $rootScope.addActiveLayer = function(layer){
+      $timeout(function() {
       if (layer){
           if (!$scope.layerInArray($scope.activeLayers,layer)){
             $scope.activeLayers.push(layer);
@@ -335,6 +338,7 @@ angular.module('visorINTA.MainController', [])
             layer.setVisible(true);
           }
       }
+      })
     }
 
 

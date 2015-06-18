@@ -51,7 +51,7 @@ angular.module('visorINTA.directives.LayerInfoBoxDirective', [])
 	  		scope.getLayerLegend = function(){
 	  			layer = scope.layerObject;
 	  			if (layer){
-	  				layerURL = layer.getSource().getUrls()[0];
+	  				layerURL = layer.get('legendURL');
 	  				source = scope.baseLegendParams;
 	  				source['LAYER'] = MapUtils.getLayerParams(layer.get('id'))['layerName'];
 	  				legendURL = layerURL + '?' + scope.encodeQueryData(source);

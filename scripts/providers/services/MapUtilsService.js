@@ -68,6 +68,7 @@ angular.module('visorINTA.utils.MapUtilsService', [])
                   params: {'LAYERS': data.layerName, 'TILED': true,'VERSION':'1.1.1','SRS':'900913','STYLES':data.style},
                 })),
                 tileGrid: gwcGrid,
+                legendURL : data.legendURL || "",
                 opacity:data.opacity,
                 visible: data.visible,
                 title: data.layerTitle,
