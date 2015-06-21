@@ -75,7 +75,7 @@ angular.module('visorINTA.MainController', [])
     $scope.checkInitProyectLoad = function(){
       if ($scope.queryValues['proyectID']){
         $scope.activeProyect.id = $scope.queryValues['proyectID'];
-        $scope.updateActiveProyect();
+        $scope.requestActiveProyect();
       }
     }
 
@@ -208,7 +208,6 @@ angular.module('visorINTA.MainController', [])
         layerIdentifier =  MapUtils.constructLayerIdentifier(nombreServidor,nombreCapa,nombreEstilo);
         layerObject = $rootScope.getLayerBy('id',layerIdentifier);
         if(!layerObject){
-                      console.log('leyenda' + urlServidor);
           layerObject = MapUtils.createWMSLayerObject({
                                     serverURL: urlServidor,
                                     legendURL: server.url, // como leyenda asigno url servidor (no cache)
@@ -290,6 +289,8 @@ angular.module('visorINTA.MainController', [])
         ProyectsFactory.getGeoServers()
         .success(function(data) {
           $scope.geoServers = data;
+          // PROYECT LOAD
+          $scope.checkInitProyectLoad();
         }).error(function(data, status) {
           console.error('Error peticionando lista de geoservidores', status, data);
         })
@@ -416,9 +417,6 @@ angular.module('visorINTA.MainController', [])
     $scope.map = createMap();
     $scope.requestProjectsList();
     $scope.requestGeoServers();
-
-    // PROYECT LOAD
-    $scope.checkInitProyectLoad();
 
 
 

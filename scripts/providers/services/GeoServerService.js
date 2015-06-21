@@ -3,7 +3,7 @@ angular.module('visorINTA.utils.GeoServerService', [])
 
 	// Retorna un objeto, el cual es una lista de capas, y cada una de ellas con su lista de estilos
 	this.getServerCapabilities = function(serverURL){
-		return this.requestData(serverURL,{request:'getCapabilities',service:'WMS',useProxy:true});
+		return this.requestData(serverURL,{request:'getCapabilities',service:'WMS'/*,useProxy:true*/});
 	}
 
 
