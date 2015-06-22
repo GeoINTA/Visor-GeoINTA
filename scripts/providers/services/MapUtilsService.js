@@ -18,6 +18,16 @@ angular.module('visorINTA.utils.MapUtilsService', [])
 		return layer;
     }
 
+    this.getLayerIndex = function(map,layerID){
+        var lyrIdx = -1;
+        map.getLayers().forEach(function(layer,idx) {
+            if (layer.get('id') == layerID) {
+                lyrIdx = idx;
+            }
+        });
+        return lyrIdx;
+    }
+
 
     this.getLayerBy = function(map,field,value){
     	lyr = null;

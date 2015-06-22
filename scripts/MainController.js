@@ -164,9 +164,12 @@ angular.module('visorINTA.MainController', [])
     }
 
     $scope.buscar = function(){
-      for (var k = 0 ; k < $scope.activeLayers.length ; k++){
+      /*for (var k = 0 ; k < $scope.activeLayers.length ; k++){
         console.log($scope.activeLayers[k].get('id'));
-      }
+      }*/
+      $scope.map.getLayers().forEach(function(layer,idx) {
+            console.log(layer.get('id') +  ' , ' + idx);
+        });
     }
 
     // Reseteo el estado del mapa

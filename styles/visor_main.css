@@ -161,7 +161,9 @@ list-style-type: none;
 	padding-top: 10px;
 }
 
-
+.layerMenuBtn{
+	margin-right: 1px;
+}
 
 .layerMenuCheckbox{
 	clear: both;

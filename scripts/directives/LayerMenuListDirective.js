@@ -96,6 +96,22 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
  				$rootScope.initBoxAction('layerInfoBox','info',boxActions["OPEN"]);
  			}
 
+ 			// Muevo la capa
+ 			// Para ello, se debe actualizar su posicion dentro de la lista de capas del mapa,
+ 			// y dentro de la lista de capas que maneja esta directiva.
+ 			// Tener en cuenta que los indices entre las dos listas pueden diferir
+ 			$scope.moveLayer = function(layer,layerIndex,delta){
+ 				layers = $scope.map.getLayers();
+ 				mapIndex = MapUtils.getLayerIndex($scope.map,layer);
+ 				layerObject = MapUtils.getLayerBy($scope.map,'id',layer);
+				// elimino capa
+				layers.removeAt(mapIndex);
+				$scope.layersList.splice(layerIndex,1);
+				// agrego a la nueva posicion
+				layers.insertAt(mapIndex + delta,layerObject);
+				$scope.layersList.splice(layerIndex + delta,0,layerObject);
+ 			}
+
   		},
 
 	}
