@@ -35,17 +35,19 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 	        }
 
 	        scope.importWMSLayer = function(){
-	        	var newLayer = MapUtils.createWMSLayerObject({
-	        			serverURL: scope.serverRequested,
-	        			legendURL: scope.serverRequested,
-	        			layerOrigin: "IMPORTED",
-	        			layerName: scope.layerSelected.name,
-	        			layerTitle:scope.layerSelected.title,
-	        			style: scope.styleSelected,
-	        			visible:true,
-	        			opacity:1
-	        	});
-	        	$rootScope.addImportedLayer(newLayer,"WMS");
+	        	if (scope.layerSelected && scope.styleSelected){
+		        	var newLayer = MapUtils.createWMSLayerObject({
+		        			serverURL: scope.serverRequested,
+		        			legendURL: scope.serverRequested,
+		        			layerOrigin: "IMPORTED",
+		        			layerName: scope.layerSelected.name,
+		        			layerTitle:scope.layerSelected.title,
+		        			style: scope.styleSelected,
+		        			visible:true,
+		        			opacity:1
+		        	});
+		        	$rootScope.addImportedLayer(newLayer,"WMS");
+	        	}
 	        }
 
 
@@ -67,7 +69,7 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 			$scope.serverCapabilities = {};
 			$scope.serverRequested = "";
 			$scope.layerSelected = {};
-			$scope.styleSelected = [];
+			$scope.styleSelected = null;
 
 			$scope.loadServerCapabilities = function(){
 				if ($scope.userServerURL){
@@ -75,6 +77,7 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 					var $btn = $('#loadCapabilitiesBtn').button('loading');
 					$scope.serverCapabilities = {};
 					$scope.serverCapabilities.layers = {};
+					if ($scope.layerSelected) {$scope.layerSelected.styles = {}; };
 					GeoServerUtils.getServerCapabilities($scope.fullServerURL)
 					.success(function(data) {
 						if (data.WMS_Capabilities){ // Si servidor retorna error, no existe
