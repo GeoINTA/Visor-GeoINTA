@@ -11,7 +11,10 @@ angular.module('visorINTA.directives.VisorBoxDirective', ['visorINTA.utils.Visor
 		link:function(scope, element, attrs) {
 			var boxID = $(element).attr('id');
 			$(element).draggable({ cursor: "move",handle:".panel-heading"});
-
+			$('#'+boxID + ' > .panel').resizable({
+				handles: "w,e",
+				ghost: true
+			});
 
 			scope.visorBoxClosed = function(){
 				// Aviso a lo hijos que la caja se cierra

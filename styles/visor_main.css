@@ -11,7 +11,6 @@ html,body {
 
 
 
-
 /* HEADER   */
 
 
@@ -172,6 +171,14 @@ list-style-type: none;
 a[ng-click]{
     cursor: pointer;
 }
+
+
+.ui-resizable-handle {
+       position: absolute;
+       font-size: 0.1px;
+       display: block;
+       /*margin: 15px 5px;*/
+ }
 
 
 /* Glow */
