@@ -56,7 +56,7 @@
   <script src="./scripts/tools/measure/directives/MeasureDirective.js"></script>
   <script src="./scripts/tools/spyLayer/directives/SpyLayerDirective.js"></script>
   <script src="./scripts/tools/swipe/directives/SwipeDirective.js"></script>
-  <script src="./scripts/tools/imageFilter/directives/ImageFilterDirective.js"></script>
+  <!--<script src="./scripts/tools/imageFilter/directives/ImageFilterDirective.js"></script>-->
   <script src="./scripts/tools/importWms/directives/ImportWmsDirective.js"></script>
   <script src="./scripts/tools/featureInfo/directives/FeatureInfoDirective.js"></script>
 
@@ -149,7 +149,7 @@
           <a class="list-group-item" ng-click="initBoxAction('measureTool','tool','toogle')">Medir</a>
           <a class="list-group-item"ng-click="initBoxAction('spyLayerTool','tool','toogle')">Lupa</a>
           <a class="list-group-item" ng-click="initBoxAction('swipeTool','tool','toogle')">Cortina</a>
-          <a class="list-group-item" ng-click="initBoxAction('imageFilterTool','tool','toogle')">Filtros</a>
+          <!--<a class="list-group-item" ng-click="initBoxAction('imageFilterTool','tool','toogle')">Filtros</a>-->
           <a class="list-group-item" ng-click="initBoxAction('importWmsTool','tool','toogle')">Importar capa WMS</a>
   			  <a class="list-group-item" ng-click="initBoxAction('featureInfoTool','tool','toogle')">Informacion</a>
   		  </div>
@@ -186,9 +186,9 @@
     <visor-box id="swipeTool" class="toolBox">
       <swipe-tool map='map' layer-list='activeLayers'></swipe-tool>
     </visor-box>
-    <visor-box id="imageFilterTool" class="toolBox">
+    <!--<visor-box id="imageFilterTool" class="toolBox">
       <image-filter-tool map='map' layer-list='activeLayers'></image-filter-tool>
-    </visor-box>
+    </visor-box>-->
     <visor-box id="importWmsTool" class="toolBox bigToolBox importWMSBox">
       <import-wms-tool map='map' layer-list='activeLayers'></import-wms-tool>
     </visor-box>
