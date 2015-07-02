@@ -1,7 +1,7 @@
 <div ng-if="!infoReceived.length" class="alert alert-{{state.label}}" role="alert">
 	{{state.text}}
 </div>
-<div ng-if="infoReceived.length">
+<div ng-if="infoReceived.length" class="boxInnerpanel">
 	<ul class="nav nav-tabs">
 	    <li ng-repeat="infoTab in infoReceived"  ng-class="{ 'active': $first }"><a data-toggle="tab" href="#infoFeature_{{$index}}">{{infoTab.title}}</a></li>
 	</ul>

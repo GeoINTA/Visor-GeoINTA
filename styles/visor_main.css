@@ -137,8 +137,12 @@ list-style-type: none;
 .visorBoxBody{
 	max-width: 800px;
 	max-height: 400px;
-	overflow-y: scroll;
 	background-color: #FFF;
+}
+
+.boxInnerpanel {
+	max-height: 250px;
+	overflow-y: scroll; 
 }
 
 
@@ -149,11 +153,6 @@ list-style-type: none;
 .importWMSBox{
 	width: 800px;
 	max-height: 600px;
-}
-
-.capabilitiesPanel {
-	max-height: 200px;
-	overflow-y: scroll;
 }
 
 .toolFooter{
