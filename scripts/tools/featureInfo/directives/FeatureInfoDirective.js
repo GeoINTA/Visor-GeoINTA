@@ -46,21 +46,25 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 	  			})
 			}
 
+			// Retorna aquellas capas que estan activas y visibles en el mapa
 			scope.prepareActiveLayers = function(){
 				var featureInfoConfig = scope.getFeatureInfoConfig();
 	  			if (featureInfoConfig != "default"){
 	  				for (layerConfig in featureInfoConfig){
 	  					layerObject = $rootScope.getLayerObjectFromConfig(layerConfig);
-	  					if (scope.layerIsActive(layerObject)){
+	  					if (scope.layerIsActive(layerObject) && layerObject.getVisible()){
 	  						scope.layersToRequest.push(layerObject);
 	  					}
 		  			}
 		  		}
 			}
 
+			// Retorna aquellas capas que fueron importadas (WMS) y se encuentran visibles 
 			scope.prepareImportedLayers = function(){
 				for (k in scope.importedLayers){
-					scope.layersToRequest.push(scope.importedLayers[k]);
+					if (scope.importedLayers[k].getVisible()){
+						scope.layersToRequest.push(scope.importedLayers[k]);
+					}
 				}
 			}
 	  		
@@ -160,7 +164,7 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 				$scope.infoReceived.push(data);
 			}
 
-
+			// Retorna true si la capa se encuentra en la lista de capas activas
 			$scope.layerIsActive = function(layerObject){
 				for (i in $scope.projectLayerList){
 					lyr = $scope.projectLayerList[i];
