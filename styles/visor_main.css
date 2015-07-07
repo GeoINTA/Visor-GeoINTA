@@ -132,6 +132,7 @@ list-style-type: none;
 	display: inline-block;
 	height: 0px;
 	min-width: 180px;
+	z-index:2147483647;
 }
 
 .visorBoxBody{

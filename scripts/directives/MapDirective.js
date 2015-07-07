@@ -22,6 +22,23 @@ angular.module('visorINTA.directives.mapDirective', [])
 
       var map = scope.map;
       var view = scope.map.getView();
+
+      // Agrego controles al mapa
+      var fullScreen = new ol.control.FullScreen();
+      var mousePosition = new ol.control.MousePosition({
+              coordinateFormat: ol.coordinate.createStringXY(4),
+              projection: 'EPSG:4326',
+              undefinedHTML: '&nbsp;',
+              className:'visor-mouse-position'
+      });
+      var scaleLine =  new ol.control.ScaleLine();
+      
+      map.addControl(fullScreen);
+      map.addControl(mousePosition);
+      map.addControl(scaleLine);
+
+     
+      // // // // // //
       scope.calcMapDimensions();
       map.setTarget(element[0]);
       scope.updateMapPositions();
