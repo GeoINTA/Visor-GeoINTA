@@ -151,6 +151,10 @@ list-style-type: none;
 	min-width: 250px;
 }
 
+.bigInfoBox{
+	min-width: 400px;
+}
+
 .importWMSBox{
 	width: 800px;
 	max-height: 600px;
@@ -179,6 +183,11 @@ a[ng-click]{
        display: block;
        /*margin: 15px 5px;*/
  }
+
+
+.resultScopeText{
+	color:#428BCA;
+}
 
 
 /* Glow */

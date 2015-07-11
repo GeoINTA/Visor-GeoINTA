@@ -47,7 +47,9 @@
 	<script src="./scripts/directives/MenuDirective.js"></script>
   <script src="./scripts/directives/NavbarLayerSelectorDirective.js"></script>
 	<script src="./scripts/directives/MapDirective.js"></script>
+  <script src="./scripts/directives/NavbarSearchDirective.js"></script>
   <script src="./scripts/directives/LayerMenuListDirective.js"></script>
+  <script src="./scripts/directives/SearchInfoBoxDirective.js"></script>
   <script src="./scripts/directives/LayerInfoBoxDirective.js"></script>
   <script src="./scripts/directives/LayersTreeDirective.js"></script>
   <script src="./scripts/directives/ProyectsListDirective.js"></script>
@@ -93,10 +95,13 @@
        <button type="button" class="btn btn-primary navbar-btn" data-nq-collapse="" data-target-id="#pulldownMenu"> Menu </button>
       </ul>
       <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Buscar...">
+        <div>
+          
+            <navbar-search></navbar-search>
+          <visor-box id="searchInfoBox" class="toolBox bigInfoBox">
+              <search-info-box map='map' data='searchdata'></search-info-box>
+          </visor-box>
         </div>
-        <button type="submit" ng-click='buscar()' class="btn btn-default"><i class="fa fa-search fa-lg"></i></button>
       </form>
       <form class="navbar-form navbar-right">
         <navbar-layer-selector layers-list='baseLayers'></navbar-layer-selector>

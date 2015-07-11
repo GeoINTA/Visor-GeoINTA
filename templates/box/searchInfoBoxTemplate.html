@@ -1,0 +1,28 @@
+<!-- Grupo de paneles que contiene un panel por cada búsqueda que se realizó -->
+<div class="panel-group boxInnerpanel" id="searchKeyResults" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default" ng-repeat="userSearch in data">
+    <div class="panel-heading" role="tab" id="searchkey_{{$index}}">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#searchKeyResults" href="#searchkeytitle_{{$index}}" aria-expanded="true" aria-controls="searchkeytitle_{{$index}}">
+          {{userSearch.searchstring}}
+          <span class="badge">{{userSearch.resultados.length}}</span>
+        </a>
+      </h4>
+    </div>
+    <div id="searchkeytitle_{{$index}}" class="panel-collapse collapse" ng-class="{ 'in': $first }" role="tabpanel" aria-labelledby="searchkey_{{$index}}">
+		<!-- Grupo de paneles de una búsqueda en particular -->
+		<div class="panel-group" id="resultsmenu_{{$index}}">
+			<div class="panel list-group">
+				<span ng-repeat="result in userSearch.resultados">
+				 <a  href="#" class="list-group-item" data-toggle="collapse" data-target="#resultdata_{{$parent.$index}}_{{$index}}" data-parent="#resultsmenu_{{$parent.$index}}"><i class="fa fa-chevron-right"></i> {{result.name}} <span class="resultScopeText">{{result.scope}}</span></a>
+				 <div id="resultdata_{{$parent.$index}}_{{$index}}" class="sublinks collapse">
+				  <a class="list-group-item small">Descripcion: {{result.description}}</a>
+				  <a class="list-group-item small">Latitud: {{result.lat}}</a>
+				  <a class="list-group-item small">Longitud: {{result.lon}}</a>
+				 </div>
+				</span>
+			</div>
+		</div>
+    </div>
+  </div>
+</div>
