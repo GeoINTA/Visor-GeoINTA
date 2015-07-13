@@ -12,4 +12,4 @@ angular.module('visorINTA.menuControllers', [])
     $scope.herramientas = function() {
         console.log("herramientas");
     };
-  }]);
+}]);

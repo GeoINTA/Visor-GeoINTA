@@ -40,7 +40,8 @@
   <script src="./scripts/tools/importWms/importWms.module.js"></script>
   <script src="./scripts/tools/featureInfo/featureInfo.module.js"></script>
   <script src="./scripts/tools/tools.module.js"></script>
-	<script src="./scripts/MainController.js"></script>
+	<script src="./scripts/controllers/MainController.js"></script>
+  <script src="./scripts/controllers/SearchController.js"></script>
 
 
   <!-- Directives -->
@@ -96,11 +97,11 @@
        <button type="button" class="btn btn-primary navbar-btn" data-nq-collapse="" data-target-id="#pulldownMenu"> Menu </button>
       </ul>
       <form class="navbar-form navbar-left" role="search">
-        <div>
+        <div ng-controller="SearchController">
           
-            <navbar-search data='searchdata'></navbar-search>
+            <navbar-search data='searchdata' max-user-searchs='maxUserSearchs'></navbar-search>
           <visor-box id="searchInfoBox" class="toolBox bigInfoBox">
-              <search-info-box map='map' data='searchdata'></search-info-box>
+              <search-info-box map='map' data='searchdata' ></search-info-box>
           </visor-box>
         </div>
       </form>

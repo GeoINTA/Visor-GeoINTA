@@ -1,5 +1,6 @@
 angular.module('visorINTA', [
   "visorINTA.MainController",
+  "visorINTA.SearchController",
   "ngRoute",
   'ngSanitize',
   'ngAnimate',

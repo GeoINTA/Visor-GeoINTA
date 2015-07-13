@@ -23,24 +23,6 @@ angular.module('visorINTA.MainController', [])
     // Info Layer
     $scope.layerInfoActive = [];
 
-    // Search
-    $scope.searchdata = [
-      {
-        "searchstring":"google",
-        "resultados":[
-            {"name":'chivil',"description":'la ciudad',"scope":"PARAJE","lon":"-62.96340178671490000000000000000","lat":"-23.01096916342150000000000000000"},
-            {"name":'chivilco',"description":'hermoso!',"scope":"CIUDAD","lon":"-65.50589751705450000000000000000","lat":"-25.14324950362250000000000000000"},
-        ]
-      },
-      {
-        "searchstring":"buscando",
-        "resultados":[
-            {"name":'chivil',"description":'la ciudade',"scope":"PARAJE","lon":"-62.96340178671490000000000000000","lat":"-23.01096916342150000000000000000"},
-            {"name":'chivilco',"description":'hermosisimo!',"scope":"CIUDAD","lon":"-65.50589751705450000000000000000","lat":"-25.14324950362250000000000000000"},
-        ]
-      }
-    ];
-
     // DEBUGGING
     $scope.verboseMode = true;
 

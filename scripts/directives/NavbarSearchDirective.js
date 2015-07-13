@@ -4,12 +4,11 @@ angular.module('visorINTA.directives.NavbarSearchDirective', [])
 		restrict: "E",
 		scope:{
 			map : '=',
-			data : '='
+			data : '=',
+			maxUserSearchs : '='
 		},
 		templateUrl:"templates/navbarSearch.html",
 		link:function(scope, iElement, iAttrs) {
-
-			scope.maxUserSearchs = 5;
 
 			scope.search = function(){
 				if (scope.searchString && scope.searchString != ""){
