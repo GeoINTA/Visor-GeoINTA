@@ -96,6 +96,23 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
  				$rootScope.initBoxAction('layerInfoBox','info',boxActions["OPEN"]);
  			}
 
+ 			$scope.zoomToLayer = function(layer){
+ 				layerName = layer.replace(/__/g,"::"); // el visor identifica a las capas con ::
+ 				model = $rootScope.getProyectModel();
+ 				layerConfig = model.capasConfig[layerName];
+ 				if (layerConfig){
+ 					box = layerConfig.extent.split(",");
+ 					// oeste, sur, este, norte
+ 					extent = [parseFloat(box[0].trim()),parseFloat(box[1].trim()),parseFloat(box[2].trim()),parseFloat(box[3].trim())];
+ 					extent = ol.extent.applyTransform(extent,ol.proj.getTransform("EPSG:4326", "EPSG:900913"));
+ 					$scope.map.getView().fitExtent(extent, $scope.map.getSize());
+ 				}
+ 			}
+
+ 			$scope.isImportedLayer = function(layer){
+ 				return MapUtils.isImportedLayer(layer);
+ 			}
+
  			// Muevo la capa
  			// Para ello, se debe actualizar su posicion dentro de la lista de capas del mapa,
  			// y dentro de la lista de capas que maneja esta directiva.

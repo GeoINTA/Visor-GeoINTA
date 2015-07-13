@@ -117,7 +117,7 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 					var infoFeatureResponse = data[i];
 					if (infoFeatureResponse.data.features.length){
 						layerOrigin = MapUtils.getLayerParams(infoFeatureResponse.data.layerId)["server"];
-						if (layerOrigin != "IMPORTED"){
+						if (layerOrigin != MapUtils.getImportedLayerServer()){
 							for (layerConfig in featureInfoConfig){
 								layerObjectConfig = $rootScope.getLayerObjectFromConfig(layerConfig);
 								layerTitle = layerObjectConfig.get('title');

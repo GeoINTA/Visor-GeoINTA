@@ -2,6 +2,19 @@ angular.module('visorINTA.utils.MapUtilsService', [])
 .service('MapUtils', function(){
 
     this.LAYER_ID_SEPARATOR = "__";
+    this.IMPORTED_LAYER_SERVER = "IMPORTED";
+
+
+    this.getImportedLayerServer = function(){
+        return this.IMPORTED_LAYER_SERVER;
+    }
+
+    this.isImportedLayer = function(layerID){
+        if (this.getLayerParams['server'] == this.IMPORTED_LAYER_SERVER){
+            return true;
+        }
+        return false;
+    }
 
     this.layerExists = function(map,layerObject){
         var exist = false;
