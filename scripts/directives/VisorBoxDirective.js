@@ -49,7 +49,6 @@ angular.module('visorINTA.directives.VisorBoxDirective', ['visorINTA.utils.Visor
 			// Notar que el evento 'visorBoxClicked' es iniciado desde afuera de aqui, y es escuchado
 			// solamente
 			scope.emitEvent = function(actionTriggered){
-				console.log(boxID + "  "  + actionTriggered);
 				scope.$broadcast('visorBoxEvent',{id:boxID,type:scope.boxType,action:actionTriggered});
 			}
 
