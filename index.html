@@ -67,6 +67,7 @@
   <script src="./scripts/providers/MainInterceptor.js"></script>
   <script src="./scripts/providers/services/MapUtilsService.js"></script>
   <script src="./scripts/providers/services/GeoServerService.js"></script>
+  <script src="./scripts/providers/services/SearchService.js"></script>
   <script src="./scripts/providers/services/VisorBoxManagerService.js"></script>
 
 
@@ -97,7 +98,7 @@
       <form class="navbar-form navbar-left" role="search">
         <div>
           
-            <navbar-search></navbar-search>
+            <navbar-search data='searchdata'></navbar-search>
           <visor-box id="searchInfoBox" class="toolBox bigInfoBox">
               <search-info-box map='map' data='searchdata'></search-info-box>
           </visor-box>

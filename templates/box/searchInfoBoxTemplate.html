@@ -1,6 +1,6 @@
 <!-- Grupo de paneles que contiene un panel por cada búsqueda que se realizó -->
 <div class="panel-group boxInnerpanel" id="searchKeyResults" role="tablist" aria-multiselectable="true">
-  <div class="panel panel-default" ng-repeat="userSearch in data">
+  <div class="panel panel-default" ng-repeat="userSearch in data track by $index">
     <div class="panel-heading" role="tab" id="searchkey_{{$index}}">
       <h4 class="panel-title">
         <a role="button" data-toggle="collapse" data-parent="#searchKeyResults" href="#searchkeytitle_{{$index}}" aria-expanded="true" aria-controls="searchkeytitle_{{$index}}">

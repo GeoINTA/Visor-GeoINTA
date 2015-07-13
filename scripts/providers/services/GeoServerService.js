@@ -36,7 +36,7 @@ angular.module('visorINTA.utils.GeoServerService', [])
 	// Aqui, manejo la respuesta para parsear el xml y convertirlo en un objeto json/javascript
 	this.requestData = function(serverURL,params){
 		url = serverURL;
-		return $http.get(url, {
+		return $http.jsonp(url, {
                 params : params,
                 transformResponse: function (data, headers) {
                     data = x2js.xml_str2json(data);

@@ -406,6 +406,10 @@ angular.module('visorINTA.MainController', [])
       $scope.$broadcast('visorBoxClicked',{id:boxID,type:'info',action:action});
     }
 
+    $rootScope.getSearchData = function(){
+      return $scope.searchdata;
+    }
+
 
     $rootScope.updateLayerInfoActive = function(layer){
       $scope.layerInfoActive[0] = layer;

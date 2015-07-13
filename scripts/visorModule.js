@@ -18,6 +18,7 @@ angular.module('visorINTA', [
   "visorINTA.directives.VisorBoxDirective",
   "visorINTA.utils.MapUtilsService",
   "visorINTA.utils.GeoServerService",
+  "visorINTA.utils.SearchService",
   "visorINTA.tools.toolsModule"
 
 ])
@@ -40,7 +41,8 @@ angular.module('visorINTA', [
 .constant("networkServices",{
         "proxyUrl" : "http://172.22.20.120:8001/proxy.php",
         //"proxyUrl":"http://192.168.2.30/neo_visor_new/proxy.php",
-        "gestor": "http://geointa.inta.gov.ar/gestor/servicioVisor"
+        "gestor": "http://geointa.inta.gov.ar/gestor/servicioVisor",
+        "searchService": " http://geointa.inta.gov.ar/visor/nomenclador/nomenclador.php"
 })
 .constant("boxActions",{
     "OPEN" : "open",
