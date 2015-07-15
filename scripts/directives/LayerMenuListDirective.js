@@ -110,6 +110,7 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
  			}
 
  			$scope.isImportedLayer = function(layer){
+ 				console.log(MapUtils.isImportedLayer(layer));
  				return MapUtils.isImportedLayer(layer);
  			}
 
