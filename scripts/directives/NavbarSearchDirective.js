@@ -12,6 +12,7 @@ angular.module('visorINTA.directives.NavbarSearchDirective', [])
 
 			scope.search = function(){
 				if (scope.searchString && scope.searchString != ""){
+					var $btn = $('#startSearchButton').button('loading');
 					SearchService.search(scope.normalize(scope.searchString))
 		  			.then(function success(response) {
 		  				searchResult = response.data;
@@ -22,7 +23,9 @@ angular.module('visorINTA.directives.NavbarSearchDirective', [])
 				    })
 				   	.catch(function error(msg) {
 				       console.log("No es posible realizar la busqueda. Chequee servicio");
-		   			});
+		   			}).finally(function() {
+					  $btn.button('reset');
+					});
 			   }
 			}
 
@@ -42,4 +45,11 @@ angular.module('visorINTA.directives.NavbarSearchDirective', [])
 		}
 	}
 })
+.filter("round", function () {
+        return function(input, precision) {
+            return input ?
+                parseFloat(input).toFixed(precision) :
+                "";
+        };
+});
 

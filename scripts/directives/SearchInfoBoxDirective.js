@@ -35,6 +35,7 @@ angular.module('visorINTA.directives.SearchInfoBoxDirective', [])
 			  	});
 				map.beforeRender(pan);
 				view.setCenter(newCenter);
+				view.setZoom(8);
 		    }
 
 	  		scope.openBox = function(){
