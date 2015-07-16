@@ -166,10 +166,12 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 
 			// Retorna true si la capa se encuentra en la lista de capas activas
 			$scope.layerIsActive = function(layerObject){
-				for (i in $scope.projectLayerList){
-					lyr = $scope.projectLayerList[i];
-					if (lyr.get('id') == layerObject.get('id')){
-						return true;
+				if (layerObject){
+					for (i in $scope.projectLayerList){
+						lyr = $scope.projectLayerList[i];
+						if (lyr.get('id') == layerObject.get('id')){
+							return true;
+						}
 					}
 				}
 				return false;
