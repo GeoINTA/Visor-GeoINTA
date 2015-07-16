@@ -5,7 +5,6 @@ angular.module('visorINTA.factories.ProyectsFactory',[])
      
     var proyectsFactory = {};
 
-
     var geoServers =  [{"nombre":"GeoINTA","url":"http:\/\/geointa.inta.gov.ar\/geoserver\/wms","urlCache":"http:\/\/geointa.inta.gov.ar\/geoserver\/gwc\/service\/wms"},{"nombre":"GeoBariloche","url":"http:\/\/sipan.inta.gob.ar\/geoserver\/wms","urlCache":""},{"nombre":"INTA Rafaela","url":"http:\/\/geointa.inta.gov.ar\/geoserversf\/wms","urlCache":"http:\/\/geointa.inta.gov.ar\/geoserversf\/gwc\/service\/wms"},{"nombre":"GeoAnguil","url":"http:\/\/geointa.inta.gov.ar\/geoserverLP\/wms","urlCache":"http:\/\/geointa.inta.gov.ar\/geoserverLP\/gwc\/service\/wms"},{"nombre":"GeoSantiago","url":"http:\/\/geointa.inta.gov.ar\/geosantiago\/wms","urlCache":"http:\/\/geointa.inta.gov.ar\/geosantiago\/gwc\/service\/wms"},{"nombre":"GeoParana","url":"http:\/\/geointa.inta.gov.ar\/geoparana\/wms","urlCache":"http:\/\/geointa.inta.gov.ar\/geoparana\/gwc\/service\/wms"},{"nombre":"RIDES","url":"http:\/\/rides.producciontucuman.gov.ar\/ArcGIS\/services\/Informacion_Productiva\/mapserver\/WMSServer","urlCache":""},{"nombre":"EEA Famailla","url":"http:\/\/geointa.inta.gov.ar\/geotucuman\/wms","urlCache":"http:\/\/geointa.inta.gov.ar\/geotucuman\/gwc\/service\/wms"},{"nombre":"IGN","url":"http:\/\/wms.ign.gob.ar\/geoserver\/wms","urlCache":"http:\/\/wms.ign.gob.ar\/geoserver\/gwc\/service\/wms"},{"nombre":"Mapoteca","url":"http:\/\/geointa.inta.gov.ar\/wmsserver\/srv_mapoteca_v2\/MapServer\/WMSServer?SRS=EPSG:102113","urlCache":""},{"nombre":"Geoservidor Cordoba","url":"http:\/\/wms.geointa.inta.gob.ar\/geocordoba\/wms","urlCache":""},{"nombre":"GeoSalta","url":"http:\/\/geosalta.inta.gob.ar\/geoserver\/wms","urlCache":"http:\/\/geosalta.inta.gob.ar\/geoserver\/gwc\/service\/wms"}]
      
     proyectsFactory.getProyects = function(){
@@ -21,33 +20,35 @@ angular.module('visorINTA.factories.ProyectsFactory',[])
         return $http.get(networkServices.gestor, {
                 params : {modo:'mod',id:id},
                 transformResponse:function(data,header,status){
-                    var regExp = /mapfish\.\w+.\w+\((.*?)\)/g;
-                    data = data.replace(regExp,'""');
-                    var second = /\'<img src=\"\' \+ \"\" \+ \'\">\'/g;
-                    data = data.replace(second,'""');
+                    var expIcon = /mapfish\.\w+\.\w+\('([\w\:\\\/\.\?]+)',\s\{[\w\:\s']+\}\)/g;
+                    var expInfo = /'(<img src="' \+ )?mapfish\.\w+\.\w+\("([\w\:\\\/\.\?]+)",\s\{[\s\w:"'\}\)\+]+>'?/g;
+                    data = data.replace(expIcon,'"$1"'); // reemplazo por la url recibida
+                    data = data.replace(expInfo,'"$2"'); // reemplazo por la url recibida
                     var jsonData = JSON.parse(data);
                     return jsonData;
                 }
         })
-        //var model = proyectsConfig[id] || null;
-        //return model;
     }
 
     proyectsFactory.getGeoServers = function(){
         return this.requestData({modo:'srvs'});
     }
 
+    proyectsFactory.getServiceUrl = function(){
+        return networkServices.gestor + '?callback=JSON_CALLBACK';
+    }
+
 
     proyectsFactory.requestData = function(params,transformResponseFunction){
       if (transformResponseFunction){
-        return $http.jsonp(networkServices.gestor + '?callback=JSON_CALLBACK', {
+        return $http.jsonp(this.getServiceUrl(), {
                 params : params,
                 transformResponse:function(data,header,status){
                     return data;
                 }
         })
       } else {
-        return $http.jsonp(networkServices.gestor + '?callback=JSON_CALLBACK', {
+        return $http.jsonp(this.getServiceUrl(), {
                   params : params
         })
       }
