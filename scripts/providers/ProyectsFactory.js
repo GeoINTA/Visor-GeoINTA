@@ -20,8 +20,8 @@ angular.module('visorINTA.factories.ProyectsFactory',[])
         return $http.get(networkServices.gestor, {
                 params : {proxyParams:{modo:'mod',id:id},contenttype:'text/html'},
                 transformResponse:function(data,header,status){
-                    var expIcon = /mapfish\.\w+\.\w+\('([\w\:\\\/\.\?\d-\n\?\=]+)',\s\{[\w\:\s'\d-\n\?\=]+\}\)/g;
-                    var expInfo = /'(<img src="' \+ )?mapfish\.\w+\.\w+\("([\w\:\\\/\.\?\d-\n\?\=]+)",\s\{[\s\w:"'\}\)\+\d-\n\?\=]+>'?/g;
+                    var expIcon = /mapfish\.\w+\.\w+\('([\w\:\\\/\.\?\d-\n\?\=\\]+)',\s\{[\w\:\s'\d-\n\?\=\\]+\}\)/g;
+                    var expInfo = /'(<img src="' \+ )?mapfish\.\w+\.\w+\("([\w\:\\\/\.\?\d-\n\?\=\\]+)",\s\{[\s\w:"'\}\)\+\d-\n\?\=\\]+>'?/g;
                     data = data.replace(expIcon,'"$1"'); // reemplazo por la url recibida
                     data = data.replace(expInfo,'"$2"'); // reemplazo por la url recibida
                     var jsonData = JSON.parse(data);
