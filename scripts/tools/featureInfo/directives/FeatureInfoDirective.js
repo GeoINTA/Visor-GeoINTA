@@ -29,7 +29,6 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 					scope.layersToRequest = [];
 		  			scope.prepareActiveLayers(); // agrego capas activas a la peticion
 		  			scope.prepareImportedLayers();// agrego capas importadas a la peticion
-		  			console.log(scope.layersToRequest);
 			  		if (scope.layersToRequest.length > 0 ){
 			  			// WARNING -> Hace una peticion independiente por cada capa presente en la config
 			  			//			  del proyecto
@@ -121,13 +120,11 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 						if (layerOrigin != MapUtils.getImportedLayerServer()){
 							for (layerConfig in featureInfoConfig){
 								layerObjectConfig = $rootScope.getLayerObjectFromConfig(layerConfig);
-								if (layerObjectConfig){ // null/false si la capa no esta activa, la ignoro
-									layerTitle = layerObjectConfig.get('title');
-									if (layerTitle == infoFeatureResponse.data.layerTitle){
-										existData = true;
-										var layerConfig = featureInfoConfig[layerConfig];
-										$scope.bindLayerData(layerTitle,layerConfig,infoFeatureResponse.data.features[0].properties);
-									}
+								layerTitle = layerObjectConfig.get('title');
+								if (layerTitle == infoFeatureResponse.data.layerTitle){
+									existData = true;
+									var layerConfig = featureInfoConfig[layerConfig];
+									$scope.bindLayerData(layerTitle,layerConfig,infoFeatureResponse.data.features[0].properties);
 								}
 							}
 						} else {
