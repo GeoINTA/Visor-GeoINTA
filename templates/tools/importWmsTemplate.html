@@ -38,7 +38,7 @@
 
 		  <!-- List group -->
 		  <div id="importStyleList" class="list-group">
-			<a class="list-group-item" ng-class="{ 'active': $index == styleSelectedIndex }" ng-repeat="style in layerSelected.styles" ng-click="setStyleSelected(style,$index)">{{style}}</a>
+			<a class="list-group-item" ng-class="{ 'active': $index == styleSelectedIndex }" ng-repeat="style in layerSelected.styles track by $index" ng-click="setStyleSelected(style,$index)">{{style}}</a>
 		  </div>
 		</div>
 	</div>
