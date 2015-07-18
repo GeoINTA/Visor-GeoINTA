@@ -18,7 +18,7 @@ angular.module('visorINTA.factories.ProyectsFactory',[])
 
     proyectsFactory.getProyect = function(id){
         return $http.get(networkServices.gestor, {
-                params : {modo:'mod',id:id},
+                params : {proxyParams:{modo:'mod',id:id},contenttype:'application/json'},
                 transformResponse:function(data,header,status){
                     var expIcon = /mapfish\.\w+\.\w+\('([\w\:\\\/\.\?]+)',\s\{[\w\:\s']+\}\)/g;
                     var expInfo = /'(<img src="' \+ )?mapfish\.\w+\.\w+\("([\w\:\\\/\.\?]+)",\s\{[\s\w:"'\}\)\+]+>'?/g;

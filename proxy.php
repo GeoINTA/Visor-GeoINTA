@@ -17,7 +17,6 @@ $Name$
 ////////////////////////////////////////////////////////////////////////////////
 
 // read in the variables
-
 if(array_key_exists('HTTP_SERVERURL', $_SERVER)){ 
   $onlineresource=$_SERVER['HTTP_SERVERURL']; 
 }else{ 
@@ -40,9 +39,8 @@ if(empty($contenttype)) {
 $data = @$GLOBALS["HTTP_RAW_POST_DATA"];
 // define content type
 header("Content-type: " . $contenttype);
-
 if(empty($data)) {
-  $result = send_request();
+  $result = send_request(); // notar que no es HTTP_Client::send_request()
 }
 else {
   // post XML
@@ -52,10 +50,12 @@ else {
 }
 
 // strip leading text from result and output result
-$len=strlen($result);
-$pos = strpos($result, "<");
-if($pos > 1) {
-  $result = substr($result, $pos, $len);
+if ($contenttype == "text/xml"){
+  $len=strlen($result);
+  $pos = strpos($result, "<");
+  if($pos > 1) {
+    $result = substr($result, $pos, $len);
+  }
 }
 //$result = str_replace("xlink:","",$result);
 echo $result;
@@ -143,7 +143,7 @@ class HTTP_Client {
 function send_request() {
   global $onlineresource;
   $ch = curl_init();
-  $timeout = 5; // set to zero for no timeout
+  $timeout = 30; // set to zero for no timeout
 
   // fix to allow HTTPS connections with incorrect certificates
   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);

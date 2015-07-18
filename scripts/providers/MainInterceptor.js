@@ -4,17 +4,14 @@ angular.module('visorINTA.factories.MainInterceptor',[])
   	return {
 
   		request : function(config){
-  			useProxy = (config.params) ? config.params.useProxy : false;
-  			if (useProxy){
-          delete config.params.useProxy; // elimino para que no se agrege como parametro luego
+  			if (config.params && config.params.proxyParams){ // true cuando se desea utilizar el proxy
   				config.url =  networkServices.proxyUrl + '?url=' +  config.url;
           newParams = [];
-          for (param in config.params){
-            newParams.push(param + "=" + config.params[param]);
+          for (param in config.params.proxyParams){
+            newParams.push(param + "=" + config.params.proxyParams[param]);
           }
           config.url += '?' + encodeURIComponent(newParams.join('&'));
-          config.params = {};
-          console.log(config);
+          delete config.params.proxyParams;
   			}
   			return config;
   		}
