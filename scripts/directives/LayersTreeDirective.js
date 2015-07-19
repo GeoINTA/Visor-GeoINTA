@@ -44,9 +44,9 @@ angular.module('visorINTA.directives.LayersTreeDirective', [])
 				if (node.leaf){
 					node.layerName = node.layerNames[0];
 					node.layerObject = MapUtils.getLayerByTitle(scope.map,node.text);
-					if (node.checked){
+					/*if (node.checked){
 						$rootScope.addActiveLayer(node.layerObject);
-					}
+					}*/
 					bindNodeControls();
 				}
 			}

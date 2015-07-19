@@ -192,7 +192,6 @@ angular.module('visorINTA.MainController', [])
             urlServidor = server.url;
             cacheOptions = null;
         }
-        console.log($scope.activeProyectModel.modelo[0]);
         extent = [$scope.activeProyectModel.modelo[0].oeste,$scope.activeProyectModel.modelo[0].sur,$scope.activeProyectModel.modelo[0].este,$scope.activeProyectModel.modelo[0].norte];
         extentGoogle = ol.extent.applyTransform(extent, ol.proj.getTransform("EPSG:4326", "EPSG:900913"));
         layerIdentifier =  MapUtils.constructLayerIdentifier(nombreServidor,nombreCapa,nombreEstilo);
@@ -212,6 +211,7 @@ angular.module('visorINTA.MainController', [])
                 );
             $scope.map.addLayer(layerObject); 
             $scope.infoLayers.push(layerObject);
+            $rootScope.addActiveLayer(layerObject);
           }
           $scope.map.getView().fitExtent(extentGoogle, $scope.map.getSize());
         //}
@@ -323,15 +323,15 @@ angular.module('visorINTA.MainController', [])
     }
 
     $rootScope.addActiveLayer = function(layer){
-      $timeout(function() {
-      if (layer){
-          if (!$scope.layerInArray($scope.activeLayers,layer)){
-            $scope.activeLayers.push(layer);
-          }
-          if (!layer.getVisible()){
-            layer.setVisible(true);
-          }
-      }
+      $timeout(function(){
+        if (layer){
+            if (!$scope.layerInArray($scope.activeLayers,layer)){
+              $scope.activeLayers.push(layer);
+            }
+            if (!layer.getVisible()){
+              layer.setVisible(true);
+            }
+        }
       })
     }
 
