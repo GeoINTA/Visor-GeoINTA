@@ -10,7 +10,7 @@ angular.module('visorINTA.utils.MapUtilsService', [])
     }
 
     this.isImportedLayer = function(layerID){
-        if (this.getLayerParams['server'] == this.IMPORTED_LAYER_SERVER){
+        if (this.getLayerParams(layerID)['server'] == this.IMPORTED_LAYER_SERVER){
             return true;
         }
         return false;
