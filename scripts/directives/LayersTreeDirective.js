@@ -1,5 +1,5 @@
 angular.module('visorINTA.directives.LayersTreeDirective', [])
-.directive('layersTree', function($rootScope,MapUtils) {
+.directive('layersTree', function($rootScope,MapUtils,ProyectUtils) {
 	return {
 		restrict: 'EA',
 		scope : {
@@ -14,7 +14,7 @@ angular.module('visorINTA.directives.LayersTreeDirective', [])
 			});
 
 			$(element).on('change', '.treeLayerChck', function() {
-				layerObject = MapUtils.getLayerByTitle(scope.map,this.name);
+				layerObject = ProyectUtils.getLayerByTitle(this.name);
 				if (this.checked){
 					$rootScope.addActiveLayer(layerObject);
 				} else {
@@ -29,7 +29,7 @@ angular.module('visorINTA.directives.LayersTreeDirective', [])
 
 	}
 })
-.directive('layerTreeObject', function($rootScope,$compile,$timeout,MapUtils) {
+.directive('layerTreeObject', function($rootScope,$compile,$timeout,MapUtils,ProyectUtils) {
 	return {
 		restrict: 'E',
 		scope : {
@@ -43,10 +43,13 @@ angular.module('visorINTA.directives.LayersTreeDirective', [])
 			function initNode(){
 				if (node.leaf){
 					node.layerName = node.layerNames[0];
-					node.layerObject = MapUtils.getLayerByTitle(scope.map,node.text);
+					node.layerObject = ProyectUtils.getLayerByTitle(node.text);
 					/*if (node.checked){
 						$rootScope.addActiveLayer(node.layerObject);
 					}*/
+					if (!node.checked){
+						$rootScope.removeActiveLayer(node.layerObject);
+					}
 					bindNodeControls();
 				}
 			}
@@ -57,7 +60,7 @@ angular.module('visorINTA.directives.LayersTreeDirective', [])
 				inputCheck.checked = node.checked;
 				inputCheck.addEventListener('change', function() {
 				  var checked = this.checked;
-				  layer = MapUtils.getLayerByTitle(scope.map,$(this).attr('name'));
+				  layer = ProyectUtils.getLayerByTitle($(this).attr('name'));
 				  if (checked !== layer.getVisible()) {
 				    layer.setVisible(checked);
 				  }

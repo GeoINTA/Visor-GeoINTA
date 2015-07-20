@@ -121,6 +121,12 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
  				layers = $scope.map.getLayers();
  				mapIndex = MapUtils.getLayerIndex($scope.map,layer);
  				layerObject = MapUtils.getLayerBy($scope.map,'id',layer);
+ 				console.log(mapIndex);
+ 				console.log(layerIndex);
+ 				console.log(delta);
+		      	$scope.map.getLayers().forEach(function(layer,idx) {
+		            console.log(layer.get('id') +  ' , ' + idx);
+		        });
 				// elimino capa
 				layers.removeAt(mapIndex);
 				$scope.layersList.splice(layerIndex,1);

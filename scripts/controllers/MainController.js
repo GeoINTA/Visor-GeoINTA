@@ -1,11 +1,10 @@
 angular.module('visorINTA.MainController', [])
-  .controller('MainController', ['$rootScope','$location','$scope','$loading','$timeout','mapConfig','ProyectsFactory','MapUtils', function($rootScope,$location,$scope,$loading,$timeout,mapConfig,ProyectsFactory,MapUtils) {
+  .controller('MainController', ['$rootScope','$location','$scope','$loading','$timeout','mapConfig','ProyectsFactory','MapUtils','ProyectUtils', function($rootScope,$location,$scope,$loading,$timeout,mapConfig,ProyectsFactory,MapUtils,ProyectUtils) {
     
     // Layers
 
     $scope.baseLayers = []; // capas base del mapa
-    $scope.infoLayers = []; // todas las capas (no base) del mapa, indepte de si estan activas (visibles) o no.
-                           // cuando se carga un proyecto, todas las capas se cargan aqui.
+    $scope.proyectLayers = [];  // cuando se carga un proyecto, todas las capas se cargan aqui.
     $scope.activeLayers = []; // capas (no base) activas actualmente.
     $scope.importedLayers = []; // capas importadas por el usuario
 
@@ -167,8 +166,8 @@ angular.module('visorINTA.MainController', [])
     //    - Capas activas
     $scope.cleanMap = function(){
       $scope.activeLayers = []; // saco todas las capas activas
-      for (var k=0; k < $scope.infoLayers.length; k++){ // limpio capas 'no base'
-        $scope.infoLayers[k].setVisible(false);
+      for (var k=0; k < $scope.proyectLayers.length; k++){ // limpio capas 'no base'
+        $scope.proyectLayers[k].setVisible(false);
       }
       for (var j=0; j < $scope.importedLayers.length; j++) // limpio capas importadas
         $scope.map.removeLayer($scope.importedLayers[j]);
@@ -195,9 +194,7 @@ angular.module('visorINTA.MainController', [])
         extent = [$scope.activeProyectModel.modelo[0].oeste,$scope.activeProyectModel.modelo[0].sur,$scope.activeProyectModel.modelo[0].este,$scope.activeProyectModel.modelo[0].norte];
         extentGoogle = ol.extent.applyTransform(extent, ol.proj.getTransform("EPSG:4326", "EPSG:900913"));
         layerIdentifier =  MapUtils.constructLayerIdentifier(nombreServidor,nombreCapa,nombreEstilo);
-        layerObject = $rootScope.getLayerBy('id',layerIdentifier);
-        if(!layerObject){
-          layerObject = MapUtils.createWMSLayerObject({
+        layerObject = MapUtils.createWMSLayerObject({
                                     serverURL: urlServidor,
                                     legendURL: server.url, // como leyenda asigno url servidor (no cache)
                                     layerOrigin: nombreServidor,
@@ -209,13 +206,11 @@ angular.module('visorINTA.MainController', [])
                                 },
                                 cacheOptions
                 );
-            $scope.map.addLayer(layerObject); 
-            $scope.infoLayers.push(layerObject);
-            $rootScope.addActiveLayer(layerObject);
-          }
+          $scope.proyectLayers.push(layerObject);
+          $rootScope.addActiveLayer(layerObject);
           $scope.map.getView().fitExtent(extentGoogle, $scope.map.getSize());
-        //}
       }
+      ProyectUtils.setProyectLayers($scope.proyectLayers);
     }
 
     // Se fija en la variable geoServers, si existe el servidor con el nombre pasado como parametro.
@@ -308,31 +303,30 @@ angular.module('visorINTA.MainController', [])
         return MapUtils.layerExists(layerObject);
     }
 
-
-    $rootScope.addLayer = function(layerObject){
-      try {
-          var exist = $rootScope.getLayerBy('id',layerObject);
-          if (!exist){
-            $scope.map.addLayer(layerObject);
-            return true;
-          }
-          return false;
-      } catch(err){
-          return false;
-      }
-    }
-
     $rootScope.addActiveLayer = function(layer){
       $timeout(function(){
         if (layer){
             if (!$scope.layerInArray($scope.activeLayers,layer)){
               $scope.activeLayers.push(layer);
+              $scope.map.addLayer(layer); 
             }
             if (!layer.getVisible()){
               layer.setVisible(true);
             }
         }
       })
+    }  
+
+    $rootScope.removeActiveLayer = function(layer){
+        for (var i = 0; i < $scope.activeLayers.length; i++) {
+            tmpLayer = $scope.activeLayers[i];
+            if (tmpLayer.get('id') == layer.get('id')){
+              $scope.activeLayers.splice(i,1);
+              $scope.map.removeLayer(layer);
+              //layer.setVisible(false);
+            }
+        }
+        $scope.$apply();
     }
 
 
@@ -340,11 +334,8 @@ angular.module('visorINTA.MainController', [])
     // y la establece como activa.
     // Luego, las guarda en la lista importedLayers
     $rootScope.addImportedLayer = function(layerObject,type){
-       if ($rootScope.addLayer(layerObject,true)){
           $rootScope.addActiveLayer(layerObject);
           $scope.importedLayers.push(layerObject);
-       }
-
     }
 
     $rootScope.getActiveLayers = function(){
@@ -353,17 +344,6 @@ angular.module('visorINTA.MainController', [])
 
     $rootScope.getGeoServers = function(){
       return $scope.geoServers;
-    }
-
-
-    $rootScope.removeActiveLayer = function(layer){
-        for (var i = 0; i < $scope.activeLayers.length; i++) {
-            tmpLayer = $scope.activeLayers[i];
-            if (tmpLayer.get('id') == layer.get('id')){
-              $scope.activeLayers.splice(i,1);
-            }
-        }
-        $scope.$apply();
     }
 
     $rootScope.getLayerBy = function(field,value){
