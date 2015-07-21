@@ -1,5 +1,5 @@
 angular.module('visorINTA.tools.draw.DrawDirective', [])
-.directive('drawTool', function() {
+.directive('drawTool', function($rootScope, MapUtils) {
 	return {
 		restrict: "E",
 		require:'^visorBox',
@@ -28,28 +28,37 @@ angular.module('visorINTA.tools.draw.DrawDirective', [])
 		      source: source,
 		      type: /** @type {ol.geom.GeometryType} */ ("Point")
 		    });
-	        var vector = new ol.layer.Vector({
-			  source: source,
-			  style: new ol.style.Style({
-			    fill: new ol.style.Fill({
-			      color: 'rgba(255, 255, 255, 0.2)'
-			    }),
-			    stroke: new ol.style.Stroke({
-			      color: '#ffcc33',
-			      width: 2
-			    }),
-			    image: new ol.style.Circle({
-			      radius: 7,
-			      fill: new ol.style.Fill({
-			        color: '#ffcc33'
-			      })
-			    })
-			  })
-			});
-	        map.addLayer(vector);
+		    var vector = null;
+
+	        scope.initDrawLayer = function(){
+				vector = new ol.layer.Vector({
+					source: source,
+					id: MapUtils.constructLayerIdentifier(MapUtils.getToolLayerServer(),'draw','no_style'),
+					title:scope.toolTitle,
+					style: new ol.style.Style({
+						fill: new ol.style.Fill({
+						  color: 'rgba(255, 255, 255, 0.2)'
+						}),
+						stroke: new ol.style.Stroke({
+						  color: '#ffcc33',
+						  width: 2
+						}),
+						image: new ol.style.Circle({
+						  radius: 7,
+						  fill: new ol.style.Fill({
+						    color: '#ffcc33'
+						  })
+						})
+					})
+				});
+				$rootScope.addActiveLayer(vector);
+	        }
 
 	        // Acciones a realizar cuando se abre la herramienta
 	        scope.openBox = function(){
+	        	if (vector == null){
+	        		scope.initDrawLayer();
+	        	}
 	        	map.addInteraction(draw);	
 	        }
 

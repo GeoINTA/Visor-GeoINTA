@@ -113,6 +113,10 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
  				return MapUtils.isImportedLayer(layer);
  			}
 
+ 			$scope.isToolLayer = function(layer){
+ 				return MapUtils.isToolLayer(layer);
+ 			}
+
  			// Muevo la capa
  			// Para ello, se debe actualizar su posicion dentro de la lista de capas del mapa,
  			// y dentro de la lista de capas que maneja esta directiva.
@@ -121,12 +125,6 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
  				layers = $scope.map.getLayers();
  				mapIndex = MapUtils.getLayerIndex($scope.map,layer);
  				layerObject = MapUtils.getLayerBy($scope.map,'id',layer);
- 				console.log(mapIndex);
- 				console.log(layerIndex);
- 				console.log(delta);
-		      	$scope.map.getLayers().forEach(function(layer,idx) {
-		            console.log(layer.get('id') +  ' , ' + idx);
-		        });
 				// elimino capa
 				layers.removeAt(mapIndex);
 				$scope.layersList.splice(layerIndex,1);

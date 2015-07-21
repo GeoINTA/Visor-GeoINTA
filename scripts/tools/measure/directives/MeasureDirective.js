@@ -1,5 +1,5 @@
 angular.module('visorINTA.tools.measure.MeasureDirective', [])
-.directive('measureTool', function() {
+.directive('measureTool', function($rootScope, MapUtils) {
 	return {
 		restrict: "E",
 		require:'^visorBox',
@@ -171,6 +171,9 @@ angular.module('visorINTA.tools.measure.MeasureDirective', [])
 
 	        // Acciones a realizar cuando se abre la herramienta
 	        scope.openBox = function(){
+	        	if (vector == null){
+					scope.init();
+	        	}
 	        	scope.addInteraction();	
 	        }
 
@@ -202,6 +205,8 @@ angular.module('visorINTA.tools.measure.MeasureDirective', [])
 		        source = new ol.source.Vector();
 		         vector = new ol.layer.Vector({
 				  source: source,
+				  id: MapUtils.constructLayerIdentifier(MapUtils.getToolLayerServer(),'measure','no_style'),
+				  title:scope.toolTitle,
 				  style: new ol.style.Style({
 				    fill: new ol.style.Fill({
 				      color: 'rgba(255, 255, 255, 0.2)'
@@ -219,11 +224,9 @@ angular.module('visorINTA.tools.measure.MeasureDirective', [])
 				  })
 				});
 		        wgs84Sphere = new ol.Sphere(6378137);
-		        map.addLayer(vector);
+		        $rootScope.addActiveLayer(vector);
 		        map.on('pointermove', scope.handlePointerMove);
 	  		}
-
-	        scope.init();
 
 		},
 		controller: function($scope){

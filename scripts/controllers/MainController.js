@@ -165,12 +165,17 @@ angular.module('visorINTA.MainController', [])
     // Limpia variables
     //    - Capas activas
     $scope.cleanMap = function(){
-      $scope.activeLayers = []; // saco todas las capas activas
-      for (var k=0; k < $scope.proyectLayers.length; k++){ // limpio capas 'no base'
-        $scope.proyectLayers[k].setVisible(false);
+      // Limpio capas activas (no elimino capas de herramientas)
+      $scope.activeLayers = MapUtils.getToolLayers($scope.activeLayers);
+      // Limpio capas del proyecto
+      for (var k=0; k < $scope.proyectLayers.length; k++){
+          $scope.map.removeLayer($scope.proyectLayers[k]);
       }
-      for (var j=0; j < $scope.importedLayers.length; j++) // limpio capas importadas
+      $scope.proyectLayers = [];
+      // Limpio capas importadas
+      for (var j=0; j < $scope.importedLayers.length; j++){
         $scope.map.removeLayer($scope.importedLayers[j]);
+      }
       $scope.importedLayers = [];
     }
 

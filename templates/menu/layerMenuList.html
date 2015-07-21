@@ -4,8 +4,8 @@
 <ul ng-if="layersList.length" class="list-group">
 	<li class="list-group-item" ng-repeat='layer in getLayerIDs() track by $index' >
 		<!-- Botones capa -->
-		<button class="layerMenuBtn btn pull-right btn-sm" ng-click="showLayerInfo(layer)" type="button"><i class="fa fa-info"></i></button>
-		<button ng-show="!isImportedLayer(layer)" class="layerMenuBtn btn pull-right btn-sm" ng-click="zoomToLayer(layer)" type="button"><i class="fa fa-eye"></i></button>
+		<button class="layerMenuBtn btn pull-right btn-sm" ng-hide="isToolLayer(layer)" ng-click="showLayerInfo(layer)" type="button"><i class="fa fa-info"></i></button>
+		<button ng-show="!isImportedLayer(layer) && !isToolLayer(layer)" class="layerMenuBtn btn pull-right btn-sm" ng-click="zoomToLayer(layer)" type="button"><i class="fa fa-eye"></i></button>
 		<button ng-disabled="$last" class="layerMenuBtn btn pull-right btn-sm" ng-click="moveLayer(layer,(layersList.length - 1) - $index,-1)" type="button"><i class="fa fa-arrow-down"></i></button>
 		<button ng-disabled="$first" class="layerMenuBtn btn pull-right btn-sm" ng-click="moveLayer(layer,(layersList.length - 1) - $index,1)" type="button"><i class="fa fa-arrow-up"></i></button>
 		
