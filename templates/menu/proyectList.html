@@ -2,5 +2,5 @@ Seleccione un proyecto
 <select 
 	class="form-control"
 	ng-model="activeProyect"
-	ng-options="proyect.nombre for proyect in proyects">
+	ng-options="proyect.nombre for proyect in proyects | orderBy:'nombre'">
 </select>
