@@ -38,6 +38,7 @@
   <script src="./scripts/tools/imageFilter/imageFilter.module.js"></script>
   <script src="./scripts/tools/importWms/importWms.module.js"></script>
   <script src="./scripts/tools/featureInfo/featureInfo.module.js"></script>
+  <script src="./scripts/tools/region/region.module.js"></script>
   <script src="./scripts/tools/tools.module.js"></script>
 	<script src="./scripts/controllers/MainController.js"></script>
   <script src="./scripts/controllers/SearchController.js"></script>
@@ -61,6 +62,7 @@
   <!--<script src="./scripts/tools/imageFilter/directives/ImageFilterDirective.js"></script>-->
   <script src="./scripts/tools/importWms/directives/ImportWmsDirective.js"></script>
   <script src="./scripts/tools/featureInfo/directives/FeatureInfoDirective.js"></script>
+  <script src="./scripts/tools/region/directives/RegionDirective.js"></script>
 
   <!-- Factories / Services -->
   <script src="./scripts/providers/ProyectsFactory.js"></script>
@@ -159,6 +161,7 @@
           <a class="list-group-item" ng-click="initBoxAction('measureTool','tool','toogle')">Medir</a>
           <a class="list-group-item"ng-click="initBoxAction('spyLayerTool','tool','toogle')">Espiar capa</a>
           <a class="list-group-item" ng-click="initBoxAction('swipeTool','tool','toogle')">Cortina</a>
+          <a class="list-group-item" ng-click="initBoxAction('regionTool','tool','toogle')">Marcar regiones</a>
           <!--<a class="list-group-item" ng-click="initBoxAction('imageFilterTool','tool','toogle')">Filtros</a>-->
   		  </div>
     </div>
@@ -202,6 +205,9 @@
     </visor-box>
     <visor-box id="featureInfoTool" class="toolBox">
       <feature-info-tool map='map' layer-list='activeLayers' imported-layers='importedLayers' project-model='activeProyectModel'></feature-info-tool>
+    </visor-box>
+    <visor-box id="regionTool" class="toolBox">
+      <region-tool map='map' base-layers='baseLayers'></region-tool>
     </visor-box>
   </div>
   <!-- Layer Info Box -->

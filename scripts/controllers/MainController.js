@@ -371,6 +371,7 @@ angular.module('visorINTA.MainController', [])
     }
 
     $rootScope.initBoxAction = function(boxID,type,action){
+      console.log(boxID);
       $scope.$broadcast('visorBoxClicked',{id:boxID,type:'info',action:action});
     }
 
