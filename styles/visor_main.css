@@ -127,6 +127,27 @@ list-style-type: none;
 	right: 10px;
 }
 
+#searchMarker {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #088;
+  border-radius: 10px;
+  background-color: #0FF;
+  opacity: 0.5;
+}
+
+#searchMarkerCheckboxContainer{
+	margin-top: 5px;
+}
+
+#searckMarkerLabel {
+  text-decoration: none;
+  color: white;
+  font-size: 11pt;
+  font-weight: bold;
+  text-shadow: black 0.1em 0.1em 0.2em;
+}
+
 .visorBox{
 	position: fixed;
 	display: inline-block;
