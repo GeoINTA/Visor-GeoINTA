@@ -1,6 +1,10 @@
-Seleccione un proyecto
-<select 
-	class="form-control"
-	ng-model="activeProyect"
-	ng-options="proyect.nombre for proyect in proyects | orderBy:'nombre'">
-</select>
+<div id="proyectListHeader" class="menuItemText">
+	Seleccione un proyecto
+</div>
+<div id="proyectListContainer">
+	<select 
+		class="form-control"
+		ng-model="activeProyect"
+		ng-options="proyect.nombre for proyect in proyects | orderBy:'nombre'">
+	</select>
+<div>

@@ -1,5 +1,5 @@
 <div ng-if="!layersList.length">
-	<div>No se ha cargado ninguna capa</div>
+	<div class="menuItemText">No se ha cargado ninguna capa</div>
 </div>
 <ul ng-if="layersList.length" class="list-group">
 	<li class="list-group-item" ng-repeat='layer in getLayerIDs() track by $index' >

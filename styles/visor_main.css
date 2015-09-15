@@ -127,6 +127,17 @@ list-style-type: none;
 	right: 10px;
 }
 
+#proyectListContainer{
+	margin-left: 10px;
+}
+
+.menuItemText{
+	padding: 5px;
+	margin-left:10px;
+	font-weight: bold;
+	
+}
+
 #searchMarker {
   width: 16px;
   height: 16px;
