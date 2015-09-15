@@ -105,7 +105,7 @@ angular.module('visorINTA.directives.LayerMenuListDirective', [])
  					// oeste, sur, este, norte
  					extent = [parseFloat(box[0].trim()),parseFloat(box[1].trim()),parseFloat(box[2].trim()),parseFloat(box[3].trim())];
  					extent = ol.extent.applyTransform(extent,ol.proj.getTransform("EPSG:4326", "EPSG:900913"));
- 					$scope.map.getView().fitExtent(extent, $scope.map.getSize());
+ 					$scope.map.getView().fit(extent, $scope.map.getSize());
  				}
  			}
 

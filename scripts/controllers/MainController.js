@@ -213,7 +213,7 @@ angular.module('visorINTA.MainController', [])
                 );
           $scope.proyectLayers.push(layerObject);
           $rootScope.addActiveLayer(layerObject);
-          $scope.map.getView().fitExtent(extentGoogle, $scope.map.getSize());
+          $scope.map.getView().fit(extentGoogle, $scope.map.getSize());
       }
       ProyectUtils.setProyectLayers($scope.proyectLayers);
     }
