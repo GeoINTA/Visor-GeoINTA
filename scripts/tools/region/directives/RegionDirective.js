@@ -28,12 +28,17 @@ angular.module('visorINTA.tools.region.RegionDirective', [])
 			
 	        // Acciones a realizar cuando se abre la herramienta
 	        scope.openBox = function(){
-	
+				scope.listenerClick = map.on('click', function(event) {
+				  coordinate = event.coordinate;
+				  raster.changed();
+				});
 	        }
 
 	        // Acciones a realizar cuando se cierra la herramienta
 	        scope.closeBox = function(){
-
+	        	if(scope.listenerClick){
+	        		map.unByKey(scope.listenerClick);
+	        	}
 	        }
 
 	        // NOCOMPILE
@@ -123,10 +128,6 @@ angular.module('visorINTA.tools.region.RegionDirective', [])
 
 			var coordinate;
 
-			map.on('click', function(event) {
-			  coordinate = event.coordinate;
-			  raster.changed();
-			});
 
 			raster.on('beforeoperations', function(event) {
 			  // the event.data object will be passed to operations
@@ -155,6 +156,8 @@ angular.module('visorINTA.tools.region.RegionDirective', [])
 		controller: function($scope){
 			$scope.toolName = "regionTool";
 			$scope.toolTitle = "Marcador de regiones";
+
+			$scope.listenerClick = null;
 
 		}
 	}
