@@ -123,15 +123,47 @@ angular.module('visorINTA.MainController', [])
                 visible:false,
                 opacity:1,
             })
-      layers.push(aerial);
-      layers.push(labelsAerial);
-      layers.push(osm);
-      var baseLayers = new ol.layer.Group({nombre:'baseLayers',layers:layers});
+      var argenmap = new ol.layer.Tile({
+                source: new ol.source.TileWMS(/** @type {olx.source.TileWMSOptions} */ ({
+                  url: "http://wms.ign.gob.ar/geoserver/wms",
+                  params: {'LAYERS': "capabaseargenmap", 'TILED': true,'VERSION':'1.1.1','SRS':'900913','STYLES':""},
+                })),
+                legendURL : "http://wms.ign.gob.ar/geoserver/wms",
+                opacity: 1,
+                visible: false,
+                title: "IGN Argenmap",
+                id :MapUtils.constructLayerIdentifier("IGN","capabaseargenmap","no_style"),
+      });
+      var sig_ign = new ol.layer.Tile({
+                source: new ol.source.TileWMS(/** @type {olx.source.TileWMSOptions} */ ({
+                  url: "http://wms.ign.gob.ar/geoserver/wms",
+                  params: {'LAYERS': "capabasesigign", 'TILED': true,'VERSION':'1.1.1','SRS':'900913','STYLES':""},
+                })),
+                legendURL : "http://wms.ign.gob.ar/geoserver/wms",
+                opacity: 1,
+                visible: false,
+                title: "IGN SIG",
+                id :MapUtils.constructLayerIdentifier("IGN","capabasesigign","no_style"),
+      });
+      var mosaicos = new ol.layer.Tile({
+                source: new ol.source.TileWMS(/** @type {olx.source.TileWMSOptions} */ ({
+                  url: "http://geointa.inta.gov.ar/geoserver/wms",
+                  params: {'LAYERS': "imagenes:mosaico_de_areas_con_agua", 'TILED': true,'VERSION':'1.1.1','SRS':'900913','STYLES':""},
+                })),
+                legendURL : "http://wms.ign.gob.ar/geoserver/wms",
+                opacity: 1,
+                visible: false,
+                title: "Mosaicos",
+                id :MapUtils.constructLayerIdentifier("GeoINTA","imagenes:mosaico_de_areas_con_agua","no_style"),
+      });     
       var map = new ol.Map({
         layers: [
           aerial,
           labelsAerial,
           osm,
+          argenmap,
+          sig_ign,
+          mosaicos,
         ],
         projection:mapConfig.projection,
         displayProjection:mapConfig.displayProjection,
@@ -143,6 +175,9 @@ angular.module('visorINTA.MainController', [])
       $scope.baseLayers.push(aerial);
       $scope.baseLayers.push(labelsAerial);
       $scope.baseLayers.push(osm);
+      $scope.baseLayers.push(argenmap);
+      $scope.baseLayers.push(sig_ign);
+      $scope.baseLayers.push(mosaicos);
       return map;  
     }
 
