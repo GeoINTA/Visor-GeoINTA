@@ -38,7 +38,7 @@
   <script src="./scripts/tools/imageFilter/imageFilter.module.js"></script>
   <script src="./scripts/tools/importWms/importWms.module.js"></script>
   <script src="./scripts/tools/featureInfo/featureInfo.module.js"></script>
-  <script src="./scripts/tools/region/region.module.js"></script>
+  <!--<script src="./scripts/tools/region/region.module.js"></script>-->
   <script src="./scripts/tools/tools.module.js"></script>
 	<script src="./scripts/controllers/MainController.js"></script>
   <script src="./scripts/controllers/SearchController.js"></script>
@@ -47,6 +47,7 @@
   <!-- Directives -->
 	<script src="./scripts/directives/MenuDirective.js"></script>
   <script src="./scripts/directives/NavbarLayerSelectorDirective.js"></script>
+  <script src="./scripts/directives/PrintManagerDirective.js"></script>
 	<script src="./scripts/directives/MapDirective.js"></script>
   <script src="./scripts/directives/NavbarSearchDirective.js"></script>
   <script src="./scripts/directives/LayerMenuListDirective.js"></script>
@@ -62,7 +63,7 @@
   <!--<script src="./scripts/tools/imageFilter/directives/ImageFilterDirective.js"></script>-->
   <script src="./scripts/tools/importWms/directives/ImportWmsDirective.js"></script>
   <script src="./scripts/tools/featureInfo/directives/FeatureInfoDirective.js"></script>
-  <script src="./scripts/tools/region/directives/RegionDirective.js"></script>
+  <!--<script src="./scripts/tools/region/directives/RegionDirective.js"></script>-->
 
   <!-- Factories / Services -->
   <script src="./scripts/providers/ProyectsFactory.js"></script>
@@ -161,9 +162,23 @@
           <a class="list-group-item" ng-click="initBoxAction('measureTool','tool','toogle')">Medir</a>
           <a class="list-group-item"ng-click="initBoxAction('spyLayerTool','tool','toogle')">Espiar capa</a>
           <a class="list-group-item" ng-click="initBoxAction('swipeTool','tool','toogle')">Cortina</a>
-          <a class="list-group-item" ng-click="initBoxAction('regionTool','tool','toogle')">Marcar regiones</a>
+          <!--<a class="list-group-item" ng-click="initBoxAction('regionTool','tool','toogle')">Marcar regiones</a>-->
           <!--<a class="list-group-item" ng-click="initBoxAction('imageFilterTool','tool','toogle')">Filtros</a>-->
   		  </div>
+    </div>
+  </div>
+    <div class="panel panel-default">
+    <div class="panel-heading menuHeader hvr-glow" role="tab" id="headingPrint" data-toggle="collapse" data-parent="#menuPanelGroup" href="#collapsePrint" aria-expanded="false" aria-controls="collapsePrint">
+      <h4 class="panel-title collapsed" >
+        <span>
+          <i class="fa fa-print"></i>  Imprimir
+        </span>
+      </h4>
+    </div>
+    <div id="collapsePrint" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingPrint">
+      <div class="panel-body menuPanelConfig">
+        <print-manager map='map' layers-list='activeLayers'></print-manager>
+      </div>
     </div>
   </div>
 </div> <!-- cierra primer panelgroup -->
@@ -206,9 +221,9 @@
     <visor-box id="featureInfoTool" class="toolBox">
       <feature-info-tool map='map' layer-list='activeLayers' imported-layers='importedLayers' project-model='activeProyectModel'></feature-info-tool>
     </visor-box>
-    <visor-box id="regionTool" class="toolBox">
+    <!--<visor-box id="regionTool" class="toolBox">
       <region-tool map='map' base-layers='baseLayers'></region-tool>
-    </visor-box>
+    </visor-box>-->
   </div>
   <!-- Layer Info Box -->
   <visor-box id="layerInfoBox" class="toolBox">

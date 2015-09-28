@@ -6,5 +6,5 @@ angular.module('visorINTA.tools.toolsModule', [
         //'visorINTA.tools.imageFilterModule',
         'visorINTA.tools.importWmsModule',
         'visorINTA.tools.featureInfoModule',
-        'visorINTA.tools.regionModule'
+        //'visorINTA.tools.regionModule'
 ])
