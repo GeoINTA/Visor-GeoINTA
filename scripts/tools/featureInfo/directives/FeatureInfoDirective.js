@@ -1,5 +1,5 @@
 angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
-.directive('featureInfoTool', function($rootScope,MapUtils,GeoServerUtils) {
+.directive('featureInfoTool', function($rootScope,MapUtils,GeoServerUtils,Lightbox) {
 	return {
 		restrict: "E",
 		require:'^visorBox',
@@ -78,6 +78,28 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 	  				var featureInfoConfig = (pluginConfig) ? pluginConfig.config[0].valor : "default";
 	  			}
 	  			return featureInfoConfig;
+			}
+
+
+			scope.infoValueClicked = function(infoValue){
+				var valueObject = $.parseHTML(infoValue);
+				// Chequeo si el valor es un atributo especial del visor
+				var valueType = $(valueObject).attr('data-visor');
+				switch (valueType){
+					case 'image': scope.showImageLightBox($(valueObject).attr('data-source'));
+								  break;
+					default:      break;
+				}
+			}
+
+
+			scope.showImageLightBox = function(imgURL){
+				var images = [
+				    {
+				      'url': imgURL,
+				    }
+				 ];
+				Lightbox.openModal(images, 0);
 			}
 
 	        // Acciones a realizar cuando se abre la herramienta

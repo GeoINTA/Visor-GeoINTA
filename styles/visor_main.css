@@ -92,7 +92,7 @@ label.tree-toggler {
 
 #pulldownMenu{
 	position: absolute;
-	z-index:1200;
+	z-index:1000;
 	width: 25%;
 	padding-left: 20px;
 	margin-top: 10px;
@@ -164,6 +164,11 @@ list-style-type: none;
 	display: inline-block;
 	height: 0px;
 	min-width: 180px;
+}
+
+
+/* Clase que deben tener aquellas cajas que se sigan viendo en full screen del mapa*/
+.mapActiveTool{
 	z-index:2147483647;
 }
 

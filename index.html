@@ -14,6 +14,7 @@
   <link href="./styles/font-awesome.min.css" type="text/css" rel="stylesheet" />
   <link href="./styles/ol.css" type="text/css" rel="stylesheet" />
   <link href="./styles/visor_main.css" type="text/css" rel="stylesheet" />
+  <link href="./styles/angular-bootstrap-lightbox.min.css" type="text/css" rel="stylesheet" />
 
 
   <!-- Libs -->
@@ -21,6 +22,8 @@
   <script src="./lib/jquery-ui.min.js"></script>
   <script src="./lib/bootstrap.min.js"></script>
 	<script src="./lib/angular.min.js"></script>
+  <script src="./lib/ui-bootstrap-tpls-0.14.2.min.js"></script>
+  <script src="./lib/angular-bootstrap-lightbox.min.js"></script>
 	<script src="./lib/angular-route.min.js"></script>
   <script src="./lib/angular-sanitize.min.js"></script>
   <script src="./lib/angular-animate.min.js"></script>
@@ -200,16 +203,16 @@
 		<div visor-map id="map" map='map'></div>
     <!-- Tools  -->
     <div id="toolsContainer">
-    <visor-box id="drawTool" class="toolBox">
+    <visor-box id="drawTool" class="toolBox mapActiveTool">
       <draw-tool map='map'></draw-tool>
     </visor-box>
-    <visor-box id="measureTool" class="toolBox">
+    <visor-box id="measureTool" class="toolBox mapActiveTool">
       <measure-tool map='map'></measure-tool>
     </visor-box>
-    <visor-box id="spyLayerTool" class="toolBox">
+    <visor-box id="spyLayerTool" class="toolBox mapActiveTool">
       <spy-layer-tool map='map' layer-list='activeLayers'></spy-layer-tool>
     </visor-box>
-    <visor-box id="swipeTool" class="toolBox">
+    <visor-box id="swipeTool" class="toolBox mapActiveTool">
       <swipe-tool map='map' layer-list='activeLayers'></swipe-tool>
     </visor-box>
     <!--<visor-box id="imageFilterTool" class="toolBox">
