@@ -27,6 +27,7 @@
 	<script src="./lib/angular-route.min.js"></script>
   <script src="./lib/angular-sanitize.min.js"></script>
   <script src="./lib/angular-animate.min.js"></script>
+  <script src="./lib/angular-mask.min.js"></script>
   <script src="./lib/quantumui.min.js"></script>
 	<script src="./lib/ol.js"></script>
   <script src="./lib/xml2json.js"></script>
@@ -41,6 +42,7 @@
   <script src="./scripts/tools/imageFilter/imageFilter.module.js"></script>
   <script src="./scripts/tools/importWms/importWms.module.js"></script>
   <script src="./scripts/tools/featureInfo/featureInfo.module.js"></script>
+  <script src="./scripts/tools/gotoxy/gotoxy.module.js"></script>
   <!--<script src="./scripts/tools/region/region.module.js"></script>-->
   <script src="./scripts/tools/tools.module.js"></script>
 	<script src="./scripts/controllers/MainController.js"></script>
@@ -66,6 +68,7 @@
   <!--<script src="./scripts/tools/imageFilter/directives/ImageFilterDirective.js"></script>-->
   <script src="./scripts/tools/importWms/directives/ImportWmsDirective.js"></script>
   <script src="./scripts/tools/featureInfo/directives/FeatureInfoDirective.js"></script>
+  <script src="./scripts/tools/gotoxy/directives/GotoxyDirective.js"></script>
   <!--<script src="./scripts/tools/region/directives/RegionDirective.js"></script>-->
 
   <!-- Factories / Services -->
@@ -161,6 +164,7 @@
       	<div class="list-group menuPanelConfig">
           <a class="list-group-item" ng-click="initBoxAction('featureInfoTool','tool','toogle')">Informacion</a>
           <a class="list-group-item" ng-click="initBoxAction('importWmsTool','tool','toogle')">Importar capa WMS</a>
+          <a class="list-group-item" ng-click="initBoxAction('gotoxyTool','tool','toogle')">Ir a coordenadas</a>
           <a class="list-group-item" ng-click="initBoxAction('drawTool','tool','toogle')">Dibujar</a>
           <a class="list-group-item" ng-click="initBoxAction('measureTool','tool','toogle')">Medir</a>
           <a class="list-group-item"ng-click="initBoxAction('spyLayerTool','tool','toogle')">Espiar capa</a>
@@ -224,12 +228,15 @@
     <visor-box id="featureInfoTool" class="toolBox">
       <feature-info-tool map='map' layer-list='activeLayers' imported-layers='importedLayers' project-model='activeProyectModel'></feature-info-tool>
     </visor-box>
+    <visor-box id="gotoxyTool" class="toolBox mapActiveTool">
+      <gotoxy-tool map='map'></gotoxy-tool>
+    </visor-box>
     <!--<visor-box id="regionTool" class="toolBox">
       <region-tool map='map' base-layers='baseLayers'></region-tool>
     </visor-box>-->
   </div>
   <!-- Layer Info Box -->
-  <visor-box id="layerInfoBox" class="toolBox">
+  <visor-box id="layerInfoBox" class="toolBox ">
     <layer-info-box map='map' active-layer='layerInfoActive'></layer-info-box>
   </visor-box>
 </body>	

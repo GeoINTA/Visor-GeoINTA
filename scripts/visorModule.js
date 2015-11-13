@@ -5,6 +5,7 @@ angular.module('visorINTA', [
   'ngSanitize',
   'ngAnimate',
   'ngQuantum',
+  'ui.mask',
   "visorINTA.factories.ProyectsFactory",
   "visorINTA.factories.MainInterceptor",
   "visorINTA.directives.menudirectives",

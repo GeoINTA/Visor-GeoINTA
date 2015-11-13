@@ -1,0 +1,48 @@
+<div>
+	<div>
+	<p>Grados decimales</p>
+	<form class="form-horizontal">
+  <div class="form-group">
+    <label for="latitudValue" class="col-sm-3 control-label">Latitud</label>
+    <div class="col-sm-9">
+      <input type="number"  ng-change="decimalCoordinatesChange()"  class="form-control" ng-model="latValue" id="latitudValue" placeholder="latitud">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="longitudValue" class="col-sm-3 control-label">Longitud</label>
+    <div class="col-sm-9">
+      <input type="number"  ng-change="decimalCoordinatesChange()" class="form-control" ng-model="lonValue" id="longitudValue" placeholder="longitud">
+    </div>
+  </div>
+	 </form>
+	</div>
+	<div>
+	<p>Grados/minutos/segundos</p>
+		<form class="form-horizontal">
+		  <div class="form-group">
+		    <label for="latitudValue" class="col-sm-3 control-label">Lon W</label>
+		    <div class="col-sm-9">
+		      <input type="text" ng-change="sexagecimalCoordinatesChange()" ng-model="lonWVal" ui-mask="99º99'99''" class="form-control"  ui-mask-placeholder ui-mask-placeholder-char="_"/>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="longitudValue" class="col-sm-3 control-label">Lat S</label>
+		    <div class="col-sm-9">
+		      <input type="text" ng-change="sexagecimalCoordinatesChange()" ng-model="latSVal" ui-mask="99º99'99''" class="form-control"  ui-mask-placeholder ui-mask-placeholder-char="_"/>
+		    </div>
+		  </div>
+	 </form>
+	</div>
+	<div>
+	<p>Nivel de acercamiento</p>
+		<select 
+			class="form-control"
+			ng-model="zoomLevelSelected" 
+			ng-options="zoom.value as zoom.title for zoom in zoomLevels">
+		</select>
+	</div>
+	<div class="toolFooter">
+		<button id="geolocationButton" data-loading-text="Geolocalizando..." class="btn btn-default" ng-click="startGeolocation()">Geolocalizarme</button>
+		<button class="btn btn-primary" ng-click="gotoPoint()">Ir</button>
+	</div>
+</div>
