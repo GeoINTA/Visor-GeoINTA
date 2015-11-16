@@ -108,7 +108,7 @@ angular.module('visorINTA.MainController', [])
                   key: $scope.bingKey,
                   imagerySet: 'Aerial'
                 }),
-                title:"Aereo",
+                title:"Bing Aereo",
                 id:MapUtils.constructLayerIdentifier("BASE","bing_aerial","no_style"),
                 visible:true,
                 opacity:1,
@@ -118,7 +118,7 @@ angular.module('visorINTA.MainController', [])
                   key: $scope.bingKey,
                   imagerySet: 'AerialWithLabels'
                 }),
-                title:"Aereo con etiquetas",
+                title:"Bing Aereo con etiquetas",
                 id:MapUtils.constructLayerIdentifier("BASE","bing_aerial_labels","no_style"),
                 visible:false,
                 opacity:1,
@@ -178,7 +178,24 @@ angular.module('visorINTA.MainController', [])
       $scope.baseLayers.push(argenmap);
       $scope.baseLayers.push(sig_ign);
       $scope.baseLayers.push(mosaicos);
+      $scope.addGoogleLayers(map);
       return map;  
+    }
+
+    $scope.addGoogleLayers = function(map){
+      var googleLayer = new olgm.layer.Google({
+        visible:false,
+        title: "Google Terreno"
+      });
+      var googleSat = new olgm.layer.Google({
+        mapTypeId: google.maps.MapTypeId.SATELLITE,
+        visible:false,
+        title: "Google Satélite"
+      });
+      map.addLayer(googleLayer);
+      map.addLayer(googleSat);
+      $scope.baseLayers.push(googleLayer);
+      $scope.baseLayers.push(googleSat);
     }
 
 

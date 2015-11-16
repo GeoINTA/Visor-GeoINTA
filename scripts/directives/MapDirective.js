@@ -19,6 +19,12 @@ angular.module('visorINTA.directives.mapDirective', [])
          $('.visor-mouse-position').css({left:($('.ol-scale-line').position().right + 15)});
       }
 
+      // Inicia plugin OLGM (mapas de google dentro de Openlayers)
+      scope.initOLGM = function(){
+        var olGM = new olgm.OLGoogleMaps({map: map}); // map is the ol.Map instance
+        olGM.activate();
+      }
+
 
       var map = scope.map;
       var view = scope.map.getView();
@@ -41,6 +47,8 @@ angular.module('visorINTA.directives.mapDirective', [])
       // // // // // //
       scope.calcMapDimensions();
       map.setTarget(element[0]);
+
+      scope.initOLGM();
       scope.updateMapPositions();
 
       $( window ).resize(function() {
