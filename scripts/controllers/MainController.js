@@ -192,10 +192,17 @@ angular.module('visorINTA.MainController', [])
         visible:false,
         title: "Google Satélite"
       });
+      var googleHybrid = new olgm.layer.Google({
+        mapTypeId: google.maps.MapTypeId.HYBRID,
+        visible:false,
+        title: "Google Híbrido"
+      });
       map.addLayer(googleLayer);
       map.addLayer(googleSat);
+      map.addLayer(googleHybrid);
       $scope.baseLayers.push(googleLayer);
       $scope.baseLayers.push(googleSat);
+      $scope.baseLayers.push(googleHybrid);
     }
 
 
