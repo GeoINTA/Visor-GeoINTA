@@ -1,13 +1,58 @@
 angular.module('visorINTA.directives.PrintManagerDirective', [])
-.directive('printManager', function(networkServices) {
+.directive('printManager', function(networkServices, $http) {
 	return {
 		restrict: 'EA',
 		scope : {
+			map:"=",
 			layersList:"=",
 		},
 		templateUrl:"templates/menu/printManager.html",
 		link: function(scope, iElement, iAttrs, ctrl) {
 
+
+			var specLayout = "Visor Layout";
+
+			var specBase = {
+			    layout: "Visor Layout",
+			    srs: "EPSG:4326",
+			    units: "m",
+			    geodetic: true,
+			    outputFilename: "mapa-visorgeointa",
+			    outputFormat: "pdf",
+			    mergeableParams: {
+			        cql_filter: {
+			            defaultValue: "INCLUDE",
+			            separator: ";",
+			            context: "http://geointa.inta.gov.ar/geoserver/wms"
+			        }
+			    },
+			    layers: [],
+			    pages: [
+			        {
+			            center: [],
+			            scale: 1000000,
+			            dpi: 150,
+			            geodetic: true,
+			            strictEpsg4326: false,
+			            mapTitle:"",
+			            comment:""
+			        }
+			    ],
+			    legends: [
+			        {
+			            classes: [
+			                {
+			                    icons: [
+			                        "http://localhost:8000/geointa.png"
+			                    ],
+			                    name: "an icon name",
+			                    iconBeforeName: true
+			                }
+			            ],
+			            name: "a class nam"
+			        }
+			    ]
+			}
 
 			var spec = {
 			    layout: "Visor Layout",
@@ -39,7 +84,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			            geodetic: true,
 			            strictEpsg4326: false,
 			            mapTitle:"MAPITA",
-			            comment:"COMENTARIO"
+			            comment:"COMENTARIO",
 			        }
 			    ],
 			    legends: [
@@ -58,13 +103,59 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			    ]
 			}
 
+			scope.getMapCenter = function(){
+				center = ol.proj.transform(scope.map.getView().getCenter(), 'EPSG:900913', 'EPSG:4326');;
+
+				console.log(center);
+				return center;
+			}
+
+			scope.createSpec = function(){
+				spec = specBase;
+				spec.pages[0].mapTitle = scope.printTitle;
+				spec.pages[0].comment = scope.printDescription;
+				spec.pages[0].center = scope.getMapCenter();
+				console.log(spec);
+				return spec;
+			}
+
 			scope.exportPDF = function(){
-				console.log(networkServices);
 				console.log(JSON.stringify(spec));
+				newSpec = scope.createSpec();
+				console.log(newSpec);
+				newSpecString = JSON.stringify(spec);
 				$.ajax({
-			        url: networkServices.printServer + "/create.json",
-			        type: "POST",
-			        data: JSON.stringify(spec),
+					type: "POST",
+					
+					url: networkServices.printServer + "/create.json",
+					data:newSpecString,
+					processData: false,
+					contentType: 'application/x-www-form-urlencoded',
+					success: function(data){
+					console.log(data);
+					/*$('a#exportPDFURL').attr({target: '_blank',
+					href : data.getURL});
+					$btn.button('reset');
+					$('#exportPDFURL').show();*/
+					},
+					error: function(){
+					/*alert("error");
+					$btn.button('reset');*/
+					}
+	        	});
+			}
+
+		    scope.requestPDF = function(spec){
+		    	return $http.post(networkServices.printServer + "/create.json?spec=" + spec, {
+        		});
+		    }
+
+
+				/*$.ajax({
+			        url: networkServices.printServer + "/print.pdf?spec=" + newSpecString,
+			        type: "GET",
+			        method:'POST',
+				params:{proxyParams:getUrlParams(infoUrl),contenttype:'text/html'},
 			        processData: false,
 			        contentType: 'application/json',
 			        success: function (response) {
@@ -73,8 +164,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			        error: function(jqXHR, textStatus, errorThrown) {
 			           console.log(textStatus, errorThrown);
 			        }
-			    });
-			}
+			    });*/
 
 		},
 		controller: function($scope){
