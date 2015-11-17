@@ -65,23 +65,57 @@ angular.module('visorINTA.tools.gotoxy.GotoxyDirective', [])
             	$("#geolocationButton").addClass(btnClass);
             }
 
-            scope.decimalCoordinatesChange = function(){
-            	alert("change");
-            }
 
-            scope.sexagecimalCoordinatesChange = function(){
-            	var latS = scope.latSVal;
-            	var lonW = scope.lonWVal;
-            	console.log(lonW);
-            	if (latS && lonW){
-            		scope.lonValue = parseInt(lonW.substr(0,2))
-            		                 + (parseInt(lonW.substr(2,4) / 60))
-            		                 + (parseInt(lonW.substr(4,6) / 3600));
-            		alert(scope.lonValue);
+            // Cambian valores decimales. Actualizo los sexagecimales
+            scope.decimalCoordinatesChange = function(){
+            	var lat = scope.latValue * -1;
+            	var lon = scope.lonValue * -1;
+            	if (lat && lon){
+            		var gx = parseInt(lon);
+					var mx = Math.floor((lon - gx) * 60);
+					var sx = parseFloat((lon - mx/60 - gx) * 3600);
+					scope.lonWVal = scope.formatSexagecimal(gx.toString()) 
+					                + scope.formatSexagecimal(mx.toString())
+					                + scope.formatSexagecimal(sx.toString());
+					console.log(scope.lonWVal);
+
+					var gy = parseInt(lat);
+					var my = Math.floor( (lat - gy) * 60 );
+					var sy = parseFloat( (lat - my/60 - gy) * 3600 );
+					scope.latSVal = scope.formatSexagecimal(gy.toString()) 
+					                + scope.formatSexagecimal(my.toString())
+					                + scope.formatSexagecimal(sy.toString());
+					console.log(scope.latSVal);
             	}
             }
 
+            scope.formatSexagecimal = function(n){
+			    return n >= 10 ? "" + n: "0" + n;
+			}
 
+            // Cambian los valores sexagecimales. Actualizo valores decimales
+            scope.sexagecimalCoordinatesChange = function(){
+            	var latS = scope.latSVal;
+            	var lonW = scope.lonWVal;
+            	if (latS && lonW){
+            		var xg = parseInt(lonW.substr(0,2));
+            		var xm = parseInt(lonW.substr(2,2));
+            		var xs = parseInt(lonW.substr(4,2));
+            		scope.lonValue = scope.formatDecimal((xg + xm/60 + xs/3600) * -1);
+            		console.log(scope.lonValue);
+
+            		var yg = parseInt(latS.substr(0,2));
+					var ym = parseInt(latS.substr(2,2));
+					var ys = parseInt(latS.substr(4,2));
+					scope.latValue = scope.formatDecimal((yg + ym/60 + ys/3600 ) * -1);
+					console.log(scope.latValue);
+            	}
+            }
+
+            // Redondea a 7 decimales a float
+            scope.formatDecimal= function(number){
+            	return Math.round(number * 10000000) / 10000000;
+            }
 
 
 	        // Acciones a realizar cuando se abre la herramienta
