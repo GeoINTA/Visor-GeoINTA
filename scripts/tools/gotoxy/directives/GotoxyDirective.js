@@ -43,11 +43,11 @@ angular.module('visorINTA.tools.gotoxy.GotoxyDirective', [])
             	var $btn = $('#geolocationButton').button('loading');
 				if (navigator.geolocation) {
 					navigator.geolocation.getCurrentPosition(function(position){
-					scope.lonValue = position.coords.longitude;
-					scope.latValue = position.coords.latitude;
+					scope.lonValue = scope.formatDecimal(position.coords.longitude);
+					scope.latValue = scope.formatDecimal(position.coords.latitude);
 					scope.finalizeGeolocation($btn,1);
-					scope.$apply();
 					scope.decimalCoordinatesChange();
+					scope.$apply();
 				},function(){
 					console.log("Error en geolocalizacion");
 					scope.finalizeGeolocation($btn,0);
@@ -74,18 +74,22 @@ angular.module('visorINTA.tools.gotoxy.GotoxyDirective', [])
             		var gx = parseInt(lon);
 					var mx = Math.floor((lon - gx) * 60);
 					var sx = parseFloat((lon - mx/60 - gx) * 3600);
+					if (sx == 0){
+						sx = "0.00"; // Para coincidir con formato de la mascara del input
+					}
 					scope.lonWVal = scope.formatSexagecimal(gx.toString()) 
 					                + scope.formatSexagecimal(mx.toString())
 					                + scope.formatSexagecimal(sx.toString());
-					console.log(scope.lonWVal);
 
 					var gy = parseInt(lat);
 					var my = Math.floor( (lat - gy) * 60 );
 					var sy = parseFloat( (lat - my/60 - gy) * 3600 );
+					if (sy == 0){
+						sy = "0.00"; // Para coincidir con formato de la mascara del input
+					}
 					scope.latSVal = scope.formatSexagecimal(gy.toString()) 
 					                + scope.formatSexagecimal(my.toString())
 					                + scope.formatSexagecimal(sy.toString());
-					console.log(scope.latSVal);
             	}
             }
 
@@ -102,13 +106,11 @@ angular.module('visorINTA.tools.gotoxy.GotoxyDirective', [])
             		var xm = parseInt(lonW.substr(2,2));
             		var xs = parseInt(lonW.substr(4,2));
             		scope.lonValue = scope.formatDecimal((xg + xm/60 + xs/3600) * -1);
-            		console.log(scope.lonValue);
 
             		var yg = parseInt(latS.substr(0,2));
 					var ym = parseInt(latS.substr(2,2));
 					var ys = parseInt(latS.substr(4,2));
 					scope.latValue = scope.formatDecimal((yg + ym/60 + ys/3600 ) * -1);
-					console.log(scope.latValue);
             	}
             }
 
@@ -137,12 +139,12 @@ angular.module('visorINTA.tools.gotoxy.GotoxyDirective', [])
 		controller: function($scope){
 			$scope.toolName = "gotoxyTool";
 			$scope.toolTitle = "Ir a coordenada";
-			$scope.zoomLevelSelected = 12;
+			$scope.zoomLevelSelected = 13;
 
 			$scope.zoomLevels = [
-				{value:12,title:"Cerca"},
-				{value:8,title:"Medio"},
-				{value:4,title:"Lejos"},
+				{value:13,title:"Cerca"},
+				{value:10,title:"Medio"},
+				{value:6,title:"Lejos"},
 			];
 		}
 	}
