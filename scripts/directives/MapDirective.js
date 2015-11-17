@@ -16,7 +16,22 @@ angular.module('visorINTA.directives.mapDirective', [])
 
       // Actualiza posiciones de los controles del mapa
       scope.updateMapPositions = function(){
-         $('.visor-mouse-position').css({left:($('.ol-scale-line').position().right + 15)});
+        var leftOffset = -140; // px que quiero correr a la izq los controles
+        var fullWidth = $(window).width();
+        $('.ol-scale-line').css({left:(fullWidth/2)+leftOffset+140});
+        $('.visor-mouse-position').css({left:(fullWidth/2)+leftOffset});
+        /*$('.visor-mouse-position').position({
+            my:        "top bottom",
+            at:        "right bottom",
+            of:        $('.ol-scale-line'), // or $("#otherdiv)
+            collision: "fit"
+        })*/
+      }
+
+      // Inicia plugin OLGM (mapas de google dentro de Openlayers)
+      scope.initOLGM = function(){
+        var olGM = new olgm.OLGoogleMaps({map: map}); // map is the ol.Map instance
+        olGM.activate();
       }
 
 
@@ -41,6 +56,8 @@ angular.module('visorINTA.directives.mapDirective', [])
       // // // // // //
       scope.calcMapDimensions();
       map.setTarget(element[0]);
+
+      scope.initOLGM();
       scope.updateMapPositions();
 
       $( window ).resize(function() {

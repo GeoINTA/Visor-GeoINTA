@@ -13,6 +13,7 @@
   <link href="./styles/quantumui.min.css" type="text/css" rel="stylesheet" />
   <link href="./styles/font-awesome.min.css" type="text/css" rel="stylesheet" />
   <link href="./styles/ol.css" type="text/css" rel="stylesheet" />
+  <link href="./styles/ol3gm.css" type="text/css" rel="stylesheet" />
   <link href="./styles/visor_main.css" type="text/css" rel="stylesheet" />
   <link href="./styles/angular-bootstrap-lightbox.min.css" type="text/css" rel="stylesheet" />
 
@@ -30,7 +31,13 @@
   <script src="./lib/angular-mask.min.js"></script>
   <script src="./lib/quantumui.min.js"></script>
 	<script src="./lib/ol.js"></script>
+  
+  <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?v=3.21&key=AIzaSyDr69FQjqdjpDKkneOaNCzYChuXEOIWS_I"></script>
+  <script src="./lib/ol3gm.js"></script>
+  
   <script src="./lib/xml2json.js"></script>
+
 
 
   <!-- Main Modules -->
@@ -108,11 +115,11 @@
       </ul>
       <form class="navbar-form navbar-left" role="search">
         <div ng-controller="SearchController">
-          
+            
             <navbar-search data='searchdata' max-user-searchs='maxUserSearchs'></navbar-search>
-          <visor-box id="searchInfoBox" class="toolBox bigInfoBox">
+            <visor-box id="searchInfoBox" class="toolBox bigInfoBox mapActiveTool">
               <search-info-box map='map' data='searchdata' ></search-info-box>
-          </visor-box>
+            </visor-box>
         </div>
       </form>
       <form class="navbar-form navbar-right">

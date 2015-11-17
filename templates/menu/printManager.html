@@ -1,0 +1,16 @@
+<form>
+  <div class="form-group">
+    <label for="printTitle">Titulo</label>
+    <input class="form-control" id="printTitle" ng-model="printTitle" placeholder="Titulo del mapa">
+  </div>
+  <div class="form-group">
+    <label for="printDescription">Descripcion</label>
+    <input class="form-control" id="printDescription" ng-model="printDescription" placeholder="Descripcion del mapa">
+  </div>
+  <div class="checkbox">
+    <label>
+      <input ng-model="printIncludeLegend" type="checkbox"> Incluir leyendas
+    </label>
+  </div>
+  <button ng-click="exportPDF()" class="btn btn-danger">Generar PDF</button>
+</form>

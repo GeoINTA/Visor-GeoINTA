@@ -86,14 +86,16 @@ angular.module('visorINTA.directives.SearchInfoBoxDirective', [])
 		    }
 
 	  		scope.openBox = function(){
-	  			
+	  			if (!scope.markerContainer){
+	  				scope.createMarkerElements();
+	  			}
 	  		}
 
 	  		scope.closeBox = function(){
 	  			
 	  		}
 
-	  		scope.createMarkerElements();
+	  		//scope.createMarkerElements();
 
 		},
 		controller: function($scope){
