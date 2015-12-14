@@ -53,7 +53,9 @@ angular.module('visorINTA.directives.LayerInfoBoxDirective', [])
 	  			if (layer){
 	  				layerURL = layer.get('legendURL');
 	  				source = scope.baseLegendParams;
-	  				source['LAYER'] = MapUtils.getLayerParams(layer.get('id'))['layerName'];
+	  				layerMetadata = MapUtils.getLayerParams(layer.get('id'));
+	  				source['LAYER'] = layerMetadata['layerName'];
+	  				source['STYLE'] = layerMetadata['layerStyle'];
 	  				legendURL = layerURL + '?' + scope.encodeQueryData(source);
 	  				return legendURL;
 	  			} else {
