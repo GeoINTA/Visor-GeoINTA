@@ -1,10 +1,11 @@
 angular.module('visorINTA.directives.PrintManagerDirective', [])
-.directive('printManager', function(networkServices, $http) {
+.directive('printManager', function($rootScope, networkServices, MapUtils,$http) {
 	return {
 		restrict: 'EA',
 		scope : {
 			map:"=",
 			layersList:"=",
+			geoservers:"=",
 		},
 		templateUrl:"templates/menu/printManager.html",
 		link: function(scope, iElement, iAttrs, ctrl) {
@@ -26,11 +27,16 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			            context: "http://geointa.inta.gov.ar/geoserver/wms"
 			        }
 			    },
-			    layers: [],
+			    layers: [{
+			            type: "WMS",
+			            layers: ['topp:Departamentos'],
+			            baseURL: "http://geointa.inta.gov.ar/geoserver/wms",
+			            format: "image/png"
+			        }],
 			    pages: [
 			        {
 			            center: [],
-			            scale: 1000000,
+			            scale: 4000000.0,
 			            dpi: 150,
 			            geodetic: true,
 			            strictEpsg4326: false,
@@ -87,31 +93,57 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			            comment:"COMENTARIO",
 			        }
 			    ],
-			    legends: [
-			        {
-			            classes: [
-			                {
-			                    icons: [
-			                        "http://localhost:8000/geointa.png"
-			                    ],
-			                    name: "an icon name",
-			                    iconBeforeName: true
-			                }
-			            ],
-			            name: "a class nam"
-			        }
-			    ]
+			    legends: []
 			}
 
 			scope.getMapCenter = function(){
 				center = ol.proj.transform(scope.map.getView().getCenter(), 'EPSG:900913', 'EPSG:4326');;
-
-				console.log(center);
 				return center;
 			}
 
+
+			scope.getPrintableBaseLayer = function() {
+				return {
+						type: "WMS",
+			            layers: ['topp:Departamentos','geointa:lluvias_hoy'],
+			            baseURL: "http://geointa.inta.gov.ar/geoserver/wms",
+			            format: "image/png"
+
+				}
+			}
+
+
+			scope.getPrintableLayers = function(){
+				layers = [];
+				for (i in scope.layersList){
+					if (scope.layersList[i].getVisible()){
+						layerInfo = MapUtils.getLayerParams(scope.layersList[i].get('id'));
+						// Solo agrego aquellas capas perteneciente a un geoserver geointa
+						var geoserverInfo = $rootScope.lookupGeoServer(layerInfo["server"]);
+						if (geoserverInfo){
+							layerData = {
+								type:"WMS",
+								layers:[layerInfo["layerName"]],
+								format:"image/png",
+								baseURL:geoserverInfo['url'],
+
+							}
+							layers.push(layerData);
+					    }
+					}
+				}
+				layers.push({
+			            type: "WMS",
+			            layers: ['topp:Departamentos','geointa:lluvias_hoy'],
+			            baseURL: "http://geointa.inta.gov.ar/geoserver/wms",
+			            format: "image/png"
+			        });
+				return layers;
+			}
+
 			scope.createSpec = function(){
-				spec = specBase;
+				var spec = specBase;
+				spec.layers = scope.getPrintableLayers();
 				spec.pages[0].mapTitle = scope.printTitle;
 				spec.pages[0].comment = scope.printDescription;
 				spec.pages[0].center = scope.getMapCenter();
@@ -120,28 +152,34 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			}
 
 			scope.exportPDF = function(){
-				console.log(JSON.stringify(spec));
+				//////////////
+				var $btn = $('#exportPDFBtn').button('loading');
+				scope.pdfCreated = false;
+				//////////////
 				newSpec = scope.createSpec();
 				console.log(newSpec);
-				newSpecString = JSON.stringify(spec);
+				newSpecString = JSON.stringify(newSpec);
 				$.ajax({
 					type: "POST",
-					
 					url: networkServices.printServer + "/create.json",
 					data:newSpecString,
 					processData: false,
 					contentType: 'application/x-www-form-urlencoded',
 					success: function(data){
-					console.log(data);
-					/*$('a#exportPDFURL').attr({target: '_blank',
-					href : data.getURL});
-					$btn.button('reset');
-					$('#exportPDFURL').show();*/
+						$('#exportPDFAnchor').attr({target: '_blank',
+						href : data.getURL});
+						scope.pdfCreated = true;
+						$btn.button('reset');
+						scope.$apply();
 					},
 					error: function(){
-					/*alert("error");
-					$btn.button('reset');*/
-					}
+						/*alert("error");
+						$btn.button('reset');*/
+						scope.pdfCreated = false;
+						$btn.button('reset');
+						scope.$apply();
+					},
+					// no existe callback finally?
 	        	});
 			}
 
@@ -168,7 +206,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 
 		},
 		controller: function($scope){
-					
+			$scope.pdfCreated = false;
 		},
 	};
 });

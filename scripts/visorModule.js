@@ -44,11 +44,11 @@ angular.module('visorINTA', [
       baseResolutions: [156543.0339, 78271.51695, 39135.758475, 19567.8792375, 9783.93961875, 4891.969809375, 2445.9849046875, 1222.99245234375, 611.496226171875, 305.7481130859375, 152.87405654296876, 76.43702827148438, 38.21851413574219, 19.109257067871095, 9.554628533935547, 4.777314266967774, 2.388657133483887, 1.1943285667419434, 0.5971642833709717]
 })
 .constant("networkServices",{
-        "proxyUrl" : "http://visortest.geointa.inta.gob.ar:8000/proxy.php",
-        //"proxyUrl":"http://192.168.2.30/neo_visor_new/proxy.php",
+        //"proxyUrl" : "http://visortest.geointa.inta.gob.ar:8000/proxy.php",
+        "proxyUrl":"http://localhost/neo_visor_new/proxy.php",
         "gestor": "http://geointa.inta.gov.ar/gestor/servicioVisor",
         "searchService": " http://geointa.inta.gov.ar/visor/nomenclador/nomenclador.php",
-        "printServer": "http://geointa.inta.gov.ar/geoserver/pdf",
+        "printServer": "http://192.168.2.31:8080/geoserver/pdf",
 })
 .constant("boxActions",{
     "OPEN" : "open",

@@ -245,7 +245,7 @@ angular.module('visorINTA.MainController', [])
         layerConfig = $scope.activeProyectModel.capasConfig[$scope.activeProyectModel.capas[i]];
         tripleta = $scope.activeProyectModel.capas[i].split("::");
         nombreServidor = tripleta[0];
-        server = $scope.lookupGeoServer(nombreServidor);
+        server = $rootScope.lookupGeoServer(nombreServidor);
         nombreCapa = tripleta[1];
         nombreEstilo = (tripleta[2] == "SIN_ESTILO") ? "" : tripleta[2];
         if(server.urlCache && layerConfig.useCache == "true"){
@@ -279,7 +279,7 @@ angular.module('visorINTA.MainController', [])
 
     // Se fija en la variable geoServers, si existe el servidor con el nombre pasado como parametro.
     // Si existe, retorna un objecto con sus propiedades correspondientes, sino, retorna null.
-    $scope.lookupGeoServer = function(name){
+    $rootScope.lookupGeoServer = function(name){
       for (var i = 0 ; i < $scope.geoServers.length; i++) {
          if ($scope.geoServers[i].nombre == name){
             return $scope.geoServers[i];
