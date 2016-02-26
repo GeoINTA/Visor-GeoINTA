@@ -6,10 +6,10 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			map:"=",
 			layersList:"=",
 			geoservers:"=",
+			importedLayers: '='
 		},
 		templateUrl:"templates/menu/printManager.html",
 		link: function(scope, iElement, iAttrs, ctrl) {
-
 
 			var specLayout = "Visor Layout";
 
@@ -27,12 +27,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			            context: "http://geointa.inta.gov.ar/geoserver/wms"
 			        }
 			    },
-			    layers: [{
-			            type: "WMS",
-			            layers: ['topp:Departamentos'],
-			            baseURL: "http://geointa.inta.gov.ar/geoserver/wms",
-			            format: "image/png"
-			        }],
+			    layers: [],
 			    pages: [
 			        {
 			            center: [],
@@ -45,55 +40,19 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			        }
 			    ],
 			    legends: [
-			        {
+			        /*{
 			            classes: [
 			                {
 			                    icons: [
-			                        "http://localhost:8000/geointa.png"
+			                        "http://geointa.inta.gov.ar/geoserver/wms?SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng&WIDTH=20&HEIGHT=20&VERSION=1.0.0&LAYER=imagenes%3ADelta%20Humedo&STYLE=delta_escenarios",
 			                    ],
 			                    name: "an icon name",
 			                    iconBeforeName: true
 			                }
 			            ],
-			            name: "a class nam"
-			        }
+			            name: "a class name"
+			        }*/
 			    ]
-			}
-
-			var spec = {
-			    layout: "Visor Layout",
-			    srs: "EPSG:4326",
-			    units: "m",
-			    geodetic: true,
-			    outputFilename: "political-boundaries",
-			    outputFormat: "pdf",
-			    mergeableParams: {
-			        cql_filter: {
-			            defaultValue: "INCLUDE",
-			            separator: ";",
-			            context: "http://geointa.inta.gov.ar/geoserver/wms"
-			        }
-			    },
-			    layers: [
-			        {
-			            type: "WMS",
-			            layers: ['topp:Departamentos','geointa:lluvias_hoy'],
-			            baseURL: "http://geointa.inta.gov.ar/geoserver/wms",
-			            format: "image/png"
-			        }
-			    ],
-			    pages: [
-			        {
-			            center: [-60.0,-34.2],
-			            scale: 1000000,
-			            dpi: 150,
-			            geodetic: true,
-			            strictEpsg4326: false,
-			            mapTitle:"MAPITA",
-			            comment:"COMENTARIO",
-			        }
-			    ],
-			    legends: []
 			}
 
 			scope.getMapCenter = function(){
@@ -101,12 +60,42 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 				return center;
 			}
 
+			scope.getMapScale = function(){
+			    var resolution = scope.map.getView().getResolution();
+			    var units = scope.map.getView().getProjection().getUnits();
+			    var dpi = 25.4 / 0.28;
+			    var mpu = ol.proj.METERS_PER_UNIT[units];
+			    var rawScale = resolution * mpu * 39.37 * dpi;
+			    var scale = scope.mapServerScale(rawScale);
+			    return scale;
+			}
+
+			// El servidor de impresion solo soporta ciertas escalas.
+			// Dada una escala, esta funcion la mapea a la escala mas cercana
+			// soportada por el servidor
+			scope.mapServerScale = function(clientScale){
+				if (!clientScale){
+					return scope.serverPrintScales[0];
+				} else {
+					var candidate = null;;
+					for (i in scope.serverPrintScales){
+						if (scope.serverPrintScales[i] >= clientScale){
+							candidate =  (i == 0) ? scope.serverPrintScales[0]: scope.serverPrintScales[i-1];
+							return candidate;
+						}
+					}
+					if (!candidate){
+						return scope.serverPrintScales[scope.serverPrintScales.length - 1];
+					}
+				}
+			}
+
 
 			scope.getPrintableBaseLayer = function() {
 				return {
 						type: "WMS",
-			            layers: ['topp:Departamentos','geointa:lluvias_hoy'],
-			            baseURL: "http://geointa.inta.gov.ar/geoserver/wms",
+			            layers: ['capabaseargenmap'],
+			            baseURL: "http://wms.ign.gob.ar/geoserver/wms",
 			            format: "image/png"
 
 				}
@@ -115,16 +104,20 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 
 			scope.getPrintableLayers = function(){
 				layers = [];
-				for (i in scope.layersList){
-					if (scope.layersList[i].getVisible()){
-						layerInfo = MapUtils.getLayerParams(scope.layersList[i].get('id'));
+				printableLayers = scope.layersList.concat(scope.importedLayers);
+				console.log(printableLayers);
+				for (i in printableLayers){
+					if (printableLayers[i].getVisible()){
+						layerInfo = MapUtils.getLayerParams(printableLayers[i].get('id'));
 						// Solo agrego aquellas capas perteneciente a un geoserver geointa
-						var geoserverInfo = $rootScope.lookupGeoServer(layerInfo["server"]);
+						var geoserverInfo = $rootScope.lookupGeoServer(printableLayers[i].get('sourceURL'),true);
 						if (geoserverInfo){
 							layerData = {
 								type:"WMS",
+								opacity: printableLayers[i].getOpacity(),
 								layers:[layerInfo["layerName"]],
 								format:"image/png",
+								styles: [layerInfo["layerStyle"]],
 								baseURL:geoserverInfo['url'],
 
 							}
@@ -132,12 +125,9 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 					    }
 					}
 				}
-				layers.push({
-			            type: "WMS",
-			            layers: ['topp:Departamentos','geointa:lluvias_hoy'],
-			            baseURL: "http://geointa.inta.gov.ar/geoserver/wms",
-			            format: "image/png"
-			        });
+				if (scope.printIncludeBaselayer){
+					layers.push(scope.getPrintableBaseLayer());
+				}
 				return layers;
 			}
 
@@ -147,7 +137,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 				spec.pages[0].mapTitle = scope.printTitle;
 				spec.pages[0].comment = scope.printDescription;
 				spec.pages[0].center = scope.getMapCenter();
-				console.log(spec);
+				spec.pages[0].scale = scope.getMapScale();
 				return spec;
 			}
 
@@ -187,26 +177,12 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 		    	return $http.post(networkServices.printServer + "/create.json?spec=" + spec, {
         		});
 		    }
-
-
-				/*$.ajax({
-			        url: networkServices.printServer + "/print.pdf?spec=" + newSpecString,
-			        type: "GET",
-			        method:'POST',
-				params:{proxyParams:getUrlParams(infoUrl),contenttype:'text/html'},
-			        processData: false,
-			        contentType: 'application/json',
-			        success: function (response) {
-			        	console.log(response);
-			        },
-			        error: function(jqXHR, textStatus, errorThrown) {
-			           console.log(textStatus, errorThrown);
-			        }
-			    });*/
-
 		},
 		controller: function($scope){
 			$scope.pdfCreated = false;
+
+			// Escalas aceptadas por el servidor de impresion (geoserver printing)
+			$scope.serverPrintScales = [25000,50000,100000,200000,500000,1000000,2000000,4000000,8000000];
 		},
 	};
 });

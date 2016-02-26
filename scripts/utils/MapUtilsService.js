@@ -101,6 +101,7 @@ angular.module('visorINTA.utils.MapUtilsService', [])
                   url: data.serverURL,
                   params: {'LAYERS': data.layerName, 'TILED': true,'VERSION':'1.1.1','SRS':'900913','STYLES':data.style},
                 })),
+                sourceURL: data.serverURL, // guardo en una propiedad la url del servidor
                 tileGrid: gwcGrid,
                 legendURL : data.legendURL || "",
                 opacity:data.opacity,

@@ -9,9 +9,15 @@
   </div>
   <div class="checkbox">
     <label>
+      <input ng-model="printIncludeBaselayer" type="checkbox"> Incluir capa base IGN
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
       <input ng-model="printIncludeLegend" type="checkbox"> Incluir leyendas
     </label>
   </div>
+
   <button id="exportPDFBtn" data-loading-text="Generando PDF..." ng-click="exportPDF()" class="btn btn-danger">Generar PDF</button>
   <a id="exportPDFAnchor" ng-show='pdfCreated'>Descargar archivo</a>
 </form>
