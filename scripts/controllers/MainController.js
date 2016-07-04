@@ -281,13 +281,13 @@ angular.module('visorINTA.MainController', [])
     // Si existe, retorna un objecto con sus propiedades correspondientes, sino, retorna null.
     $rootScope.lookupGeoServer = function(query, byUrl){
       for (var i = 0 ; i < $scope.geoServers.length; i++) {
-        server = $scope.geoServers[i];
-        searchValue = (byUrl) ? server.url: server.nombre;
-        if (searchValue == query){
-             return $scope.geoServers[i];
-        }
-       return null; 
+          server = $scope.geoServers[i];
+          searchValue = (byUrl) ? server.url: server.nombre;
+          if (searchValue == query){
+               return $scope.geoServers[i];
+          }
        }
+       return null;
     }
 
 
