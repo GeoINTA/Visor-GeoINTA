@@ -10,7 +10,6 @@ angular.module('visorINTA.utils.ProyectUtilsService', [])
     // ATENCION! Se utiliza solo cuando se carga proyecto
     this.setProyectLayers = function(layersList){
         this.proyectLayers = layersList;
-        console.log(this.proyectLayers);
     }
 
 
