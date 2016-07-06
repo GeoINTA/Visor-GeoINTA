@@ -56,6 +56,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			    ]
 			}
 
+			
 			scope.getMapCenter = function(){
 				center = ol.proj.transform(scope.map.getView().getCenter(), 'EPSG:900913', 'EPSG:4326');;
 				return center;
@@ -136,13 +137,27 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 				return layersSpecMetadata;
 			}
 
+			scope.getMapTitle = function(){
+				if (scope.printTitle){
+					return scope.printTitle.substring(0, scope.TITLE_MAX_LENGTH);
+				}
+				return "";
+			}
+
+			scope.getMapDescription = function(){
+				if (scope.printDescription){
+					return scope.printDescription.substring(0, scope.DESCRIPTION_MAX_LENGTH);
+				}
+				return "";
+			}
+
 			scope.createSpec = function(){
 				var spec = specBase;
 				layersSpecMetadata = scope.getPrintableLayersMetadata();
 				spec.layers = layersSpecMetadata.layers;
 				spec.legends[0].classes = layersSpecMetadata.legends;
-				spec.pages[0].mapTitle = scope.printTitle || "";
-				spec.pages[0].comment = scope.printDescription || "";
+				spec.pages[0].mapTitle = scope.getMapTitle();
+				spec.pages[0].comment = scope.getMapDescription();
 				spec.pages[0].center = scope.getMapCenter();
 				spec.pages[0].scale = scope.getMapScale();
 				console.log(scope.printIncludeLegend);
@@ -188,6 +203,11 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 		    }
 		},
 		controller: function($scope){
+
+			$scope.TITLE_MAX_LENGTH = 40;
+			$scope.DESCRIPTION_MAX_LENGTH = 400;
+
+
 			$scope.pdfCreated = false;
 
 			// Escalas aceptadas por el servidor de impresion (geoserver printing)
