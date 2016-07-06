@@ -120,4 +120,39 @@ angular.module('visorINTA.utils.MapUtilsService', [])
         }
         return true;
     }
+
+    //////////////////////////// LAYER LEGENDS!
+
+    this.baseLegendParams = {
+                SERVICE: 'WMS',
+                REQUEST: 'GetLegendGraphic',
+                FORMAT: 'image/png',
+                WIDTH : '20',
+                HEIGHT: '20',
+                VERSION: '1.0.0',
+    }
+
+
+    this.getLayerLegend = function(layer){
+        if (layer){
+            layerURL = layer.get('legendURL');
+            source = this.baseLegendParams;
+            layerMetadata = this.getLayerParams(layer.get('id'));
+            source['LAYER'] = layerMetadata['layerName'];
+            source['STYLE'] = layerMetadata['layerStyle'];
+            legendURL = layerURL + '?' + this.encodeQueryData(source);
+            return legendURL;
+        }
+        return "";
+    }
+
+    ////////////////////////////
+
+
+    this.encodeQueryData = function(data){
+        var ret = [];
+        for (var d in data)
+          ret.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+        return ret.join("&");
+    }
 });

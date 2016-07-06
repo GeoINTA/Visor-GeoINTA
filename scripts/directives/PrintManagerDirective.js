@@ -20,6 +20,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			    geodetic: true,
 			    outputFilename: "mapa-visorgeointa",
 			    outputFormat: "pdf",
+			    showLegends: false,
 			    mergeableParams: {
 			        cql_filter: {
 			            defaultValue: "INCLUDE",
@@ -40,18 +41,18 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			        }
 			    ],
 			    legends: [
-			        /*{
+			        {
 			            classes: [
-			                {
+			                /*{
 			                    icons: [
-			                        "http://geointa.inta.gov.ar/geoserver/wms?SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng&WIDTH=20&HEIGHT=20&VERSION=1.0.0&LAYER=imagenes%3ADelta%20Humedo&STYLE=delta_escenarios",
+			                        "http://geointa.inta.gov.ar/geoparana/wms?SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng&WIDTH=40&HEIGHT=40&VERSION=1.0.0&LAYER=suelos%3Acarta_suelos_er&STYLE=cartas_suelos&LEGEND_OPTIONS=dpi:150",
 			                    ],
 			                    name: "an icon name",
-			                    iconBeforeName: true
-			                }
+			                    iconBeforeName: false
+			                },*/
 			            ],
-			            name: "a class name"
-			        }*/
+			            name: "Leyendas",
+			        }
 			    ]
 			}
 
@@ -102,42 +103,50 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			}
 
 
-			scope.getPrintableLayers = function(){
-				layers = [];
+			scope.getPrintableLayersMetadata = function(){
+				layersSpecMetadata = {"layers":[],"legends":[]};
 				printableLayers = scope.layersList.concat(scope.importedLayers);
-				console.log(printableLayers);
 				for (i in printableLayers){
 					if (printableLayers[i].getVisible()){
 						layerInfo = MapUtils.getLayerParams(printableLayers[i].get('id'));
 						// Solo agrego aquellas capas perteneciente a un geoserver geointa
-						var geoserverInfo = $rootScope.lookupGeoServer(printableLayers[i].get('sourceURL'),true);
+						var geoserverInfo = $rootScope.lookupGeoServer(layerInfo['server'],false);
 						if (geoserverInfo){
-							layerData = {
+							layersSpecMetadata.layers.push({
 								type:"WMS",
 								opacity: printableLayers[i].getOpacity(),
 								layers:[layerInfo["layerName"]],
 								format:"image/png",
 								styles: [layerInfo["layerStyle"]],
 								baseURL:geoserverInfo['url'],
-
-							}
-							layers.push(layerData);
+							})
+							//layersSpecMetadata.layers.push(layerData);
+							layersSpecMetadata.legends.push({
+								'icons':[MapUtils.getLayerLegend(printableLayers[i])],
+								'name': printableLayers[i].get('title'),
+								'iconBeforeName':false
+							})
 					    }
 					}
 				}
 				if (scope.printIncludeBaselayer){
-					layers.push(scope.getPrintableBaseLayer());
+					layersSpecMetadata.layers.push(scope.getPrintableBaseLayer());
 				}
-				return layers;
+				console.log(layersSpecMetadata);
+				return layersSpecMetadata;
 			}
 
 			scope.createSpec = function(){
 				var spec = specBase;
-				spec.layers = scope.getPrintableLayers();
-				spec.pages[0].mapTitle = scope.printTitle;
-				spec.pages[0].comment = scope.printDescription;
+				layersSpecMetadata = scope.getPrintableLayersMetadata();
+				spec.layers = layersSpecMetadata.layers;
+				spec.legends[0].classes = layersSpecMetadata.legends;
+				spec.pages[0].mapTitle = scope.printTitle || "";
+				spec.pages[0].comment = scope.printDescription || "";
 				spec.pages[0].center = scope.getMapCenter();
 				spec.pages[0].scale = scope.getMapScale();
+				console.log(scope.printIncludeLegend);
+				spec.showLegends = scope.printIncludeLegend || false;
 				return spec;
 			}
 
