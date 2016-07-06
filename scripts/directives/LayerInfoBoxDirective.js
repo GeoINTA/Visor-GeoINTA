@@ -33,7 +33,7 @@ angular.module('visorINTA.directives.LayerInfoBoxDirective', [])
 		    scope.updateLayerInfo = function(){
 		    	scope.updateLayerObject();
 		    	scope.activeLayertitle = scope.getLayerTitle();
-		    	scope.activeLayerLegend = scope.getLayerLegend();
+		    	scope.activeLayerLegend = MapUtils.getLayerLegend(scope.layerObject);
 		    }
 
 		    scope.updateLayerObject = function(){
