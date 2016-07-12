@@ -106,12 +106,15 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 
 			scope.getPrintableLayersMetadata = function(){
 				layersSpecMetadata = {"layers":[],"legends":[]};
-				printableLayers = scope.layersList.concat(scope.importedLayers);
+				//printableLayers = scope.layersList.concat(scope.importedLayers);
+				printableLayers = scope.layersList;
 				for (i in printableLayers){
 					if (printableLayers[i].getVisible()){
 						layerInfo = MapUtils.getLayerParams(printableLayers[i].get('id'));
 						// Solo agrego aquellas capas perteneciente a un geoserver geointa
-						var geoserverInfo = $rootScope.lookupGeoServer(layerInfo['server'],false);
+						var geoserverInfo = (layerInfo["server"] == MapUtils.IMPORTED_LAYER_SERVER) 
+											?  $rootScope.lookupGeoServer(printableLayers[i].get("sourceURL"),true)
+											: $rootScope.lookupGeoServer(layerInfo['server'],false);
 						if (geoserverInfo){
 							layersSpecMetadata.layers.push({
 								type:"WMS",
@@ -120,7 +123,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 								format:"image/png",
 								styles: [layerInfo["layerStyle"]],
 								baseURL:geoserverInfo['url'],
-							})
+							});
 							//layersSpecMetadata.layers.push(layerData);
 							layersSpecMetadata.legends.push({
 								'icons':[MapUtils.getLayerLegend(printableLayers[i])],
@@ -133,7 +136,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 				if (scope.printIncludeBaselayer){
 					layersSpecMetadata.layers.push(scope.getPrintableBaseLayer());
 				}
-				console.log(layersSpecMetadata);
+				//console.log(layersSpecMetadata);
 				return layersSpecMetadata;
 			}
 
@@ -160,7 +163,6 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 				spec.pages[0].comment = scope.getMapDescription();
 				spec.pages[0].center = scope.getMapCenter();
 				spec.pages[0].scale = scope.getMapScale();
-				console.log(scope.printIncludeLegend);
 				spec.showLegends = scope.printIncludeLegend || false;
 				return spec;
 			}
@@ -171,7 +173,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 				scope.pdfCreated = false;
 				//////////////
 				newSpec = scope.createSpec();
-				console.log(newSpec);
+				//console.log(newSpec);
 				newSpecString = JSON.stringify(newSpec);
 				$.ajax({
 					type: "POST",
