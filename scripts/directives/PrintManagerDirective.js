@@ -227,7 +227,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			$scope.pdfCreated = false;
 
 			// Escalas aceptadas por el servidor de impresion (geoserver printing)
-			$scope.serverPrintScales = [25000,50000,100000,200000,500000,1000000,2000000,4000000,8000000];
+			$scope.serverPrintScales = [5000, 10000, 25000, 50000, 75000, 100000, 200000, 300000, 400000, 500000, 1000000, 2000000, 5000000, 10000000, 12000000, 15000000, 20000000, 25000000];
 		},
 	};
 });
