@@ -13,7 +13,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 
 			var specLayout = "Visor Layout";
 
-			var specBase = {
+			var specBaseOld = {
 			    layout: "Visor Layout",
 			    srs: "EPSG:4326",
 			    units: "m",
@@ -55,6 +55,18 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			        }
 			    ]
 			}
+
+			var specBase = {
+				    "attributes": {"map": {
+				        "center": [],
+				        "scale": 4000000,
+				        "dpi": 150,
+				        "layers": [],
+				        "longitudeFirst": true,
+				        "projection": "EPSG:4326"
+				    }},
+				    "layout": "main"
+				}
 
 			
 			scope.getMapCenter = function(){
@@ -98,7 +110,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 						type: "WMS",
 			            layers: ['capabaseargenmap'],
 			            baseURL: "http://wms.ign.gob.ar/geoserver/wms",
-			            format: "image/png"
+			            imageFormat: "image/png"
 
 				}
 			}
@@ -120,9 +132,10 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 								type:"WMS",
 								opacity: printableLayers[i].getOpacity(),
 								layers:[layerInfo["layerName"]],
-								format:"image/png",
+								imageFormat:"image/png",
 								styles: [layerInfo["layerStyle"]],
 								baseURL:geoserverInfo['url'],
+								version:"1.1.1"
 							});
 							//layersSpecMetadata.layers.push(layerData);
 							layersSpecMetadata.legends.push({
@@ -157,12 +170,12 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			scope.createSpec = function(){
 				var spec = specBase;
 				layersSpecMetadata = scope.getPrintableLayersMetadata();
-				spec.layers = layersSpecMetadata.layers;
-				spec.legends[0].classes = layersSpecMetadata.legends;
-				spec.pages[0].mapTitle = scope.getMapTitle();
-				spec.pages[0].comment = scope.getMapDescription();
-				spec.pages[0].center = scope.getMapCenter();
-				spec.pages[0].scale = scope.getMapScale();
+				spec.attributes.map.layers = layersSpecMetadata.layers;
+				//spec.legends[0].classes = layersSpecMetadata.legends;
+				spec.attributes.title = scope.getMapTitle();
+				spec.attributes.description = scope.getMapDescription();
+				spec.attributes.map.center = scope.getMapCenter();
+				//spec.attributes.map.scale = scope.getMapScale();
 				spec.showLegends = scope.printIncludeLegend || false;
 				return spec;
 			}
@@ -177,13 +190,14 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 				newSpecString = JSON.stringify(newSpec);
 				$.ajax({
 					type: "POST",
-					url: networkServices.printServer + "/create.json",
+					url: networkServices.printServer,
 					data:newSpecString,
-					processData: false,
-					contentType: 'application/x-www-form-urlencoded',
+					dataType: 'json',
+					//processData: false,
+					//contentType: 'application/x-www-form-urlencoded',
 					success: function(data){
 						$('#exportPDFAnchor').attr({target: '_blank',
-						href : data.getURL});
+						href : data.downloadURL});
 						scope.pdfCreated = true;
 						$btn.button('reset');
 						scope.$apply();
