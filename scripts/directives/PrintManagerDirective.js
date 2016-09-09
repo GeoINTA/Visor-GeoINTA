@@ -175,7 +175,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 				spec.attributes.title = scope.getMapTitle();
 				spec.attributes.description = scope.getMapDescription();
 				spec.attributes.map.center = scope.getMapCenter();
-				//spec.attributes.map.scale = scope.getMapScale();
+				spec.attributes.map.scale = scope.getMapScale();
 				spec.showLegends = scope.printIncludeLegend || false;
 				return spec;
 			}
