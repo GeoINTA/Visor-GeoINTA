@@ -80,11 +80,34 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			}
 
 
+			scope.getGridLayer = function(){
+				grid =  {
+				  "type": "grid",
+				  "gridType": "points",
+				  "numberOfLines": [2,2],
+				  "renderAsSvg": true,
+				  "haloColor" : "#CCFFCC",
+				  "labelColor" : "black",
+				  "labelFomat": "%251.0f %25s",
+				  "indent": 10,
+				  "haloRadius" : 4,
+				  "font" : {
+					"name" : ["Arial", "Helvetica", "Nimbus Sans L", "Liberation Sans", "FreeSans", "Sans-serif"],
+					"size" : 8,
+					"style" : "BOLD"
+				  }
+				}
+				return grid;
+			}
+
 
 			scope.getPrintableLayersMetadata = function(){
 				layersSpecMetadata = {"layers":[],"legends":[]};
 				//printableLayers = scope.layersList.concat(scope.importedLayers);
 				printableLayers = scope.layersList;
+				if (scope.printGrid){
+					layersSpecMetadata.layers.push(scope.getGridLayer());
+				}
 				for (var i=printableLayers.length; i--;){ // itero en reversa,
 					if (printableLayers[i].getVisible()){
 						layerInfo = MapUtils.getLayerParams(printableLayers[i].get('id'));
@@ -167,7 +190,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			}
 
 			// Escanea status de un tabajo de impresion.
-			// Binda url de descarga al usuario cuando el mismo está listo.
+			// Brinda url de descarga al usuario cuando el mismo está listo.
 			scope.pollReport = function(){
 				var statusURL = scope.reportData.statusURL;
 				$.ajax({
