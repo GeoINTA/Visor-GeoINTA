@@ -11,51 +11,6 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 		templateUrl:"templates/menu/printManager.html",
 		link: function(scope, iElement, iAttrs, ctrl) {
 
-			var specLayout = "Visor Layout";
-
-			var specBaseOld = {
-			    layout: "Visor Layout",
-			    srs: "EPSG:4326",
-			    units: "m",
-			    geodetic: true,
-			    outputFilename: "mapa-visorgeointa",
-			    outputFormat: "pdf",
-			    showLegends: false,
-			    mergeableParams: {
-			        cql_filter: {
-			            defaultValue: "INCLUDE",
-			            separator: ";",
-			            context: "http://geointa.inta.gov.ar/geoserver/wms"
-			        }
-			    },
-			    layers: [],
-			    pages: [
-			        {
-			            center: [],
-			            scale: 4000000.0,
-			            dpi: 150,
-			            geodetic: true,
-			            strictEpsg4326: false,
-			            mapTitle:"",
-			            comment:""
-			        }
-			    ],
-			    legends: [
-			        {
-			            classes: [
-			                /*{
-			                    icons: [
-			                        "http://geointa.inta.gov.ar/geoparana/wms?SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng&WIDTH=40&HEIGHT=40&VERSION=1.0.0&LAYER=suelos%3Acarta_suelos_er&STYLE=cartas_suelos&LEGEND_OPTIONS=dpi:150",
-			                    ],
-			                    name: "an icon name",
-			                    iconBeforeName: false
-			                },*/
-			            ],
-			            name: "Leyendas",
-			        }
-			    ]
-			}
-
 			var specBase = {
 				    "attributes": {"map": {
 				        "center": [],
@@ -66,7 +21,19 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 				        "projection": "EPSG:4326"
 				    }},
 				    "layout": "main"
+			}
+
+
+			scope.getDefaultLayerParams = function(){
+				return {
+					type: "WMS",
+					version:"1.1.1",
+					customParams: {
+						"EXCEPTIONS": "INIMAGE",
+						"TRANSPARENT": "true"
+					}
 				}
+			}
 
 			
 			scope.getMapCenter = function(){
@@ -106,21 +73,19 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 
 
 			scope.getPrintableBaseLayer = function() {
-				return {
-						type: "WMS",
-			            layers: ['capabaseargenmap'],
-			            baseURL: "http://wms.ign.gob.ar/geoserver/wms",
-			            imageFormat: "image/png"
-
-				}
+				var tmpData = scope.getDefaultLayerParams();
+				tmpData.layers = ['capabaseargenmap'];
+				tmpData.baseURL = "http://wms.ign.gob.ar/geoserver/wms";
+				return tmpData;
 			}
+
 
 
 			scope.getPrintableLayersMetadata = function(){
 				layersSpecMetadata = {"layers":[],"legends":[]};
 				//printableLayers = scope.layersList.concat(scope.importedLayers);
 				printableLayers = scope.layersList;
-				for (i in printableLayers){
+				for (var i=printableLayers.length; i--;){ // itero en reversa,
 					if (printableLayers[i].getVisible()){
 						layerInfo = MapUtils.getLayerParams(printableLayers[i].get('id'));
 						// Solo agrego aquellas capas perteneciente a un geoserver geointa
@@ -128,16 +93,12 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 											?  $rootScope.lookupGeoServer(printableLayers[i].get("sourceURL"),true)
 											: $rootScope.lookupGeoServer(layerInfo['server'],false);
 						if (geoserverInfo){
-							layersSpecMetadata.layers.push({
-								type:"WMS",
-								opacity: printableLayers[i].getOpacity(),
-								layers:[layerInfo["layerName"]],
-								imageFormat:"image/png",
-								styles: [layerInfo["layerStyle"]],
-								baseURL:geoserverInfo['url'],
-								version:"1.1.1"
-							});
-							//layersSpecMetadata.layers.push(layerData);
+							var tmpData = scope.getDefaultLayerParams();
+							tmpData.opacity = printableLayers[i].getOpacity();
+							tmpData.layers = [layerInfo["layerName"]];
+							tmpData.styles =  [layerInfo["layerStyle"]];
+							tmpData.baseURL = geoserverInfo['url'];
+							layersSpecMetadata.layers.push(tmpData);
 							layersSpecMetadata.legends.push({
 								'icons':[MapUtils.getLayerLegend(printableLayers[i])],
 								'name': printableLayers[i].get('title'),
@@ -149,7 +110,6 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 				if (scope.printIncludeBaselayer){
 					layersSpecMetadata.layers.push(scope.getPrintableBaseLayer());
 				}
-				//console.log(layersSpecMetadata);
 				return layersSpecMetadata;
 			}
 
@@ -181,50 +141,91 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			}
 
 			scope.exportPDF = function(){
-				//////////////
-				var $btn = $('#exportPDFBtn').button('loading');
-				scope.pdfCreated = false;
+				scope.currentStatus = scope.status.BUSY;
+				scope.reportCreated = false;
+				scope.printStatusMessage = scope.getBusyLabel(0);
 				//////////////
 				newSpec = scope.createSpec();
 				//console.log(newSpec);
 				newSpecString = JSON.stringify(newSpec);
 				$.ajax({
 					type: "POST",
-					url: networkServices.printServer,
+					url: networkServices.printServer + networkServices.printReportPath,
 					data:newSpecString,
 					dataType: 'json',
 					//processData: false,
 					//contentType: 'application/x-www-form-urlencoded',
 					success: function(data){
-						$('#exportPDFAnchor').attr({target: '_blank',
-						href : data.downloadURL});
-						scope.pdfCreated = true;
-						$btn.button('reset');
-						scope.$apply();
+						scope.reportData = data;
+						scope.pollReport();
 					},
 					error: function(){
-						/*alert("error");
-						$btn.button('reset');*/
-						scope.pdfCreated = false;
-						$btn.button('reset');
-						scope.$apply();
+						scope.currentStatus = scope.status.IDLE;
 					},
 					// no existe callback finally?
 	        	});
 			}
 
-		    scope.requestPDF = function(spec){
-		    	return $http.post(networkServices.printServer + "/create.json?spec=" + spec, {
-        		});
-		    }
+			// Escanea status de un tabajo de impresion.
+			// Binda url de descarga al usuario cuando el mismo está listo.
+			scope.pollReport = function(){
+				var statusURL = scope.reportData.statusURL;
+				$.ajax({
+			            type: "GET",
+			            url: networkServices.printServer + statusURL,
+			            dataType: "json",
+			            success: function (data) {
+			                if (data.status == "finished"){
+			                	scope.currentStatus = scope.status.READY;
+			                	var downloadURL = networkServices.printServer + data.downloadURL;
+								$('#exportPDFAnchor').attr({target: '_blank',
+								href : downloadURL});
+								scope.reportCreated = true;
+								scope.currentStatus = scope.status.IDLE;
+								scope.$apply();
+			                } else {
+			                	scope.printStatusMessage = scope.getBusyLabel(data.elapsedTime / 1000);
+			                	scope.$apply();
+			                	setTimeout(function () {
+			                    scope.pollReport();
+			                }, 1500)
+			                }
+			            },
+			            error: function () {
+			                setTimeout(function () {
+			                    scope.pollReport();
+			                }, 1500)
+			            }
+			        });
+			}
+
+
+			scope.cancelPDF = function(){
+				//
+			}
+
+			scope.getBusyLabel = function(secs){
+				return "Procesando... (" + secs.toFixed(2) +  "s)"; 
+			}
+
 		},
 		controller: function($scope){
 
 			$scope.TITLE_MAX_LENGTH = 40;
 			$scope.DESCRIPTION_MAX_LENGTH = 400;
 
+			$scope.status = {
+				"IDLE": 0,
+				"BUSY": 1,
+			}
 
-			$scope.pdfCreated = false;
+			$scope.labelsAvailable = true;
+
+			$scope.currentStatus = $scope.status.IDLE;
+			$scope.reportCreated = false;
+			$scope.printStatusMessage = "Cancelar";
+
+			$scope.reportData = {};
 
 			// Escalas aceptadas por el servidor de impresion (geoserver printing)
 			$scope.serverPrintScales = [5000, 10000, 25000, 50000, 75000, 100000, 200000, 300000, 400000, 500000, 1000000, 2000000, 5000000, 10000000, 12000000, 15000000, 20000000, 25000000];

@@ -14,10 +14,13 @@
   </div>
   <div class="checkbox">
     <label>
-      <input ng-model="printIncludeLegend" type="checkbox"> Incluir leyendas
+      <input ng-disabled="labelsAvailable" ng-model="printIncludeLegend" type="checkbox"> Incluir leyendas
     </label>
   </div>
-
-  <button id="exportPDFBtn" data-loading-text="Generando PDF..." ng-click="exportPDF()" class="btn btn-danger">Generar PDF</button>
-  <a id="exportPDFAnchor" ng-show='pdfCreated'>Descargar archivo</a>
+  <span ng-switch="currentStatus">
+    <button ng-switch-when="0" ng-disabled="!printTitle || !printDescription" id="exportPDFBtn" ng-click="exportPDF()" class="btn btn-danger">Generar reporte</button> 
+    <button ng-switch-when="1"  id="canceltPDFBtn" ng-click="cancelPDF()" class="btn btn-warning"><i class="fa fa-spinner fa-spin fa-fw"></i>  {{printStatusMessage}}</button>
+  </span>
+    <a ng-show="reportCreated" id="exportPDFAnchor">Descargar reporte</a>
+  </span>
 </form>
