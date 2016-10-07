@@ -146,6 +146,18 @@ angular.module('visorINTA.utils.MapUtilsService', [])
         return "";
     }
 
+    this.getLayerLegendParams = function(layer){
+        if (layer){
+            layerURL = layer.get('legendURL');
+            source = this.baseLegendParams;
+            layerMetadata = this.getLayerParams(layer.get('id'));
+            source['LAYER'] = layerMetadata['layerName'];
+            source['STYLE'] = layerMetadata['layerStyle'];
+            return this.encodeQueryData(source);
+        }
+        return "";
+    }
+
     ////////////////////////////
 
 

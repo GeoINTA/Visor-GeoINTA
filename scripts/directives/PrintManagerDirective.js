@@ -11,18 +11,6 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 		templateUrl:"templates/menu/printManager.html",
 		link: function(scope, iElement, iAttrs, ctrl) {
 
-			var specBase = {
-				    "attributes": {"map": {
-				        "center": [],
-				        "scale": 4000000,
-				        "dpi": 150,
-				        "layers": [],
-				        "longitudeFirst": true,
-				        "projection": "EPSG:4326"
-				    }},
-				    "layout": "main"
-			}
-
 
 			scope.getDefaultLayerParams = function(){
 				return {
@@ -122,11 +110,13 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 							tmpData.styles =  [layerInfo["layerStyle"]];
 							tmpData.baseURL = geoserverInfo['url'];
 							layersSpecMetadata.layers.push(tmpData);
-							layersSpecMetadata.legends.push({
-								'icons':[MapUtils.getLayerLegend(printableLayers[i])],
-								'name': printableLayers[i].get('title'),
-								'iconBeforeName':false
-							})
+							if ( scope.printIncludeLegend){
+								iconURL =  printableLayers[i].get('legendURL') + "?" + encodeURIComponent(MapUtils.getLayerLegendParams(printableLayers[i]));
+								layersSpecMetadata.legends.push({
+									'icons':[iconURL],
+									'name': printableLayers[i].get('title'),
+								})
+							}
 					    }
 					}
 				}
@@ -151,15 +141,28 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 			}
 
 			scope.createSpec = function(){
-				var spec = specBase;
+				var spec = {
+				    "attributes": {"map": {
+				        "center": [],
+				        "scale": 4000000,
+				        "dpi": 150,
+				        "layers": [],
+				        "longitudeFirst": true,
+				        "projection": "EPSG:4326"
+				    }},
+				    "layout": "main"
+				};
 				layersSpecMetadata = scope.getPrintableLayersMetadata();
 				spec.attributes.map.layers = layersSpecMetadata.layers;
-				//spec.legends[0].classes = layersSpecMetadata.legends;
+				if (scope.printIncludeLegend){
+					spec.attributes.legend = {"name":"","classes":[]};
+					spec.attributes.legend.classes = layersSpecMetadata.legends;
+				}
 				spec.attributes.title = scope.getMapTitle();
 				spec.attributes.description = scope.getMapDescription();
 				spec.attributes.map.center = scope.getMapCenter();
 				spec.attributes.map.scale = scope.getMapScale();
-				spec.showLegends = scope.printIncludeLegend || false;
+				//spec.showLegends = scope.printIncludeLegend || false;
 				return spec;
 			}
 
@@ -169,7 +172,6 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 				scope.printStatusMessage = scope.getBusyLabel(0);
 				//////////////
 				newSpec = scope.createSpec();
-				//console.log(newSpec);
 				newSpecString = JSON.stringify(newSpec);
 				$.ajax({
 					type: "POST",
@@ -241,8 +243,6 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 				"IDLE": 0,
 				"BUSY": 1,
 			}
-
-			$scope.labelsAvailable = true;
 
 			$scope.currentStatus = $scope.status.IDLE;
 			$scope.reportCreated = false;
