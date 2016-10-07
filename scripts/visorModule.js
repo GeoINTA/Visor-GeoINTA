@@ -49,7 +49,7 @@ angular.module('visorINTA', [
         "gestor": "http://geointa.inta.gov.ar/gestor/servicioVisor",
         "searchService": " http://geointa.inta.gov.ar/visor/nomenclador/nomenclador.php",
         "printServer": "http://visor.geointa.inta.gob.ar",
-        "printReportPath": "/mapfish/print/simple/report.pdf"
+        "printReportPath": "/mapfish/print/pruebas/report.pdf"
 })
 .constant("boxActions",{
     "OPEN" : "open",
