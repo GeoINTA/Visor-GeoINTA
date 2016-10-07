@@ -76,7 +76,7 @@ angular.module('visorINTA.directives.PrintManagerDirective', [])
 				  "renderAsSvg": true,
 				  "haloColor" : "#CCFFCC",
 				  "labelColor" : "black",
-				  "labelFomat": "%251.0f %25s",
+				  "labelFomat": "%251.3f %25s",
 				  "indent": 10,
 				  "haloRadius" : 4,
 				  "font" : {
