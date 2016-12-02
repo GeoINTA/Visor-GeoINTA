@@ -21,6 +21,17 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 	    		}
 	  		});
 
+	  		jQuery("#searchLayerInput").keyup(function () {
+			    var filter = jQuery(this).val();
+			    jQuery("#importLayersList a").each(function () {
+			        if (jQuery(this).text().search(new RegExp(filter, "i")) < 0) {
+			            jQuery(this).hide();
+			        } else {
+			            jQuery(this).show()
+			        }
+			    });
+			});
+
 
 	        // Acciones a realizar cuando se abre la herramienta
 	        scope.openBox = function(){
@@ -60,6 +71,7 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 	        }
 
 
+
 		},
 		controller: function($scope){
 			$scope.toolName = "importWmsTool";
@@ -70,6 +82,7 @@ angular.module('visorINTA.tools.importWms.importWmsDirective', [])
 			$scope.serverRequested = "";
 			$scope.layerSelected = {};
 			$scope.styleSelected = null;
+			$scope.showSearchLayerInput = false;
 
 			$scope.loadServerCapabilities = function(){
 				if ($scope.userServerURL){

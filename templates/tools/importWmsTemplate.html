@@ -24,7 +24,15 @@
 	<div class="col-md-8">
 		<div class="panel panel-default boxInnerpanel">
 		  <!-- Default panel contents -->
-		  <div class="panel-heading">Lista de capas</div>
+		  <div class="panel-heading">
+			  <div class="btn-group pull-right">
+		        <a ng-click="showSearchLayerInput=!showSearchLayerInput" class="btn btn-default btn-sm"><i class="fa fa-search fa-lg"></i></a>
+	    	  </div>
+    		  <h4>Lista de capas</h4>
+    	 </div>
+		  <div id="boxInnerSearchLayer" class="form-group">
+		  <input id="searchLayerInput" type="text" class="form-control" ng-show="showSearchLayerInput" placeholder="Buscar capa...">
+		  </div>
 		  <!-- List group -->
 		  <div id="importLayersList"class="list-group">
 			<a class="list-group-item" ng-class="{ 'active': $index == layerSelectdIndex }" ng-repeat="layer in serverCapabilities.layers" ng-click="setLayerSelected(layer,$index)">{{layer.title}}</a>
