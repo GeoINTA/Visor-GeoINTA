@@ -14,7 +14,6 @@ angular.module('visorINTA.directives.NavbarLayerSelectorDirective', [])
 		    	if (baseLayerSelected != ""){
 		    		for (var i = 0 ; i < scope.layersList.length ; i++){
 		    			layer = scope.layersList[i];
-		    			console.log(layer.get('title') == baseLayerSelected);
 		    			layer.setVisible(layer.get('title') == baseLayerSelected);
 		    		}
 		    	}

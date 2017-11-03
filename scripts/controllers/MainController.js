@@ -311,6 +311,11 @@ angular.module('visorINTA.MainController', [])
       $scope.activeProyectModel = data;
       $scope.cleanMap();
       $scope.loadActiveProyectLayers();
+      newTitle = "Visor GeoINTA"
+      if ($scope.activeProyectModel){
+        newTitle  += " - " + $scope.activeProyectModel.nombre;
+      }
+      document.title = newTitle
     }
 
 
