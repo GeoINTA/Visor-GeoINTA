@@ -49,13 +49,18 @@ angular.module('visorINTA.directives.SearchInfoBoxDirective', [])
 			// hacia él
 		    scope.moveToSearchResult = function(result){
 		    	var newCenter = ol.proj.transform([parseFloat(result.lon),parseFloat(result.lat)], 'EPSG:4326', 'EPSG:900913');
-	    		var pan = ol.animation.pan({
-				    duration: 2000,
-				    source: /** @type {ol.Coordinate} */ (view.getCenter())
-			  	});
-				map.beforeRender(pan);
-				view.setCenter(newCenter);
+		    	var viewCenter = ol.proj.transform([parseFloat(result.lon)+1,parseFloat(result.lat)], 'EPSG:4326', 'EPSG:900913');
+	    		//var pan = ol.animation.pan({
+				//    duration: 2000,
+				//    source: /** @type {ol.Coordinate} */ (view.getCenter())
+			  	//});
+				//map.beforeRender(pan);
+				//view.setCenter(newCenter);
 				view.setZoom(8);
+				view.animate({
+		          center: viewCenter,
+		          duration: 2000
+		        });
 				// Seteo centro marker
 				scope.marker = new ol.Overlay({
 				  position: newCenter,
