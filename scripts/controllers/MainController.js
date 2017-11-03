@@ -134,17 +134,6 @@ angular.module('visorINTA.MainController', [])
                 title: "IGN Argenmap",
                 id :MapUtils.constructLayerIdentifier("IGN","capabaseargenmap","no_style"),
       });
-      var sig_ign = new ol.layer.Tile({
-                source: new ol.source.TileWMS(/** @type {olx.source.TileWMSOptions} */ ({
-                  url: "http://wms.ign.gob.ar/geoserver/wms",
-                  params: {'LAYERS': "capabasesigign", 'TILED': true,'VERSION':'1.1.1','SRS':'900913','STYLES':""},
-                })),
-                legendURL : "http://wms.ign.gob.ar/geoserver/wms",
-                opacity: 1,
-                visible: false,
-                title: "IGN SIG",
-                id :MapUtils.constructLayerIdentifier("IGN","capabasesigign","no_style"),
-      });
       var mosaicos = new ol.layer.Tile({
                 source: new ol.source.TileWMS(/** @type {olx.source.TileWMSOptions} */ ({
                   url: "http://geointa.inta.gov.ar/geoserver/wms",
@@ -162,7 +151,6 @@ angular.module('visorINTA.MainController', [])
           labelsAerial,
           osm,
           argenmap,
-          sig_ign,
           mosaicos,
         ],
         projection:mapConfig.projection,
@@ -176,10 +164,9 @@ angular.module('visorINTA.MainController', [])
       $scope.baseLayers.push(labelsAerial);
       $scope.baseLayers.push(osm);
       $scope.baseLayers.push(argenmap);
-      $scope.baseLayers.push(sig_ign);
       $scope.baseLayers.push(mosaicos);
       $scope.addGoogleLayers(map);
-      return map;  
+      return map;
     }
 
     $scope.addGoogleLayers = function(map){
