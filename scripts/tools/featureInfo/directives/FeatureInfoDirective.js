@@ -29,7 +29,6 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 					scope.layersToRequest = [];
 		  			scope.prepareActiveLayers(); // agrego capas activas a la peticion
 		  			scope.prepareImportedLayers();// agrego capas importadas a la peticion
-		  			console.log(scope.layersToRequest);
 			  		if (scope.layersToRequest.length > 0 ){
 			  			// WARNING -> Hace una peticion independiente por cada capa presente en la config
 			  			//			  del proyecto
@@ -108,11 +107,13 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
         			scope.updateState();
 	        	}
 	        	scope.listenEvents();
+	        	document.getElementById("map").style.cursor = 'pointer';
 	        }
 
 	        // Acciones a realizar cuando se cierra la herramienta
 	        scope.closeBox = function(){
-	        	scope.map.unByKey(scope.mapListener);
+	        	document.getElementById("map").style.cursor = 'auto';
+	        	ol.Observable.unByKey(scope.mapListener);
 	        }
 
 
@@ -165,7 +166,6 @@ angular.module('visorINTA.tools.featureInfo.FeatureInfoDirective', [])
 
 
 			$scope.bindLayerData = function(layerTitle,layerConfig,dataReceived){
-				console.log("bind layer!!");
 				// objecto que almacena la info recibida desde el servidor
 				var data = {
 					'title':layerTitle,
